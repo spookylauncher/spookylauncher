@@ -44,6 +44,10 @@ public final class VersionInfo {
         else return def;
     }
 
+    public boolean hasProperty(final String key) {
+        return launchData.containsKey(key);
+    }
+
     public int getPreviewsCount() {
         if(previewsCount == -1) {
             Tree previewsTree = GitHubAPI.getTreeFromBranch("spookylauncher", "Spooky-Launcher", "launcher/" + name + "/previews");

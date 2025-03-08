@@ -185,9 +185,9 @@ public class GameLauncher extends LauncherComponent {
             cmd.add(classPath);
         }
 
-        //cmd.add("com.github.onran0.spookylauncher.SLWrapper");
+        cmd.add("com.github.onran0.spookylauncher.SLWrapper");
 
-        cmd.add(version.getLaunchProperty("main", "Start"));
+        //cmd.add(version.getLaunchProperty("main", "Start"));
 
         final Properties properties = new Properties();
 
@@ -195,8 +195,12 @@ public class GameLauncher extends LauncherComponent {
 
         properties.setProperty("nickname", nickname);
         properties.setProperty("launcher.dir", "\"" + workDirectory.getAbsolutePath() + "\"");
+        properties.setProperty("launcher.resourcesDir", "\"" + workDirectory.getAbsolutePath() + "/resources\"");
 
-        String gameArgs = version.getLaunchProperty("gameArgs", "${nickname}");
+        String gameArgs = "--nickname ${nickname} --resourcesDirectory ${launcher.resourcesDir}";
+
+        if(version.hasProperty("gameArgs"))
+            gameArgs += " " + version.getLaunchProperty("gameArgs");
 
          for(String name : properties.stringPropertyNames())
              gameArgs = gameArgs.replace("${" + name + "}", properties.getProperty(name));
