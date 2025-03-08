@@ -26,7 +26,7 @@ public final class VersionInfo {
     @SerializedName("launchData") public HashMap<String, Object> launchData = new HashMap<>();
     @SerializedName("articles") public HashMap<String, String> articles = new HashMap<>();
     @SerializedName("libsCollections") public String[] libsCollections = { "BetaKit" };
-    @SerializedName("libraries") public LibraryInfo[] libraries;
+    @SerializedName("libraries") public List<LibraryInfo> libraries;
     @SerializedName("previewsCount") private int previewsCount = -1;
     @SerializedName("labels") public String[] labels;
     @SerializedName("securityRules") public SecurityRules securityRules;

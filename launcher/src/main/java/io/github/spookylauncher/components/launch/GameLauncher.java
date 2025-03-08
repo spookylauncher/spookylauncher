@@ -3,6 +3,7 @@ package io.github.spookylauncher.components.launch;
 import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.components.*;
+import io.github.spookylauncher.components.debug.LocalLibraries;
 import io.github.spookylauncher.components.log.Level;
 import io.github.spookylauncher.GameStartData;
 import io.github.spookylauncher.components.log.LogsController;
@@ -117,8 +118,11 @@ public class GameLauncher extends LauncherComponent {
         }
 
         if(version.libraries != null) {
-            for (LibraryInfo library : version.libraries) libraries.add(manifest.getLibrary(library.name, library.version));
+            for (LibraryInfo library : version.libraries)
+                libraries.add(manifest.getLibrary(library.name, library.version));
         }
+
+        libraries.addAll(LocalLibraries.LOCAL_LIBS);
 
         final String relativePathToLibrariesPrefix = "../../" + (IOUtils.getRelativePath(workDirectory, libsController.getLibrariesDirectory())) + "/";
 

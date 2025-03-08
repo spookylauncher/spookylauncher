@@ -1,10 +1,13 @@
 package io.github.spookylauncher.tree.versions;
 
 import io.github.spookylauncher.advio.collectors.URLCollector;
+import io.github.spookylauncher.tree.LibraryInfo;
 import io.github.spookylauncher.util.io.Json;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public final class VersionsManifest {
     @SerializedName("manifestVersion") public int manifestVersion = 0;
