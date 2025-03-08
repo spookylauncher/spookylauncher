@@ -194,10 +194,11 @@ public class GameLauncher extends LauncherComponent {
         final String nickname = options.getNickname();
 
         properties.setProperty("nickname", nickname);
+        properties.setProperty("main", version.getLaunchProperty("main"));
         properties.setProperty("launcher.dir", "\"" + workDirectory.getAbsolutePath() + "\"");
         properties.setProperty("launcher.resourcesDir", "\"" + workDirectory.getAbsolutePath() + "/resources\"");
 
-        String gameArgs = "--nickname ${nickname} --resourcesDirectory ${launcher.resourcesDir}";
+        String gameArgs = "--nickname ${nickname} --resourcesDirectory ${launcher.resourcesDir} --minecraftClass ${main}";
 
         if(version.hasProperty("gameArgs"))
             gameArgs += " " + version.getLaunchProperty("gameArgs");
