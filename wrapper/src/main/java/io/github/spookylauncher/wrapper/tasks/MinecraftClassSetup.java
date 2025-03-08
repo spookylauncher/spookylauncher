@@ -39,7 +39,7 @@ public final class MinecraftClassSetup {
             mcDirFields = Collections.singletonList(Integer.parseInt(config.getProperty("mcDirFieldIndex")));
         else mcDirFields = findMCDirectoryFields(minecraftClass);
 
-        if(mcDirFields.size() == 0) return false;
+        if(mcDirFields.isEmpty()) return false;
 
         File directory = new File(".");
 
