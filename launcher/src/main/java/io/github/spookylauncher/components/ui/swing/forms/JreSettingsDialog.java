@@ -34,42 +34,40 @@ public class JreSettingsDialog extends JDialog {
         setResizable(false);
         getRootPane().setDefaultButton(buttonOK);
 
-        setSize(441, 145);
+        setSize(495, 175);
 
         JreInfo[] jres = jreController.findJres();
 
         javaPathField.setText(optionsController.getOptions().customJavaPath);
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (useExternalJreButton.isSelected()) {
-                    File f = new File(javaPathField.getText());
+        buttonOK.addActionListener(e -> {
+            if (useExternalJreButton.isSelected()) {
+                File f = new File(javaPathField.getText());
 
-                    boolean firstFlag = !f.exists();
-                    boolean secondFlag = !firstFlag && (f.isDirectory() || !f.getName().contains("java"));
+                boolean firstFlag = !f.exists();
+                boolean secondFlag = !firstFlag && (f.isDirectory() || !f.getName().contains("java"));
 
-                    if (firstFlag || secondFlag) {
-                        Locale locale = localeController.getLocale();
+                if (firstFlag || secondFlag) {
+                    Locale locale = localeController.getLocale();
 
-                        messages.error
-                        (
-                                locale.get("error"),
-                                locale.get
-                                (
-                                        firstFlag
-                                        ? "externalJreNotExists"
-                                        : "specifiedExternalJreIsntExecutable"
-                                )
-                        );
+                    messages.error
+                    (
+                            locale.get("error"),
+                            locale.get
+                            (
+                                    firstFlag
+                                    ? "externalJreNotExists"
+                                    : "specifiedExternalJreIsntExecutable"
+                            )
+                    );
 
-                        return;
-                    }
+                    return;
+                }
 
-                    jreController.selectCustomJre(javaPathField.getText());
-                } else jreController.selectJre(jres[jresComboBox.getSelectedIndex()]);
+                jreController.selectCustomJre(javaPathField.getText());
+            } else jreController.selectJre(jres[jresComboBox.getSelectedIndex()]);
 
-                dispose();
-            }
+            dispose();
         });
 
         buttonCancel.addActionListener(e -> dispose());

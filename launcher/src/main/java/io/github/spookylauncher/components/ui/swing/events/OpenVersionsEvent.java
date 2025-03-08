@@ -38,7 +38,7 @@ final class OpenVersionsEvent extends Event {
 
         dialog.setResizable(false);
 
-        dialog.setSize(210, 303);
+        dialog.setSize(225, 303);
 
         dialog.setLocationRelativeTo(provider.getFrame());
 
