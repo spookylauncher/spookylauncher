@@ -25,7 +25,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
     private VersionInfo currentVersion;
 
-    private final Image noPreview;
+    private final BufferedImage noPreview;
 
     private Locale locale;
 
@@ -34,7 +34,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
         this.noPreview = new BufferedImage(100, 50, BufferedImage.TYPE_INT_RGB);
 
-        this.noPreview.getGraphics().drawString("=)", noPreview.getWidth(null) / 2, noPreview.getHeight(null) / 2);
+        this.noPreview.getGraphics().drawString("=)", noPreview.getWidth() / 2, noPreview.getHeight() / 2);
 
         frame.setContentPane((titlePanelForm = new TitlePanelForm()).panel1);
 
