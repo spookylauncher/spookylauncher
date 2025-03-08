@@ -23,7 +23,7 @@ class MainWindowImpl extends LauncherComponent implements MainWindow {
         this.icon = new ResourceCollector("icon.png").collectImage();
 
         frame = new JFrame("Spooky Launcher");
-        frame.setSize(735, 404);
+        frame.setSize(800, 434);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setResizable(false);
 
