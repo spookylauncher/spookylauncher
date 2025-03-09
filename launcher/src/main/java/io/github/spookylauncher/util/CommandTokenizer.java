@@ -13,8 +13,10 @@ public final class CommandTokenizer {
         for(int i = 0;i < cmd.length();i++) {
             char c = cmd.charAt(i);
 
-            if(c == '"') quotes = !quotes;
-            else if(c == ' ' && !quotes) {
+            boolean last = i == cmd.length() - 1;
+
+            if(c == '"' && !last) quotes = !quotes;
+            else if((c == ' ' && !quotes) || last) {
                 tokens.add(tokenBuilder.toString());
                 tokenBuilder.setLength(0);
             } else tokenBuilder.append(c);
