@@ -54,13 +54,15 @@ public final class SLWrapper implements Runnable {
 
                 proxyClassLoader.closePackage("io.github.spookylauncher.spookylauncher");
 
-                if (!mcSetupTask.setup(proxyClassLoader, config)) error = true;
-                else {
+                if (!mcSetupTask.setup(proxyClassLoader, config)) {
+                    Logger.log(Level.ERROR, LOG_ID, "failed to setup minecraft");
+                    error = true;
+                } else {
                     File resourcesDirectory = new File(Objects.requireNonNull(config.getProperty("resourcesDirectory"), "resourcesDirectory property is not specified"));
 
                     String downloadResClass = config.getProperty("tdrClass", "net.minecraft.src.ThreadDownloadResources");
 
-                    if (ClassUtils.classExists(SLWrapper.class, downloadResClass)) {
+                    if (!ClassUtils.classExists(SLWrapper.class, downloadResClass)) {
                         Logger.log(Level.FATAL, LOG_ID, "ThreadDownloadResources class (" + downloadResClass + ") not found");
                         System.exit(1);
                         return;
