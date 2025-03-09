@@ -5,7 +5,7 @@ import io.github.spookylauncher.tree.versions.VersionInfo;
 import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.util.Locale;
 import net.arikia.dev.drpc.*;
-import static io.github.spookylauncher.components.log.Level.*;
+import static io.github.spookylauncher.log.Level.*;
 
 public final class DiscordPresenceViewer extends LauncherComponent {
     private static final String APP_ID = "1264356894361780286";

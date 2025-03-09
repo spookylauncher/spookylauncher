@@ -6,7 +6,7 @@ import io.github.spookylauncher.advio.ResourceCollector;
 
 import java.util.Properties;
 
-import static io.github.spookylauncher.components.log.Level.*;
+import static io.github.spookylauncher.log.Level.*;
 
 public final class Translator extends LauncherComponent {
     private Locale locale;

@@ -1,7 +1,7 @@
 package io.github.spookylauncher.protocol;
 
 import io.github.spookylauncher.components.ComponentsController;
-import io.github.spookylauncher.components.log.Level;
+import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.components.ProtocolHandler;
 import io.github.spookylauncher.util.uri.QueryParser;
 import io.github.spookylauncher.util.StringUtils;
@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static io.github.spookylauncher.components.log.Logger.*;
+import static io.github.spookylauncher.log.Logger.*;
 
 public final class ProtocolRequestHandler {
     private static final String LOG_ID = "protocol request handler";

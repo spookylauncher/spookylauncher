@@ -1,11 +1,9 @@
 package io.github.spookylauncher.ipc;
 
-import io.github.spookylauncher.components.log.Level;
-import io.github.spookylauncher.components.log.Logger;
+import io.github.spookylauncher.log.Level;
+import io.github.spookylauncher.log.Logger;
 
 import java.io.File;
-
-import static io.github.spookylauncher.components.log.Logger.log;
 
 public final class Constants {
     private static String file;

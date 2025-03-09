@@ -8,7 +8,7 @@ import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.advio.Os;
 import io.github.spookylauncher.advio.collectors.URLCollector;
-import io.github.spookylauncher.components.log.Level;
+import io.github.spookylauncher.log.Level;
 
 import java.io.File;
 import java.util.HashMap;

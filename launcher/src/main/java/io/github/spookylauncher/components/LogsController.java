@@ -1,9 +1,10 @@
-package io.github.spookylauncher.components.log;
+package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.advio.IOUtils;
-import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.GameStartData;
 import io.github.spookylauncher.advio.AsyncOperation;
+import io.github.spookylauncher.log.Level;
+import io.github.spookylauncher.log.Logger;
 import io.github.spookylauncher.util.structures.tuple.Tuple2;
 
 import java.io.*;

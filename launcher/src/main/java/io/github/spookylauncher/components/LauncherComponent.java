@@ -1,7 +1,7 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.components.log.Level;
-import io.github.spookylauncher.components.log.Logger;
+import io.github.spookylauncher.log.Level;
+import io.github.spookylauncher.log.Logger;
 
 public abstract class LauncherComponent {
     protected final ComponentsController components;

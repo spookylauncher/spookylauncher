@@ -3,7 +3,7 @@ package io.github.spookylauncher.components.events;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.ErrorHandler;
 import io.github.spookylauncher.components.LauncherComponent;
-import io.github.spookylauncher.components.log.Level;
+import io.github.spookylauncher.log.Level;
 
 import java.util.*;
 

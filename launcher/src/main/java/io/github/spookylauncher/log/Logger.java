@@ -1,4 +1,4 @@
-package io.github.spookylauncher.components.log;
+package io.github.spookylauncher.log;
 
 import io.github.spookylauncher.util.io.PipedPrintStream;
 
@@ -16,12 +16,19 @@ public final class Logger {
     }
 
     public static void throwing(final Throwable t, final String location) {
-        log(Level.ERROR, location, t.toString());
+        log(Level.ERROR, location, t);
     }
 
-    public static void log(final Level level, final String location, final Object msg) {
+    public static void log(final Level level, final String location, final Object obj) {
         if(level == Level.DEBUG && !DEBUG) return;
 
-        (level == Level.ERROR ? err : out).println("[" + level.name + "] [" + location + "] : " + msg);
+        final PipedPrintStream pipedOut = (level == Level.ERROR ? err : out);
+
+        pipedOut.print("[" + level.name + "] [" + location + "] : ");
+
+        if(obj instanceof Throwable)
+            ((Throwable) obj).printStackTrace(pipedOut);
+        else
+            pipedOut.println(String.valueOf(obj));
     }
 }

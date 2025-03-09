@@ -4,7 +4,6 @@ import io.github.spookylauncher.components.events.Events;
 import io.github.spookylauncher.components.launch.GameLauncher;
 import io.github.spookylauncher.components.ui.swing.SwingUIProvider;
 import io.github.spookylauncher.components.ui.spi.UIProvider;
-import io.github.spookylauncher.components.log.LogsController;
 import io.github.spookylauncher.tree.jre.JREsManifest;
 import io.github.spookylauncher.tree.launcher.LauncherManifest;
 import io.github.spookylauncher.tree.mirrors.MirrorsManifest;

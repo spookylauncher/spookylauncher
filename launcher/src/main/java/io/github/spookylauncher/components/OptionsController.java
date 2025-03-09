@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.components.log.Level;
+import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.advio.collectors.FileCollector;
 import io.github.spookylauncher.advio.peddlers.FilePeddler;

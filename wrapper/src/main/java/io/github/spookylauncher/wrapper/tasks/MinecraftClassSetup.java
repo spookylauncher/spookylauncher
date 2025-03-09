@@ -26,9 +26,11 @@ public final class MinecraftClassSetup {
         try {
             minecraftClass = proxyClassLoader.loadClass(minecraftClassName);
         } catch(ClassNotFoundException e) {
-            log(FATAL, LOG_ID, "minecraft class (" + minecraftClassName + ") not found: " + e);
+            log(FATAL, LOG_ID, "minecraft class (" + minecraftClassName + ") not found");
+            log(FATAL, LOG_ID, e);
         } catch(Exception e) {
-            log(FATAL, LOG_ID, "failed to load minecraft class (" + minecraftClassName + "): " + e);
+            log(FATAL, LOG_ID, "failed to load minecraft class (" + minecraftClassName + ")");
+            log(FATAL, LOG_ID, e);
         }
 
         if(minecraftClass == null) return false;
@@ -39,7 +41,10 @@ public final class MinecraftClassSetup {
             mcDirFields = Collections.singletonList(Integer.parseInt(config.getProperty("mcDirFieldIndex")));
         else mcDirFields = findMCDirectoryFields(minecraftClass);
 
-        if(mcDirFields.isEmpty()) return false;
+        if(mcDirFields.isEmpty()) {
+            log(FATAL, LOG_ID, "failed to detect \"minecraftDir\" field");
+            return false;
+        }
 
         File directory = new File(".");
 

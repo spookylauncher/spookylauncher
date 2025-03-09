@@ -12,7 +12,7 @@ import io.github.spookylauncher.util.Locale;
 
 import java.io.File;
 
-import static io.github.spookylauncher.components.log.Level.*;
+import static io.github.spookylauncher.log.Level.*;
 
 public final class VersionsInstaller extends LauncherComponent {
 

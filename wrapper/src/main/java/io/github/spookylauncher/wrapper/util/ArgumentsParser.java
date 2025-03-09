@@ -12,9 +12,11 @@ public final class ArgumentsParser {
             boolean prefix = args[i].startsWith("--");
 
             if(nextValue) {
-                if(prefix) props.setProperty(args[i - 1], "true");
+                final String key = args[i - 1].substring(2);
+
+                if(prefix) props.setProperty(key, "true");
                 else {
-                    props.setProperty(args[i - 1], args[i]);
+                    props.setProperty(key, args[i]);
                     nextValue = false;
                 }
             } else if(!prefix) throw new IllegalArgumentException("key without prefix: " + args[i]);

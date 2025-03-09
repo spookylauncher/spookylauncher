@@ -1,4 +1,4 @@
-package io.github.spookylauncher.components.log;
+package io.github.spookylauncher.log;
 
 public enum Level {
     DEBUG("debug"),

@@ -3,7 +3,7 @@ package io.github.spookylauncher.components;
 import io.github.spookylauncher.advio.InstallAdapter;
 import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.advio.collectors.Collector;
-import io.github.spookylauncher.components.log.Level;
+import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.components.ui.spi.UIProvider;
 
 import java.io.File;

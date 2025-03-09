@@ -6,7 +6,7 @@ import io.github.spookylauncher.advio.collectors.URLCollector;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
-import static io.github.spookylauncher.components.log.Level.*;
+import static io.github.spookylauncher.log.Level.*;
 
 public class ManifestDownloader<T> extends LauncherComponent {
 
