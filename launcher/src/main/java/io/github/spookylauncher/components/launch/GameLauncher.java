@@ -5,9 +5,9 @@ import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.debug.LocalLibraries;
-import io.github.spookylauncher.components.log.Level;
+import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.GameStartData;
-import io.github.spookylauncher.components.log.LogsController;
+import io.github.spookylauncher.components.LogsController;
 import io.github.spookylauncher.components.ui.spi.UIProvider;
 import io.github.spookylauncher.components.ui.spi.TitlePanel;
 import io.github.spookylauncher.tree.LibrariesCollection;
@@ -199,7 +199,7 @@ public class GameLauncher extends LauncherComponent {
         final String nickname = options.getNickname();
 
         properties.setProperty("nickname", nickname);
-        properties.setProperty("main", version.getLaunchProperty("main"));
+        properties.setProperty("main", version.getLaunchProperty("main", Constants.DEFAULT_MC_MAIN));
         properties.setProperty("launcher.dir", "\"" + workDirectory.getAbsolutePath() + "\"");
         properties.setProperty("launcher.resourcesDir", "\"" + workDirectory.getAbsolutePath() + "/resources\"");
 
