@@ -42,7 +42,10 @@ public final class VersionsList extends ManifestDownloader<VersionsManifest> {
         if(super.downloadManifest()) {
             final UIProvider uiProvider = components.get(UIProvider.class);
 
-            if(uiProvider.panel().getCurrentVersion() == null && components.get(OptionsController.class).getOptions().selectedVersion != null)
+            if (
+                    (uiProvider.panel() == null || uiProvider.panel().getCurrentVersion() == null) &&
+                    components.get(OptionsController.class).getOptions().selectedVersion != null
+            )
                 uiProvider.panel().setVersion(this.getSelectedVersionInfo());
 
             uiProvider.panel().setEnabledButton(TitlePanel.VERSIONS, true);
