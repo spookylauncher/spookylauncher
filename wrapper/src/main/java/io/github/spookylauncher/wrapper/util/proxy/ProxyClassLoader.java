@@ -13,7 +13,7 @@ public final class ProxyClassLoader extends ClassLoader {
     private final List<ClassTransformer> transformers = new ArrayList<>();
     private final HashMap<String, Class<?>> loaded = new HashMap<>();
 
-    private final HashSet<String> closedPackage = new HashSet<>();
+    private final HashSet<String> closedPackages = new HashSet<>();
 
     private final HashMap<String, List<ClassTransformer>> specializedTransformers = new HashMap<>();
 
@@ -39,10 +39,11 @@ public final class ProxyClassLoader extends ClassLoader {
     public ProxyClassLoader(ClassLoader parent, boolean specialized) {
         super(parent);
         this.specialized = specialized;
+        this.closedPackages.addAll(PROHIBITED_PACKAGES);
     }
 
     public void closePackage(String pkg) {
-        this.closedPackage.add(pkg);
+        this.closedPackages.add(pkg);
     }
 
     public void addTransformer(ClassTransformer transformer) {
@@ -76,8 +77,8 @@ public final class ProxyClassLoader extends ClassLoader {
         return true;
     }
 
-    private boolean canAccess(String name) {
-        for(String pkg : closedPackage) {
+    private boolean canDefine(String name) {
+        for(String pkg : closedPackages) {
             if(name.startsWith(pkg + "."))
                 return false;
         }
@@ -89,7 +90,8 @@ public final class ProxyClassLoader extends ClassLoader {
     public Class<?> loadClass(String name) throws ClassNotFoundException {
         if(loaded.containsKey(name)) return loaded.get(name);
 
-        if(!canAccess(name)) return null;
+        if(!canDefine(name))
+            return super.loadClass(name);
 
         String path = name.replace(".", "/") + ".class";
 
@@ -103,7 +105,7 @@ public final class ProxyClassLoader extends ClassLoader {
 
                 int len;
 
-                while((len = in.read()) != -1)
+                while((len = in.read(buffer)) != -1)
                     baOs.write(buffer, 0, len);
 
                 in.close();
