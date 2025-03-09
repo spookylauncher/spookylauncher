@@ -11,7 +11,7 @@ import java.util.List;
 public final class LocalLibraries {
     public static final List<LibraryInfo> LOCAL_LIBS = new ArrayList<>();
 
-    public static LibraryInfo addLocalLibrary(
+    private static void addLocalLibrary(
             String name,
             String packet,
             String version,
@@ -28,7 +28,7 @@ public final class LocalLibraries {
         final DownloadableFile file = new DownloadableFile();
 
         try {
-            file.downloadUrl = jar.toURI().toURL().toString();
+            file.downloadUrl = jar.getAbsoluteFile().toURI().toURL().toString();
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -36,8 +36,6 @@ public final class LocalLibraries {
         libInfo.jar = file;
 
         LOCAL_LIBS.add(libInfo);
-
-        return libInfo;
     }
 
     static {

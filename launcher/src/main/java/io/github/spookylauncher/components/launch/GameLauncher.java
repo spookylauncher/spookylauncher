@@ -1,5 +1,6 @@
 package io.github.spookylauncher.components.launch;
 
+import io.github.spookylauncher.Constants;
 import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.components.*;
@@ -189,7 +190,7 @@ public class GameLauncher extends LauncherComponent {
             cmd.add(classPath);
         }
 
-        cmd.add("com.github.onran0.spookylauncher.SLWrapper");
+        cmd.add(Constants.WRAPPER_MAIN);
 
         //cmd.add(version.getLaunchProperty("main", "Start"));
 
@@ -202,7 +203,7 @@ public class GameLauncher extends LauncherComponent {
         properties.setProperty("launcher.dir", "\"" + workDirectory.getAbsolutePath() + "\"");
         properties.setProperty("launcher.resourcesDir", "\"" + workDirectory.getAbsolutePath() + "/resources\"");
 
-        String gameArgs = "--nickname ${nickname} --resourcesDirectory ${launcher.resourcesDir} --minecraftClass ${main}";
+        String gameArgs = Constants.DEFAULT_GAME_ARGS;
 
         if(version.hasProperty("gameArgs"))
             gameArgs += " " + version.getLaunchProperty("gameArgs");

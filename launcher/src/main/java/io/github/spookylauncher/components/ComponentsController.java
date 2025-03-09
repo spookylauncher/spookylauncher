@@ -69,7 +69,9 @@ public final class ComponentsController {
 
         onInitializedEvents.clear();
     }
+
     private boolean canceled;
+
     private void initializeComponent(int index, boolean async) {
         if(canceled) return;
 
@@ -93,7 +95,7 @@ public final class ComponentsController {
                 }
             } catch(Exception e) {
                 log(ERROR, LOG_ID, "failed to initialize \"" + component.getName() + "\" launcher component:");
-                e.printStackTrace();
+                log(ERROR, LOG_ID, e);
             }
         };
 
