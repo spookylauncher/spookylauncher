@@ -41,20 +41,26 @@ public final class VersionsList extends ManifestDownloader<VersionsManifest> {
     @Override
     public boolean downloadManifest() {
         if(super.downloadManifest()) {
-
             final UIProvider uiProvider = components.get(UIProvider.class);
 
-            while(uiProvider.panel() == null) {
-                System.out.println(uiProvider);
-                System.out.println(uiProvider.panel());
-                System.out.println(Thread.currentThread().getName());
-            }
+            final Runnable task = () -> {
+                if (
+                        uiProvider.panel().getCurrentVersion() == null && components.get(OptionsController.class).getOptions().selectedVersion != null
+                ) uiProvider.panel().setVersion(this.getSelectedVersionInfo());
 
-            if (
-                    uiProvider.panel().getCurrentVersion() == null && components.get(OptionsController.class).getOptions().selectedVersion != null
-            ) uiProvider.panel().setVersion(this.getSelectedVersionInfo());
+                uiProvider.panel().setEnabledButton(TitlePanel.VERSIONS, true);
+            };
 
-            uiProvider.panel().setEnabledButton(TitlePanel.VERSIONS, true);
+            if(uiProvider.panel() == null) {
+                components.addOnInitializedEvent(
+                        components.getIndex((LauncherComponent) uiProvider),
+                        c -> {
+                            task.run();
+                            return false;
+                        }
+                );
+            } else
+                task.run();
 
             return true;
         } else return false;

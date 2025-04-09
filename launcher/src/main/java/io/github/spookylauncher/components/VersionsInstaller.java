@@ -11,6 +11,9 @@ import io.github.spookylauncher.advio.collectors.URLCollector;
 import io.github.spookylauncher.util.Locale;
 
 import java.io.File;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 import static io.github.spookylauncher.log.Level.*;
 
@@ -27,6 +30,45 @@ public final class VersionsInstaller extends LauncherComponent {
         super("Versions Installer", components);
         this.librariesManifestDownloaderName = librariesManifestDownloaderName;
         this.mirrorsManifestDownloaderName = mirrorsManifestDownloaderName;
+    }
+
+    public void installLibraries(VersionInfo version, Consumer<Boolean> onInstalledCallback) {
+        LibrariesController libsController = components.get(LibrariesController.class);
+        LibrariesManifest manifest = ( (ManifestDownloader<LibrariesManifest>) components.get(librariesManifestDownloaderName)).getManifest();
+
+        AtomicInteger uninstalledCount = new AtomicInteger(version.libsCollections.length);
+
+        AtomicBoolean success = new AtomicBoolean(true);
+
+        for(String libs : version.libsCollections) {
+            LibrariesCollection libsCollection = manifest.getLibsCollection(libs);
+
+            if(libsCollection == null) continue;
+
+            if(!libsController.isInstalled(libsCollection)) {
+                libsController.install(libsCollection,
+                        s -> {
+                            uninstalledCount.getAndDecrement();
+
+                            if(!s)
+                                success.set(false);
+                        }
+                );
+            } else uninstalledCount.getAndDecrement();
+        }
+
+        if(onInstalledCallback != null) {
+            AsyncOperation.run(
+                    () -> {
+                        while(true) {
+                            if(uninstalledCount.get() <= 0) {
+                                onInstalledCallback.accept(success.get());
+                                break;
+                            }
+                        }
+                    }
+            );
+        }
     }
 
     public void install(VersionInfo version) {
@@ -57,15 +99,8 @@ public final class VersionsInstaller extends LauncherComponent {
             }
         }
 
-        if(version.libsCollections != null) {
-            for(String libs : version.libsCollections) {
-                LibrariesCollection libsCollection = manifest.getLibsCollection(libs);
-
-                if(libsCollection == null) continue;
-
-                if(!libsController.isInstalled(libsCollection)) libsController.install(libsCollection, null);
-            }
-        }
+        if(version.libsCollections != null)
+            installLibraries(version, null);
 
         File versionDir = new File(versions.versionsDirectory, version.name);
 

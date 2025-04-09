@@ -2,6 +2,7 @@ package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.components.events.Events;
 import io.github.spookylauncher.components.launch.GameLauncher;
+import io.github.spookylauncher.components.ui.stub.StubUIProvider;
 import io.github.spookylauncher.components.ui.swing.SwingUIProvider;
 import io.github.spookylauncher.components.ui.spi.UIProvider;
 import io.github.spookylauncher.tree.jre.JREsManifest;

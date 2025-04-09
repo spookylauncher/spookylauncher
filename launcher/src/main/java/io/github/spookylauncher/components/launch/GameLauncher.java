@@ -43,6 +43,7 @@ public class GameLauncher extends LauncherComponent {
         final UIProvider uiProvider = components.get(UIProvider.class);
         final Options options = components.get(OptionsController.class).getOptions();
         final LogsController logs = components.get(LogsController.class);
+        final VersionsInstaller versionsInstaller = components.get(VersionsInstaller.class);
 
         if(options.selectedJavaType == null) {
             log(Level.ERROR, "no selected java");
@@ -56,27 +57,39 @@ public class GameLauncher extends LauncherComponent {
 
         uiProvider.panel().setEnabledButtons(false, TitlePanel.VERSIONS, TitlePanel.PLAY);
 
-        AsyncOperation.run(
-                () -> {
-                    boolean success =
+        final Runnable launchTask = () -> {
+            boolean success =
                     startProcess
-                    (
-                            version,
-                            new File
                             (
-                                components.get(VersionsList.class).versionsDirectory,
-                                version.name
-                            ),
-                            logs,
-                            log,
-                            new File(logsDirectory, "latest.log")
-                    );
+                                    version,
+                                    new File
+                                            (
+                                                    components.get(VersionsList.class).versionsDirectory,
+                                                    version.name
+                                            ),
+                                    logs,
+                                    log,
+                                    new File(logsDirectory, "latest.log")
+                            );
 
+            if(success) {
+                uiProvider.window().setVisible(false);
+
+                if(options.discordPresence) components.get(DiscordPresenceViewer.class).showGamePresence(version);
+            }
+        };
+
+        log(Level.INFO, "installing libraries for version " + version.name);
+
+        versionsInstaller.installLibraries(
+                version,
+                success -> {
                     if(success) {
-                        uiProvider.window().setVisible(false);
+                        log(Level.INFO, "libraries successfully installed");
+                        AsyncOperation.run(launchTask);
+                    } else
+                        log(Level.ERROR, "failed to install libraries");
 
-                        if(options.discordPresence) components.get(DiscordPresenceViewer.class).showGamePresence(version);
-                    }
                 }
         );
     }
@@ -241,6 +254,8 @@ public class GameLauncher extends LauncherComponent {
 
             data.process = builder.start();
             data.uptime = System.currentTimeMillis();
+
+            log(Level.INFO, "launching game");
 
             logs.startLogging(data, log, latestLog, () -> {
                 final UIProvider uiProvider = components.get(UIProvider.class);

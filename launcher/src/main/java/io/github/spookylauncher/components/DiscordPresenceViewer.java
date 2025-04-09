@@ -20,28 +20,35 @@ public final class DiscordPresenceViewer extends LauncherComponent {
 
         AsyncOperation.run(
                 () -> {
-                    components.get(Events.class).subscribe(Events.SHUTDOWN, args -> {
-                        active = false;
-                        log(INFO, "disconnecting from discord client...");
-                        DiscordRPC.discordShutdown();
-                    });
+                    try {
+                        components.get(Events.class).subscribe(Events.SHUTDOWN, args -> {
+                            active = false;
+                            log(INFO, "disconnecting from discord client...");
+                            DiscordRPC.discordShutdown();
+                        });
 
-                    DiscordEventHandlers handlers = new DiscordEventHandlers.Builder()
-                            .setReadyEventHandler(user -> log(INFO, "successfully connected to discord client"))
-                            .setErroredEventHandler((code, message) -> {
-                                log(ERROR, "error occurred in Discord RPC: #" + code + ": " + message);
-                            })
-                            .setDisconnectedEventHandler((code, message) -> {
-                                        log(INFO, "disconnected from discord client: #" + code + ": " + message);
-                                    }
-                            )
-                            .build();
+                        DiscordEventHandlers handlers = new DiscordEventHandlers.Builder()
+                                .setReadyEventHandler(user -> log(INFO, "successfully connected to discord client"))
+                                .setErroredEventHandler((code, message) -> {
+                                    log(ERROR, "error occurred in Discord RPC: #" + code + ": " + message);
+                                })
+                                .setDisconnectedEventHandler((code, message) -> {
+                                            log(INFO, "disconnected from discord client: #" + code + ": " + message);
+                                        }
+                                )
+                                .build();
 
-                    DiscordRPC.discordInitialize(APP_ID, handlers, true);
+                        DiscordRPC.discordInitialize(APP_ID, handlers, true);
 
-                    active = true;
+                        active = true;
 
-                    while(active) DiscordRPC.discordRunCallbacks();
+                        while(active) {
+                            DiscordRPC.discordRunCallbacks();
+                            Thread.sleep(100L);
+                        }
+                    } catch(final Exception e) {
+                        e.printStackTrace();
+                    }
                 }
         );
 

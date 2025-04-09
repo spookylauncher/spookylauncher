@@ -13,6 +13,7 @@ import io.github.spookylauncher.log.Level;
 import java.io.File;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public final class LibrariesController extends LauncherComponent {
@@ -60,9 +61,11 @@ public final class LibrariesController extends LauncherComponent {
 
         LibrariesManifest manifest = getManifest();
 
-        if(collection.libraries.length != 0) { for(LibraryInfo lib : collection.libraries) if(!isInstalled(manifest.getLibrary(lib.name, lib.version))) return false; }
+        for (LibraryInfo lib : collection.libraries)
+            if (!isInstalled(manifest.getLibrary(lib.name, lib.version))) return false;
 
-        if(collection.collections.length != 0) { for(String col : collection.collections) if(!isInstalled(manifest.getLibsCollection(col))) return false; }
+        for (String col : collection.collections)
+            if (!isInstalled(manifest.getLibsCollection(col))) return false;
 
         return true;
     }
@@ -72,21 +75,22 @@ public final class LibrariesController extends LauncherComponent {
 
         LibrariesManifest manifest = getManifest();
 
+        AtomicBoolean success = new AtomicBoolean(true);
+        AtomicInteger uninstalledCount = new AtomicInteger();
+
         for(String subCollectionName : collection.collections) {
             LibrariesCollection subCollection = manifest.getLibsCollection(subCollectionName);
 
-            AtomicBoolean failed = new AtomicBoolean();
+            uninstalledCount.getAndIncrement();
 
             install
             (
                subCollection,
-               success -> failed.set(!success)
+               s -> {
+                   success.set(s);
+                   uninstalledCount.getAndDecrement();
+               }
             );
-
-            if(failed.get()) {
-                onInstalled.accept(false);
-                return;
-            }
         }
 
         for(LibraryInfo lib : collection.libraries) {
@@ -94,21 +98,28 @@ public final class LibrariesController extends LauncherComponent {
 
             assert libInfo != null;
 
-            AtomicBoolean failed = new AtomicBoolean();
+            uninstalledCount.getAndIncrement();
 
             install
             (
                 libInfo,
-                success -> failed.set(!success)
+                s -> {
+                    success.set(s);
+                    uninstalledCount.getAndDecrement();
+                }
             );
-
-            if(failed.get()) {
-                onInstalled.accept(false);
-                return;
-            }
         }
 
-        if(onInstalled != null) onInstalled.accept(true);
+        AsyncOperation.run(
+                () -> {
+                    while(true) {
+                        if(uninstalledCount.get() <= 0 || !success.get()) {
+                            onInstalled.accept(success.get());
+                            break;
+                        }
+                    }
+                }
+        );
     }
 
     public void install(LibraryInfo lib, Consumer<Boolean> onInstalled) {

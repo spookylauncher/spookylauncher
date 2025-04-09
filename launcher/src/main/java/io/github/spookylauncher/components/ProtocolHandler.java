@@ -44,6 +44,7 @@ public final class ProtocolHandler extends LauncherComponent {
 
                         while(running) {
                             reader.read(ProtocolHandler.this);
+                            Thread.sleep(100L);
                         }
 
                         reader.close();
