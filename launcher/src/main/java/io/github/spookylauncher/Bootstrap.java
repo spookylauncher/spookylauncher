@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.Translator;
+import io.github.spookylauncher.components.events.EventsManager;
 import io.github.spookylauncher.components.events.Events;
 import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.log.Logger;
@@ -127,7 +128,7 @@ public final class Bootstrap implements Runnable {
             });
         }
 
-        controller.get(Events.class).subscribe(Events.SHUTDOWN, args -> {
+        controller.get(EventsManager.class).subscribe(Events.SHUTDOWN, args -> {
             Logger.log(Level.INFO, LOG_ID, "releasing file lock");
             try {
                 lock.release();

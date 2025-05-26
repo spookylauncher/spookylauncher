@@ -3,6 +3,7 @@ package io.github.spookylauncher.components.ui.swing;
 import io.github.spookylauncher.advio.ResourceCollector;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
+import io.github.spookylauncher.components.events.EventsManager;
 import io.github.spookylauncher.components.events.Events;
 import io.github.spookylauncher.components.ui.spi.MainWindow;
 
@@ -32,7 +33,7 @@ class MainWindowImpl extends LauncherComponent implements MainWindow {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
 
-                components.get(Events.class).emitAndUnsubscribeAll(Events.SHUTDOWN);
+                components.get(EventsManager.class).emitAndUnsubscribeAll(Events.SHUTDOWN);
 
                 System.exit(0);
             }
@@ -47,7 +48,7 @@ class MainWindowImpl extends LauncherComponent implements MainWindow {
 
     @Override
     public void toTopFront() {
-        EventQueue.invokeLater(() -> {
+        java.awt.EventQueue.invokeLater(() -> {
             int state = frame.getExtendedState();
             state &= ~JFrame.ICONIFIED;
             frame.setExtendedState(state);

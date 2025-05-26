@@ -1,5 +1,6 @@
 package io.github.spookylauncher.components;
 
+import io.github.spookylauncher.components.events.EventsManager;
 import io.github.spookylauncher.components.events.Events;
 import io.github.spookylauncher.tree.versions.VersionInfo;
 import io.github.spookylauncher.advio.AsyncOperation;
@@ -21,7 +22,7 @@ public final class DiscordPresenceViewer extends LauncherComponent {
         AsyncOperation.run(
                 () -> {
                     try {
-                        components.get(Events.class).subscribe(Events.SHUTDOWN, args -> {
+                        components.get(EventsManager.class).subscribe(Events.SHUTDOWN, args -> {
                             active = false;
                             log(INFO, "disconnecting from discord client...");
                             DiscordRPC.discordShutdown();

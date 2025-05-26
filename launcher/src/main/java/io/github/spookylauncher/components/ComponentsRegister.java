@@ -1,8 +1,8 @@
 package io.github.spookylauncher.components;
 
+import io.github.spookylauncher.components.events.EventsManager;
 import io.github.spookylauncher.components.events.Events;
 import io.github.spookylauncher.components.launch.GameLauncher;
-import io.github.spookylauncher.components.ui.stub.StubUIProvider;
 import io.github.spookylauncher.components.ui.swing.SwingUIProvider;
 import io.github.spookylauncher.components.ui.spi.UIProvider;
 import io.github.spookylauncher.tree.jre.JREsManifest;
@@ -48,7 +48,7 @@ public final class ComponentsRegister {
         int downloader = controller.put(new Downloader(controller));
         int errorHandler = controller.put(new ErrorHandler(controller));
         int protocolHandler = controller.put(new ProtocolHandler(controller));
-        int events = controller.put(new Events(controller));
+        int events = controller.put(new EventsManager(controller));
 
         int launcherManifestDownloader = controller.put(launcherManifestDownloaderName, new ManifestDownloader<>(controller, LauncherManifest.class, manifestsURLs.getLauncherManifestURL()));
         int librariesManifestDownloader = controller.put(librariesManifestDownloaderName, new ManifestDownloader<>(controller, LibrariesManifest.class, manifestsURLs.getLibrariesManifestURL()));
@@ -71,9 +71,9 @@ public final class ComponentsRegister {
         priority.add(uiProvider);
         priority.add(discordPresenceViewer);
 
-        Events eventsObj = controller.get(events);
+        EventsManager eventsManager = controller.get(events);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> eventsObj.emitAndUnsubscribeAll(Events.SHUTDOWN)));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> eventsManager.emitAndUnsubscribeAll(Events.SHUTDOWN)));
     }
 
     public void createComponents() {
