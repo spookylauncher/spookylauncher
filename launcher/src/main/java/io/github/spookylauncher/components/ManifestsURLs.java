@@ -14,7 +14,7 @@ public final class ManifestsURLs extends LauncherComponent {
     }
 
     public ManifestsURLs(final ComponentsController components) {
-        super("", components);
+        super("Manifests URLs", components);
 
         OptimalDataURLSolver solver = new OptimalDataURLSolver(
                 BASE_DATA_URLS,

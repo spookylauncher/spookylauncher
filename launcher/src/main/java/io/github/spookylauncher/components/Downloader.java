@@ -34,7 +34,7 @@ public final class Downloader extends LauncherComponent {
 
                 IOUtils.install(collector, destination, adapter);
 
-                adapter.closeDialog.run();
+                adapter.onEnd.run();
             }
         } catch(Exception e) {
             log(Level.ERROR, "downloading failed");
@@ -57,7 +57,7 @@ public final class Downloader extends LauncherComponent {
 
                 IOUtils.unzip(collector, destination, adapter);
 
-                adapter.closeDialog.run();
+                adapter.onEnd.run();
             }
         } catch(Exception e) {
             log(Level.ERROR, "downloading and unpacking failed");
@@ -86,8 +86,6 @@ public final class Downloader extends LauncherComponent {
 
             if(finalOnCancel != null) finalOnCancel.run();
         };
-
-
 
         return options.ui ?
                 components.get(UIProvider.class).dialogs().createInstallationDialog(

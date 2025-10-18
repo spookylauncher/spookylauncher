@@ -8,7 +8,7 @@ public class InstallAdapter {
         public Consumer<Integer> progressBarMaxConsumer;
         public Supplier<Boolean> cancelSupplier;
         public Runnable onCancel;
-        public Runnable closeDialog;
+        public Runnable onEnd;
 
         public boolean consumeFullPaths = true;
 }
