@@ -5,11 +5,15 @@ import io.github.spookylauncher.advio.IOUtils;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Properties;
 
 public abstract class Collector {
+    private static final CharsetDecoder UTF_DECODER = StandardCharsets.UTF_8.newDecoder();
+
     protected final String path;
     private boolean buffering;
 
@@ -40,7 +44,7 @@ public abstract class Collector {
     }
 
     public final String collectString() throws IOException {
-        return IOUtils.readString(collectInput());
+        return UTF_DECODER.decode(ByteBuffer.wrap(collectBytes())).toString();
     }
 
     public InputStream collectInput() throws IOException {

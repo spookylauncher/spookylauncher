@@ -3,11 +3,15 @@ package io.github.spookylauncher.advio.peddlers;
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Properties;
 
 public abstract class Peddler {
+    private static final CharsetEncoder UTF_ENCODER = StandardCharsets.UTF_8.newEncoder();
     protected final String path;
 
     public Peddler(String path) {
@@ -35,7 +39,12 @@ public abstract class Peddler {
     }
 
     public final void peddleString(String str) throws IOException {
-        peddleBytes(str.getBytes(StandardCharsets.UTF_8));
+        ByteBuffer buf = UTF_ENCODER.encode(CharBuffer.wrap(str));
+
+        byte[] bytes = new byte[buf.remaining()];
+        buf.get(bytes);
+
+        peddleBytes(bytes);
     }
 
     public abstract void peddleStream(InputStream in) throws IOException;
@@ -50,7 +59,7 @@ public abstract class Peddler {
 
     public OutputStream asStream(final int bufferSize) {
         return new OutputStream() {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             int count = 0;
 
             @Override

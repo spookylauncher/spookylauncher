@@ -21,226 +21,179 @@ public final class IOUtils {
         return ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalPhysicalMemorySize();
     }
 
-    public static List<String> readLines(InputStream in) {
-        try {
-            List<String> lines = new ArrayList<>();
+    private static List<String> readLines(InputStream in) throws IOException {
+        List<String> lines = new ArrayList<>();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
-            String line;
+        String line;
 
-            while((line = reader.readLine()) != null) lines.add(line);
+        while((line = reader.readLine()) != null)
+            lines.add(line);
 
-            reader.close();
+        reader.close();
 
-            return lines;
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+        return lines;
     }
 
-    public static String readString(InputStream in) {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            StringBuilder builder = new StringBuilder();
+    public static String readString(InputStream in) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        StringBuilder builder = new StringBuilder();
 
-            int character;
+        int character;
 
-            while((character = reader.read()) != -1) builder.append((char) character);
+        while((character = reader.read()) != -1)
+            builder.append((char) character);
 
-            reader.close();
-            return builder.toString();
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+        reader.close();
+
+        return builder.toString();
     }
 
-    public static byte[] readBytes(InputStream in) {
-        try {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    public static byte[] readBytes(InputStream in) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
-            int nRead;
-            byte[] data = new byte[16384];
+        int nRead;
+        byte[] data = new byte[16384];
 
-            while ((nRead = in.read(data, 0, data.length)) != -1) buffer.write(data, 0, nRead);
+        while ((nRead = in.read(data, 0, data.length)) != -1)
+            buffer.write(data, 0, nRead);
 
-            return buffer.toByteArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return buffer.toByteArray();
     }
 
-    private static boolean move(InstallAdapter adapter, int length, InputStream in, OutputStream out) throws IOException {
+    private static boolean move(InstallAdapter adapter, InputStream in, OutputStream out) throws IOException {
         boolean cancel = false;
 
         boolean hasCancelSupplier = adapter.cancelSupplier != null;
         boolean hasProgressConsumer = adapter.progressConsumer != null;
-
-        int updateCounterLimit = length / 100;
-        byte supplierCounter = 0;
         int len;
         int counter = 0;
-        int updateCounter = 0;
 
-        while((len = in.read()) != -1) {
-            out.write(len);
+        byte[] buffer = new byte[16384];
 
-            counter++;
+        while((len = in.read(buffer)) != -1) {
+            out.write(buffer, 0, len);
 
-            if(updateCounter++ == updateCounterLimit) {
-                updateCounter = 0;
+            counter += len;
 
-                if(hasProgressConsumer) adapter.progressConsumer.accept(counter);
-
-                if(++supplierCounter == 5) {
-                    supplierCounter = 0;
-
-                    if(hasCancelSupplier && adapter.cancelSupplier.get()) {
-                        cancel = true;
-                        break;
-                    }
-                }
-            }
+            if(hasCancelSupplier && adapter.cancelSupplier.get()) {
+                cancel = true;
+                break;
+            } else if(hasProgressConsumer) adapter.progressConsumer.accept(counter);
         }
 
-        return !cancel;
+        return cancel;
     }
-    public static boolean install(Collector collector, File dest, InstallAdapter fns) {
-        try {
-            BufferedInputStream in = new BufferedInputStream(collector.collectInput());
 
-            int length = (int) collector.size();
+    public static void install(Collector collector, File dest, InstallAdapter fns) throws IOException {
+        InputStream in = collector.collectInput();
 
-            BufferedOutputStream out;
-            FileOutputStream fout;
+        int length = (int) collector.size();
 
-            boolean cancel;
+        OutputStream out;
 
-            fns.progressBarMaxConsumer.accept(length);
+        boolean cancel;
 
-            out = new BufferedOutputStream(fout = new FileOutputStream(dest));
+        fns.progressBarMaxConsumer.accept(length);
 
-            cancel = !move(fns, length, in, out);
+        out = Files.newOutputStream(dest.toPath());
+
+        cancel = move(fns, in, out);
+
+        out.flush();
+        out.close();
+
+        in.close();
+
+        if(cancel && fns.onCancel != null)
+            fns.onCancel.run();
+    }
+
+    public static void unzip(Collector zip, File dest, InstallAdapter fns) throws IOException {
+        ZipInputStream in = new ZipInputStream(new BufferedInputStream(zip.collectInput(), 16384));
+
+        ZipEntry e;
+
+        String name;
+
+        OutputStream out;
+        File ef;
+
+        boolean cancel = false;
+        boolean hasTitleConsumer = fns.titleConsumer != null;
+
+        while((e = in.getNextEntry()) != null) {
+            ef = new File(dest, e.getName());
+
+            if(e.isDirectory()) {
+                if(!ef.mkdirs())
+                    throw new IOException("Failed to create directory " + ef.getAbsolutePath());
+                continue;
+            }
+
+            fns.progressBarMaxConsumer.accept((int) e.getSize());
+
+            if(hasTitleConsumer) {
+                name = e.getName();
+
+                if(!fns.consumeFullPaths) name = name.substring(name.lastIndexOf("/") + 1);
+
+                fns.titleConsumer.accept(name);
+            }
+
+            if(!ef.getParentFile().mkdirs())
+                throw new IOException("Failed to create directory " + ef.getParentFile().getAbsolutePath());
+
+            out = Files.newOutputStream(ef.toPath());
+
+            cancel = move(fns, in, out);
 
             out.flush();
             out.close();
-            fout.close();
-
-            in.close();
-
-            if(cancel && fns.onCancel != null) fns.onCancel.run();
-
-            return true;
-        } catch(Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean unzip(Collector zip, File dest, InstallAdapter fns) {
-        try {
-            ZipInputStream in = new ZipInputStream(new BufferedInputStream(zip.collectInput(), 8192 * 5));
-
-            ZipEntry e;
-
-            int length;
-            String name;
-
-            BufferedOutputStream out;
-            FileOutputStream fout;
-            File ef;
-
-            boolean cancel = false;
-            boolean hasTitleConsumer = fns.titleConsumer != null;
-
-            while((e = in.getNextEntry()) != null) {
-                ef = new File(dest, e.getName());
-
-                if(e.isDirectory()) {
-                    ef.mkdirs();
-                    continue;
-                }
-
-                length = (int) e.getSize();
-
-                fns.progressBarMaxConsumer.accept(length);
-
-                if(hasTitleConsumer) {
-                    name = e.getName();
-
-                    if(!fns.consumeFullPaths) name = name.substring(name.lastIndexOf("/") + 1);
-
-                    fns.titleConsumer.accept(name);
-                }
-
-                ef.getParentFile().mkdirs();
-
-                out = new BufferedOutputStream(fout = new FileOutputStream(ef));
-
-                cancel = !move(fns, length, in, out);
-
-                out.flush();
-                out.close();
-                fout.close();
-                in.closeEntry();
-
-                if(cancel) break;
-            }
-
-            in.close();
-
-            if(cancel && fns.onCancel != null) fns.onCancel.run();
-
-            return true;
-        } catch(Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    public static void deleteTree(File... files) {
-        try {
-            for(File file : files) {
-                if(!file.exists()) continue;
-
-                if(file.isFile()) file.delete();
-                else {
-                    deleteTree(file.listFiles());
-
-                    file.delete();
-                }
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static boolean copy(File src, File dest) {
-        try {
-            FileInputStream fin;
-            FileOutputStream fout;
-
-            BufferedInputStream in = new BufferedInputStream(fin = new FileInputStream(src));
-            BufferedOutputStream out = new BufferedOutputStream(fout = new FileOutputStream(dest));
-
-            int len;
-
-            while((len = in.read()) != -1) out.write(len);
-
-            in.close();
-            out.flush();
             out.close();
-            fin.close();
-            fout.close();
+            in.closeEntry();
 
-            return true;
-        } catch(Exception e) {
-            e.printStackTrace();
-            return false;
+            if(cancel) break;
+        }
+
+        in.close();
+
+        if(cancel && fns.onCancel != null) fns.onCancel.run();
+    }
+
+    public static void deleteTree(File... files) throws IOException {
+        for(File file : files) {
+            if(!file.exists()) continue;
+
+            if(file.isDirectory()) {
+                File[] dirFiles = file.listFiles();
+
+                if(dirFiles != null)
+                    deleteTree(dirFiles);
+            }
+
+            if(!file.delete())
+                throw new IOException("Failed to delete file " + file.getAbsolutePath());
         }
     }
 
-    public static String getPathWithoutFormat(String path) {
+    public static void copy(File src, File dest) throws IOException {
+        InputStream in = Files.newInputStream(src.toPath());
+        OutputStream out = Files.newOutputStream(dest.toPath());
+
+        byte[] buffer = new byte[16384];
+
+        int len;
+
+        while((len = in.read(buffer)) != -1)
+            out.write(buffer, 0, len);
+
+        in.close();
+        out.close();
+    }
+
+    public static String getPathWithoutExtension(String path) {
         path = path.replace("\\", "/");
 
         if
@@ -254,59 +207,54 @@ public final class IOUtils {
         else return path.substring(0, path.lastIndexOf("."));
     }
 
-    public static String[] locate(String processName) {
+    public static String[] locate(String processName) throws IOException, InterruptedException {
         List<String> result = new ArrayList<>();
 
-        try {
-            String commandName = "";
+        String commandName;
 
-            switch(Objects.requireNonNull(OSType.CURRENT)) {
-                case WINDOWS: commandName = "where"; break;
-                case MACOS: commandName = "which"; break;
-                case LINUX: commandName = "locate"; break;
-                default: throw new RuntimeException("Unknown OS: " + OSType.CURRENT);
-            }
-
-            Process process = Runtime.getRuntime().exec(commandName + " " + processName);
-
-            if(process.waitFor() == 0) result.addAll(readLines(process.getInputStream()));
-        } catch(Exception e) {
-            e.printStackTrace();
+        switch(Objects.requireNonNull(OSType.CURRENT)) {
+            case WINDOWS: commandName = "where"; break;
+            case MACOS: commandName = "which"; break;
+            case LINUX: commandName = "locate"; break;
+            default: throw new IOException("Unknown OS: " + OSType.CURRENT);
         }
+
+        Process process = Runtime.getRuntime().exec(commandName + " " + processName);
+
+        if(process.waitFor() == 0) result.addAll(readLines(process.getInputStream()));
 
         return result.toArray(new String[0]);
     }
+
     public static File find(String ending, File... dirs) {
         return find(ending, true, dirs);
     }
     public static File find(String ending, boolean formatSensitivity, File...dirs) {
         return find(ending, formatSensitivity, dirs[0].toPath(), dirs);
     }
+
     public static File find(String ending, boolean formatSensitivity, Path rootPath, File...dirs) {
-        try {
-            for(File dir : dirs) {
-                File[] files = dir.listFiles();
+        for(File dir : dirs) {
+            File[] files = dir.listFiles();
 
-                if(files == null) continue;
+            if(files == null) continue;
 
-                for(File file : files) {
-                    if(file.isFile()) {
-                        String path =
+            for(File file : files) {
+                if(file.isFile()) {
+                    String path =
                         rootPath
                         .relativize(file.toPath())
                         .toString()
                         .replace("\\", "/");
 
-                        if(!formatSensitivity) path = getPathWithoutFormat(path);
+                    if(!formatSensitivity) path = getPathWithoutExtension(path);
 
-                        if (path.endsWith(ending)) return file;
-                    }
-                    else return find(ending, formatSensitivity, rootPath, file);
+                    if (path.endsWith(ending)) return file;
                 }
+                else return find(ending, formatSensitivity, rootPath, file);
             }
-        } catch(Exception e) {
-            e.printStackTrace();
         }
+
         return null;
     }
 
@@ -321,21 +269,12 @@ public final class IOUtils {
         return currentDirF.toPath().relativize(absoluteDirF.toPath()).toString();
     }
 
-
-    public static boolean canWrite(File file) {
-        return Files.isWritable(file.toPath());
-    }
-
-    public static boolean canRead(File file) {
-        return Files.isReadable(file.toPath());
-    }
-
     public static String getExecutableFormat() {
         if (OSType.CURRENT == OSType.WINDOWS) return ".exe";
         return "";
     }
 
-    public static int getNumberOfProcesses(String name) {
+    public static int getNumberOfProcesses(String name) throws IOException {
         int count = 0;
 
         for(String process : getProcessList()) {
@@ -345,87 +284,83 @@ public final class IOUtils {
         return count;
     }
 
-    public static List<String> getProcessList() {
+    public static List<String> getProcessList() throws IOException {
         List<String> list = new ArrayList<>();
 
-        try {
-            String processName;
+        String processName;
 
-            switch(OSType.CURRENT) {
-                case WINDOWS:
-                    processName = "tasklist.exe /fo csv /nh";
-                    break;
+        switch(OSType.CURRENT) {
+            case WINDOWS:
+                processName = "tasklist.exe /fo csv /nh";
+                break;
 
-                case LINUX:
-                    processName = "ps -e";
-                    break;
+            case LINUX:
+                processName = "ps -e";
+                break;
 
-                case MACOS:
-                    processName = "ps -T -e";
-                    break;
+            case MACOS:
+                processName = "ps -T -e";
+                break;
 
-                default: throw new UnsupportedOperationException("Unsupported OS: " + OSType.CURRENT);
-            }
+            default: throw new IOException("Unsupported OS: " + OSType.CURRENT);
+        }
 
-            Process p = Runtime.getRuntime().exec(processName);
+        Process p = Runtime.getRuntime().exec(processName);
 
-            List<String> lines = readLines(p.getInputStream());
+        List<String> lines = readLines(p.getInputStream());
 
-            BiFunction<String, Integer, String> nameExtractFunction;
+        BiFunction<String, Integer, String> nameExtractFunction;
 
-            AtomicInteger tempIndex = new AtomicInteger();
+        AtomicInteger tempIndex = new AtomicInteger();
 
-            switch(OSType.CURRENT) {
-                case WINDOWS:
-                    nameExtractFunction = (line, i) -> {
-                        line = line.substring(1);
+        switch(OSType.CURRENT) {
+            case WINDOWS:
+                nameExtractFunction = (line, i) -> {
+                    line = line.substring(1);
 
-                        return line.substring(0, line.indexOf('"'));
-                    };
-                    break;
+                    return line.substring(0, line.indexOf('"'));
+                };
+                break;
 
-                case MACOS: case LINUX:
-                    nameExtractFunction = (line, i) -> {
-                        String path;
+            case MACOS: case LINUX:
+                nameExtractFunction = (line, i) -> {
+                    String path;
 
-                        if(i == 0) {
-                            int index = line.indexOf("CMD");
+                    if(i == 0) {
+                        int index = line.indexOf("CMD");
 
-                            if(index == -1) {
-                                index = 0;
+                        if(index == -1) {
+                            index = 0;
 
-                                String[] splits = line.split(" ");
+                            String[] splits = line.split(" ");
 
-                                for(int j = 0;j < 6;j++) {
-                                    index += splits[j].length();
+                            for(int j = 0;j < 6;j++) {
+                                index += splits[j].length();
 
-                                    if(j != 5) index += 1;
-                                }
-
-                                tempIndex.set(index);
-
-                                path = splits[6];
-                            } else {
-                                tempIndex.set(index);
-                                path = null;
+                                if(j != 5) index += 1;
                             }
+
+                            tempIndex.set(index);
+
+                            path = splits[6];
+                        } else {
+                            tempIndex.set(index);
+                            path = null;
                         }
-                        else path = line.substring(tempIndex.get());
+                    }
+                    else path = line.substring(tempIndex.get());
 
-                        return path == null ? null : (path.contains("/") ? path.substring(path.lastIndexOf("/") + 1) : path);
-                    };
-                    break;
+                    return path == null ? null : (path.contains("/") ? path.substring(path.lastIndexOf("/") + 1) : path);
+                };
+                break;
 
-                default: throw new UnsupportedOperationException("Unsupported OS: " + OSType.CURRENT);
-            }
+            default: throw new UnsupportedOperationException("Unsupported OS: " + OSType.CURRENT);
+        }
 
-            for(int i = 0;i < lines.size();i++) {
-                String name = nameExtractFunction.apply(lines.get(i), i);
+        for(int i = 0;i < lines.size();i++) {
+            String name = nameExtractFunction.apply(lines.get(i), i);
 
-                if(name != null) list.add(name);
-            }
-        } catch(Exception e) {
-            e.printStackTrace();
+            if(name != null) list.add(name);
         }
 
         return list;
