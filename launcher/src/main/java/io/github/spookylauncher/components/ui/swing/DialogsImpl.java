@@ -5,14 +5,21 @@ import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.Translator;
 import io.github.spookylauncher.components.ui.spi.*;
+import io.github.spookylauncher.components.ui.spi.Dialog;
+import io.github.spookylauncher.components.ui.spi.Label;
 import io.github.spookylauncher.components.ui.swing.forms.ConfirmDialog;
+import io.github.spookylauncher.components.ui.swing.forms.MultiProgressDialog;
 import io.github.spookylauncher.components.ui.swing.forms.ProgressPanel;
 import io.github.spookylauncher.util.Locale;
+import io.github.spookylauncher.util.structures.tuple.Tuple2;
 import io.github.spookylauncher.util.structures.tuple.Tuple3;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class DialogsImpl extends LauncherComponent implements Dialogs {
@@ -20,6 +27,8 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
     private final SwingUIProvider provider;
 
     private final TitlePanelImpl titlePanel;
+
+    private final Map<String, JDialog> multiProgressDialogsMap = new HashMap<>();
 
     DialogsImpl(final ComponentsController components, final SwingUIProvider provider) {
         super("Swing API Dialogs", components);
@@ -62,34 +71,53 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
 
     @Override
     public Tuple3<Label, ProgressBar, Dialog> createProgressDialog(String title) {
-        Tuple3<JLabel, JProgressBar, JDialog> tuple = createSwingProgressDialog(title);
+        Tuple2<JLabel, JProgressBar> tuple = createSwingProgressDialog(title);
 
         Label label;
 
         return new Tuple3<>(
                 label = SPIFactory.getLabel(tuple.x),
                 SPIFactory.getProgressBar(tuple.y),
-                SPIFactory.getDialog(tuple.z, label));
+                SPIFactory.getDialog(getMultiProgressDialog("1"), label)); // TODO
     }
 
-    private Tuple3<JLabel, JProgressBar, JDialog> createSwingProgressDialog(String title) {
+    private JDialog getMultiProgressDialog(String name) {
+        JDialog dialog = multiProgressDialogsMap.get(name);
+
+        if(dialog == null)
+            multiProgressDialogsMap.put(name, dialog = new MultiProgressDialog());
+
+        return dialog;
+    }
+
+    private void closeMultiProgressDialog(String name) {
+        if(multiProgressDialogsMap.containsKey(name)) {
+            JDialog dialog = multiProgressDialogsMap.get(name);
+            dialog.setVisible(false);
+            dialog.dispose();
+            multiProgressDialogsMap.remove(name);
+        }
+    }
+
+    private Tuple2<JLabel, JProgressBar> createSwingProgressDialog(String title) {
         ProgressPanel panel = new ProgressPanel();
 
-        JDialog dialog = new JDialog();
+        JDialog dialog = getMultiProgressDialog(null); // TODO;
 
-        dialog.setTitle(title);
-        dialog.setContentPane(panel.panel);
+        dialog.setTitle("");
+
+        ((MultiProgressDialog)dialog).scrollPane.add(panel.panel);
 
         dialog.setResizable(false);
         dialog.setLocationRelativeTo(provider.getFrame());
 
-        dialog.setSize(486, 76);
+        dialog.setSize(486, 500);
 
         dialog.setIconImage(provider.window().getIcon());
 
         dialog.setVisible(true);
 
-        return new Tuple3<>(panel.label, panel.progressBar, dialog);
+        return new Tuple2<>(panel.label, panel.progressBar);
     }
 
     @Override
@@ -98,27 +126,9 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
 
         Locale locale = components.get(Translator.class).getLocale();
 
-        Tuple3<JLabel, JProgressBar, JDialog> tuple = createSwingProgressDialog(locale.get(title));
+        Tuple2<JLabel, JProgressBar> tuple = createSwingProgressDialog(locale.get(title));
 
         titlePanel.setEnabledButtons(false, TitlePanel.PLAY, TitlePanel.VERSIONS);
-
-        tuple.z.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-        tuple.z.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-
-                if(abortInstall.get()) return;
-
-                showConfirmDialog(
-                        () -> abortInstall.set(true),
-
-                        locale.get("abortingInstallation"),
-
-                        locale.get("abortingInstallationQuestion")
-                );
-            }
-        });
 
         tuple.y.setMaximum(100);
         tuple.y.setMinimum(0);
@@ -138,9 +148,19 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
 
         adapter.cancelSupplier = () -> (hasCancelSupplier && inputAdapter.cancelSupplier.get()) || abortInstall.get();
 
-        adapter.closeDialog = () -> {
-            tuple.z.setVisible(false);
-            tuple.z.dispose();
+        adapter.onEnd = () -> {
+            tuple.y.setVisible(false);
+
+            if(tuple.y.getParent() != null) {
+                Container parent = tuple.y.getParent();
+
+                parent.remove(tuple.y);
+
+                Component[] comps = parent.getComponents();
+
+                if(comps == null || comps.length == 0)
+                    closeMultiProgressDialog(null); // TODO
+            }
         };
 
         adapter.onCancel = () -> {
