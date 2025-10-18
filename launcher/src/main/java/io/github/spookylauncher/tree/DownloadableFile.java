@@ -3,8 +3,6 @@ package io.github.spookylauncher.tree;
 import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.advio.Os;
 import io.github.spookylauncher.advio.collectors.URLCollector;
-import io.github.spookylauncher.advio.security.hash.HashCalculators;
-import io.github.spookylauncher.advio.security.hash.HashingAlgorithm;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
@@ -27,7 +25,8 @@ public class DownloadableFile {
 
         if(autoCalculateSha1) {
             AsyncOperation.run(
-                    () -> sha1 = HashCalculators.get(HashingAlgorithm.SHA1).calculateToHex(new URLCollector(url))
+                    // TODO: new hash calculation
+                    () -> sha1 = ""
             );
         }
     }
