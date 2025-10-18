@@ -1,9 +1,8 @@
 package io.github.spookylauncher.advio.security.hash;
 
 public enum HashingAlgorithm {
-    MD5("MD5"),
-    SHA1("SHA-1"),
-    SHA256("SHA-256");
+    SHA2_256("SHA-256"),
+    SHA2_512("SHA-512");
 
     private final String name;
 
@@ -11,7 +10,7 @@ public enum HashingAlgorithm {
         this.name = name;
     }
 
-    public String toString() {
+    public String getAlgorithmID() {
         return this.name;
     }
 }

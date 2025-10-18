@@ -6,7 +6,7 @@ public final class HashCalculators {
     private static final HashMap<String, HashCalculator> calculators = new HashMap<>();
 
     public static HashCalculator get(HashingAlgorithm algorithm) {
-        return get(algorithm.toString());
+        return get(algorithm.getAlgorithmID());
     }
 
     public static HashCalculator get(String algorithm) {

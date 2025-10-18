@@ -9,7 +9,7 @@ public final class HashCalculator {
     public final String algorithm;
 
     public HashCalculator(HashingAlgorithm algorithm) {
-        this(algorithm.toString());
+        this(algorithm.getAlgorithmID());
     }
 
     public HashCalculator(String algorithm) {
