@@ -16,8 +16,11 @@ import io.github.spookylauncher.advio.collectors.FileCollector;
 import io.github.spookylauncher.advio.collectors.URLCollector;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
+
+import static io.github.spookylauncher.log.Level.ERROR;
 
 public final class JREController extends LauncherComponent {
     private final File javaDir;
@@ -35,8 +38,17 @@ public final class JREController extends LauncherComponent {
         return ( (ManifestDownloader<JREsManifest>) components.get(manifestDownloaderName)).getManifest();
     }
 
+    private void safeOptionsStore() {
+        try {
+            components.get(OptionsController.class).store();
+        } catch (IOException e) {
+            log(ERROR, "failed to store options");
+            log(ERROR, e);
+        }
+    }
+
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         this.checkJre();
@@ -59,10 +71,11 @@ public final class JREController extends LauncherComponent {
             } else {
                 selectJre(jres[JreInfo.getIndexOfNewer(jres)]);
 
-                optionsController.store();
+                safeOptionsStore();
             }
         }
     }
+
     public JreInfo[] findJres() {
         if(foundJREs == null) {
             List<JreInfo> jres = new ArrayList<>();
@@ -80,7 +93,15 @@ public final class JREController extends LauncherComponent {
 
                 ExternalJreInfo jre = new ExternalJreInfo(javaPath);
 
-                Properties props = new FileCollector(new File(javaDir, "release")).collectProperties();
+                Properties props;
+
+                try {
+                    props = new FileCollector(new File(javaDir, "release")).collectProperties();
+                } catch (IOException e) {
+                    log(ERROR, "failed to read info of jre \"" + javaPath + "\"");
+                    log(ERROR, e);
+                    continue;
+                }
 
                 jre.vendor = props.getProperty("IMPLEMENTOR");
                 jre.vendor = jre.vendor.substring(1, jre.vendor.length() - 1);
@@ -133,7 +154,7 @@ public final class JREController extends LauncherComponent {
         options.selectedJavaType = SelectedJavaType.EXTERNAL;
         options.selectedJavaPath = new File(executablePath).getAbsolutePath();
 
-        optionsController.store();
+        safeOptionsStore();
 
         return true;
     }
@@ -145,8 +166,9 @@ public final class JREController extends LauncherComponent {
         options.selectedJavaType = SelectedJavaType.CUSTOM;
         options.customJavaPath = new File(executablePath).getAbsolutePath();
 
-        optionsController.store();
+        safeOptionsStore();
     }
+
     public boolean selectJre(JreInfo info) {
         if(info instanceof ExternalJreInfo) return selectExternalJre(((ExternalJreInfo) info).path);
 
@@ -159,7 +181,7 @@ public final class JREController extends LauncherComponent {
         options.selectedJavaType = SelectedJavaType.LAUNCHER;
         options.selectedJavaPath = getJreExecutable(info).getAbsolutePath();
 
-        optionsController.store();
+        safeOptionsStore();
 
         return true;
     }
@@ -189,7 +211,7 @@ public final class JREController extends LauncherComponent {
 
         if(info.downloads.containsKey(Os.CURRENT)) url = info.downloads.get(Os.CURRENT);
         else {
-            log(Level.ERROR, "JRE installation failed because downloads are not available");
+            log(ERROR, "JRE installation failed because downloads are not available");
             uiProvider.messages().error
             (
                     locale.get("installationError"),

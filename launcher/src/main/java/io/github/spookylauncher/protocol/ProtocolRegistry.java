@@ -8,6 +8,7 @@ import io.github.spookylauncher.util.Locale;
 import com.sun.jna.platform.win32.*;
 
 import javax.swing.*;
+import java.io.IOException;
 
 @Deprecated
 public final class ProtocolRegistry extends LauncherComponent {
@@ -19,7 +20,7 @@ public final class ProtocolRegistry extends LauncherComponent {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         RegisterResult result = register();

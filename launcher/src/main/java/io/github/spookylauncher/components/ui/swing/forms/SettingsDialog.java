@@ -18,6 +18,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class SettingsDialog extends JDialog {
@@ -122,7 +123,12 @@ public class SettingsDialog extends JDialog {
 
             options.setNickname(nicknameField.getText());
 
-            optionsController.store();
+            try {
+                optionsController.store();
+            } catch (IOException ex) {
+                // TODO: normal catch
+                ex.printStackTrace();
+            }
 
             dispose();
         });

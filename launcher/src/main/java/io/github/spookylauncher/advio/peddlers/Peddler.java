@@ -14,51 +14,47 @@ public abstract class Peddler {
         this.path = path;
     }
 
-    public final void peddleImage(RenderedImage img) {
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(img, "png", baos);
-            peddleBytes(baos.toByteArray());
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+    public final void peddleImage(RenderedImage img) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(img, "png", baos);
+        peddleBytes(baos.toByteArray());
     }
 
-    public final void peddleProperties(Properties props) {
+    public final void peddleProperties(Properties props) throws IOException {
         peddleProperties(props, null);
     }
 
-    public final void peddleProperties(Properties props, String comments) {
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+    public final void peddleProperties(Properties props, String comments) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
 
-            props.store(writer, comments);
+        props.store(writer, comments);
 
-            writer.close();
-            peddleBytes(out.toByteArray());
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+        writer.close();
+        peddleBytes(out.toByteArray());
     }
-    public final void peddleString(String str) {
+
+    public final void peddleString(String str) throws IOException {
         peddleBytes(str.getBytes(StandardCharsets.UTF_8));
     }
-    public abstract void peddleStream(InputStream in);
 
-    public final void peddleBytes(byte[] bytes) {
+    public abstract void peddleStream(InputStream in) throws IOException;
+
+    public final void peddleBytes(byte[] bytes) throws IOException {
         peddleStream(new ByteArrayInputStream(bytes));
     }
+
     public OutputStream asStream() {
         return asStream(8192);
     }
+
     public OutputStream asStream(final int bufferSize) {
         return new OutputStream() {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             int count = 0;
 
             @Override
-            public void write(int b) {
+            public void write(int b) throws IOException {
                 baos.write(b);
 
                 if(count++ == bufferSize) {
@@ -67,13 +63,13 @@ public abstract class Peddler {
             }
 
             @Override
-            public void flush() {
+            public void flush() throws IOException {
                 peddleBytes(baos.toByteArray());
                 baos.reset();
             }
 
             @Override
-            public void close() {
+            public void close() throws IOException {
                 flush();
             }
         };

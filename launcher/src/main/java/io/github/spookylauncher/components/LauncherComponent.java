@@ -3,6 +3,8 @@ package io.github.spookylauncher.components;
 import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.log.Logger;
 
+import java.io.IOException;
+
 public abstract class LauncherComponent {
     protected final ComponentsController components;
 
@@ -32,5 +34,5 @@ public abstract class LauncherComponent {
         return this.name;
     }
 
-    public void initialize() { }
+    public void initialize() throws IOException { }
 }

@@ -8,6 +8,7 @@ import io.github.spookylauncher.tree.GeneralDate;
 import io.github.spookylauncher.tree.GsonGeneralDateAdapter;
 import io.github.spookylauncher.tree.GsonOsAdapter;
 
+import java.io.IOException;
 import java.io.Reader;
 
 public final class Json {
@@ -15,15 +16,15 @@ public final class Json {
     private static final Gson GSON;
     private static final Gson PRETTY_PRINTING_GSON;
 
-    public static void peddleJson(Peddler peddler, Object obj) {
+    public static void peddleJson(Peddler peddler, Object obj) throws IOException {
         peddleJson(peddler, obj, true);
     }
 
-    public static void peddleJson(Peddler peddler, Object object, boolean prettyPrinting) {
+    public static void peddleJson(Peddler peddler, Object object, boolean prettyPrinting) throws IOException {
         peddler.peddleString(toJson(object, prettyPrinting));
     }
 
-    public static <T> T collectJson(Collector collector, Class<T> clazz) {
+    public static <T> T collectJson(Collector collector, Class<T> clazz) throws IOException {
         return fromJson(collector.collectString(), clazz);
     }
 

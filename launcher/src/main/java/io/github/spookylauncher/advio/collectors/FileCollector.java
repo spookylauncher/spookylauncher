@@ -14,12 +14,8 @@ public final class FileCollector extends Collector {
     }
 
     @Override
-    public InputStream collectBaseInput() {
-        try {
-            return Files.newInputStream(Paths.get(path));
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+    public InputStream collectBaseInput() throws IOException {
+        return Files.newInputStream(Paths.get(path));
     }
 
     @Override

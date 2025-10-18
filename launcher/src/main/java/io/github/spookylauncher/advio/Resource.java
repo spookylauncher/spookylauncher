@@ -13,4 +13,8 @@ public final class Resource {
 
         return false;
     }
+
+    public static InputStream getInput(String resource) {
+        return Resource.class.getResourceAsStream("/" + resource);
+    }
 }

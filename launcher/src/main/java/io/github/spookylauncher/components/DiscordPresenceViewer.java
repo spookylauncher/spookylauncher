@@ -6,6 +6,9 @@ import io.github.spookylauncher.tree.versions.VersionInfo;
 import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.util.Locale;
 import net.arikia.dev.drpc.*;
+
+import java.io.IOException;
+
 import static io.github.spookylauncher.log.Level.*;
 
 public final class DiscordPresenceViewer extends LauncherComponent {
@@ -16,7 +19,7 @@ public final class DiscordPresenceViewer extends LauncherComponent {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         AsyncOperation.run(

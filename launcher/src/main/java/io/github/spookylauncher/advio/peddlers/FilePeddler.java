@@ -11,24 +11,20 @@ public final class FilePeddler extends Peddler {
     }
 
     @Override
-    public void peddleStream(InputStream in) {
-        try {
-            in = new BufferedInputStream(in);
+    public void peddleStream(InputStream in) throws IOException {
+        in = new BufferedInputStream(in);
 
-            FileOutputStream fos;
-            BufferedOutputStream out = new BufferedOutputStream(fos = new FileOutputStream(path));
+        FileOutputStream fos;
+        BufferedOutputStream out = new BufferedOutputStream(fos = new FileOutputStream(path));
 
-            int len;
+        int len;
 
-            while((len = in.read()) != -1) {
-                out.write(len);
-            }
-
-            out.flush();
-            out.close();
-            fos.close();
-        } catch(Exception e) {
-            throw new RuntimeException(e);
+        while((len = in.read()) != -1) {
+            out.write(len);
         }
+
+        out.flush();
+        out.close();
+        fos.close();
     }
 }

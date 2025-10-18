@@ -100,7 +100,7 @@ public final class LogsController extends LauncherComponent {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         this.branchLoggerOutput();

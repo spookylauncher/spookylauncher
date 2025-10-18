@@ -4,6 +4,8 @@ import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.ui.spi.*;
 
+import java.io.IOException;
+
 public final class StubUIProvider extends LauncherComponent implements UIProvider {
 
     private Dialogs dialogs;
@@ -18,7 +20,7 @@ public final class StubUIProvider extends LauncherComponent implements UIProvide
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         window = new StubMainWindowImpl(components);

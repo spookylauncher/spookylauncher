@@ -15,6 +15,7 @@ import io.github.spookylauncher.util.Locale;
 import io.mappedbus.MappedBusMessage;
 
 import java.io.File;
+import java.io.IOException;
 
 public final class ProtocolHandler extends LauncherComponent {
     public ProtocolHandler(ComponentsController components) {
@@ -28,7 +29,7 @@ public final class ProtocolHandler extends LauncherComponent {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         IOUtils.deleteTree(new File(Constants.getFile()));

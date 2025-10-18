@@ -12,8 +12,11 @@ import io.github.spookylauncher.tree.versions.VersionInfo;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.*;
 import io.github.spookylauncher.util.Locale;
+
+import static io.github.spookylauncher.log.Level.ERROR;
 
 class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
@@ -162,13 +165,18 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
         AsyncOperation.run(() -> {
             if(info.getPreviewsCount() > 0) {
-                setPreview(new URLCollector
-                        (
-                                components.get(ManifestsURLs.class).getBaseDataURL() + "/versions/"
-                                + info.name
-                                + "/previews/preview_"
-                                + (new Random().nextInt(info.getPreviewsCount()) + 1) + ".png"
-                        ).collectImage());
+                try {
+                    setPreview(new URLCollector
+                            (
+                                    components.get(ManifestsURLs.class).getBaseDataURL() + "/versions/"
+                                    + info.name
+                                    + "/previews/preview_"
+                                    + (new Random().nextInt(info.getPreviewsCount()) + 1) + ".png"
+                            ).collectImage());
+                } catch (IOException e) {
+                    log(ERROR, "failed to set preview");
+                    log(ERROR, e);
+                }
             } else setPreview(noPreview);
         });
 
@@ -188,9 +196,16 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
         final String labelUrl = repo + "/versions/" + info.name + "/label" + (fallback ? "" : "_" + lang) + ".txt";
 
         AsyncOperation.run(
-                () -> titlePanelForm.description.setText(
-                        new URLCollector(labelUrl).collectString()
-                )
+                () -> {
+                    try {
+                        titlePanelForm.description.setText(
+                                new URLCollector(labelUrl).collectString()
+                        );
+                    } catch (IOException e) {
+                        log(ERROR, "failed to set description");
+                        log(ERROR, e);
+                    }
+                }
         );
     }
 

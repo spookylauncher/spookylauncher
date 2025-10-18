@@ -25,64 +25,51 @@ public abstract class Collector {
         this.buffering = buffering;
     }
 
-    public BufferedImage collectImage() {
-        try {
-            return ImageIO.read(collectInput());
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+    public BufferedImage collectImage() throws IOException {
+        return ImageIO.read(collectInput());
     }
-    public final Reader collectReader() {
-        try {
-            return new InputStreamReader(collectInput(), StandardCharsets.UTF_8);
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+    public final Reader collectReader() throws IOException {
+        return new InputStreamReader(collectInput(), StandardCharsets.UTF_8);
     }
-    public final Properties collectProperties() {
-        try {
-            Properties props = new Properties();
+    public final Properties collectProperties() throws IOException {
+        Properties props = new Properties();
 
-            props.load(collectReader());
+        props.load(collectReader());
 
-            return props;
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+        return props;
     }
-    public final String collectString() {
+
+    public final String collectString() throws IOException {
         return IOUtils.readString(collectInput());
     }
-    public InputStream collectInput() {
+
+    public InputStream collectInput() throws IOException {
         InputStream in = collectBaseInput();
 
         return buffering && !(in instanceof BufferedInputStream) ? new BufferedInputStream(in) : in;
     }
-    protected abstract InputStream collectBaseInput();
+
+    protected abstract InputStream collectBaseInput() throws IOException;
 
     public abstract long size();
 
-    public final byte[] collectBytes() {
-        try {
-            InputStream in = collectInput();
+    public final byte[] collectBytes() throws IOException {
+        InputStream in = collectInput();
 
-            byte[] bytes = IOUtils.readBytes(in);
+        byte[] bytes = IOUtils.readBytes(in);
 
-            in.close();
+        in.close();
 
-            return bytes;
-        } catch(Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return bytes;
     }
 
     public static Collector of(Path path) { return of(path.toFile()); }
 
     public static Collector of(File file) { return new FileCollector(file); }
-    public static Collector of(byte[] bytes) {
+
+    public static Collector of(byte[] bytes) throws IOException {
         return of(new ByteArrayInputStream(bytes));
     }
 
-    public static Collector of(InputStream in) { return new StreamCollector(in); }
+    public static Collector of(InputStream in) throws IOException { return new StreamCollector(in); }
 }

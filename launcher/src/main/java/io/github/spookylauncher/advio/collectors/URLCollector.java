@@ -11,26 +11,22 @@ public final class URLCollector extends Collector {
         super(url.replace(" ", "%20"));
     }
 
-    public InputStream collectBaseInput() {
-        try {
-            URLConnection con = new URL(path).openConnection();
+    public InputStream collectBaseInput() throws IOException {
+        URLConnection con = new URL(path).openConnection();
 
-            con.setRequestProperty("User-Agent", "");
-            con.setDoInput(true);
-            con.connect();
+        con.setRequestProperty("User-Agent", "");
+        con.setDoInput(true);
+        con.connect();
 
-            if(con instanceof HttpURLConnection) {
-                int response = ((HttpURLConnection)con).getResponseCode();
+        if(con instanceof HttpURLConnection) {
+            int response = ((HttpURLConnection)con).getResponseCode();
 
-                if(response >= 400) throw new RuntimeException("HTTP Error " + response);
-            }
-
-            size = con.getContentLengthLong();
-
-            return con.getInputStream();
-        } catch(Exception e) {
-            throw new RuntimeException(path, e);
+            if(response >= 400) throw new RuntimeException("HTTP Error " + response);
         }
+
+        size = con.getContentLengthLong();
+
+        return con.getInputStream();
     }
 
     @Override

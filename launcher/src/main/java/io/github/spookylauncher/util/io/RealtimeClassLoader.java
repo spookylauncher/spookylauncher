@@ -2,8 +2,10 @@ package io.github.spookylauncher.util.io;
 
 import io.github.spookylauncher.advio.collectors.Collector;
 
+import java.io.IOException;
+
 public  class RealtimeClassLoader extends ClassLoader {
-    public Class<?> loadClass(Collector collector) {
+    public Class<?> loadClass(Collector collector) throws IOException {
         return this.loadClass(collector.collectBytes());
     }
     public Class<?> loadClass(byte[] bytes) {
