@@ -5,7 +5,7 @@ import io.github.spookylauncher.tree.LibrariesCollection;
 import io.github.spookylauncher.tree.LibraryInfo;
 import io.github.spookylauncher.tree.versions.LibrariesManifest;
 import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.advio.Os;
+import io.github.spookylauncher.advio.OSType;
 import io.github.spookylauncher.advio.collectors.URLCollector;
 import io.github.spookylauncher.log.Level;
 
@@ -140,7 +140,7 @@ public final class LibrariesController extends LauncherComponent {
 
         new Thread(
                 () -> {
-                    assert Os.CURRENT != null;
+                    assert OSType.CURRENT != null;
 
                     File destination = getLibraryFile(lib);
 

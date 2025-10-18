@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components.ui.swing.events;
 
-import io.github.spookylauncher.advio.Environment;
+import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.JREController;
 import io.github.spookylauncher.components.OptionsController;
@@ -11,7 +11,7 @@ import io.github.spookylauncher.util.Locale;
 
 class OpenSettingsEvent extends Event {
 
-    private static final int MAX_MEMORY = (int) (Environment.MAX_PHYSICAL_MEMORY / 2097152);
+    private static final int MAX_MEMORY = (int) (IOUtils.MAX_PHYSICAL_MEMORY / 1024 / 1024 / 2); // half of all memory in megabytes
 
     OpenSettingsEvent(final ComponentsController components, final SwingUIProvider provider) {
         super(components, provider);

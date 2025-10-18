@@ -1,6 +1,6 @@
 package io.github.spookylauncher.util.io;
 
-import io.github.spookylauncher.advio.Os;
+import io.github.spookylauncher.advio.OSType;
 import io.github.spookylauncher.advio.collectors.Collector;
 import io.github.spookylauncher.advio.peddlers.Peddler;
 import com.google.gson.*;
@@ -46,7 +46,7 @@ public final class Json {
         GsonBuilder builder =
                 new GsonBuilder()
                 .registerTypeAdapter(GeneralDate.class, new GsonGeneralDateAdapter())
-                .registerTypeAdapter(Os.class, new GsonOsAdapter());
+                .registerTypeAdapter(OSType.class, new GsonOsAdapter());
 
         GSON = builder.create();
 

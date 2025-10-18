@@ -1,6 +1,6 @@
 package io.github.spookylauncher.tree.jre;
 
-import io.github.spookylauncher.advio.Os;
+import io.github.spookylauncher.advio.OSType;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
@@ -9,7 +9,7 @@ public class JreInfo {
     @SerializedName("vendor") public String vendor = "";
     @SerializedName("majorVersion") public int majorVersion;
     @SerializedName("fullVersion") public String fullVersion;
-    @SerializedName("downloadUrls") public HashMap<Os, String> downloads;
+    @SerializedName("downloadUrls") public HashMap<OSType, String> downloads;
 
     public String toString() {
         return String.valueOf(majorVersion);

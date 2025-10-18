@@ -9,7 +9,7 @@ import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.tree.jre.JreInfo;
 import io.github.spookylauncher.tree.jre.SelectedJavaType;
 import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.advio.Os;
+import io.github.spookylauncher.advio.OSType;
 import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.advio.collectors.FileCollector;
 import io.github.spookylauncher.advio.collectors.URLCollector;
@@ -29,7 +29,7 @@ public final class JREController extends LauncherComponent {
 
     public JREController(ComponentsController components, File javaDir, String manifestDownloaderName) {
         super("JRE Controller", components);
-        this.javaDir = new File(javaDir, Os.CURRENT.name.toLowerCase());
+        this.javaDir = new File(javaDir, OSType.CURRENT.name.toLowerCase());
         this.manifestDownloaderName = manifestDownloaderName;
     }
 
@@ -197,7 +197,7 @@ public final class JREController extends LauncherComponent {
         if(info instanceof ExternalJreInfo) return new File(((ExternalJreInfo) info).path);
         if(!isInstalled(info)) return null;
 
-        return IOUtils.find("bin/" + (Os.CURRENT == Os.WINDOWS ? "java.exe" : "java"), getJreDirectory(info));
+        return IOUtils.find("bin/" + (OSType.CURRENT == OSType.WINDOWS ? "java.exe" : "java"), getJreDirectory(info));
     }
 
     public void installJre(JreInfo info, Consumer<Boolean> onInstalled) {
@@ -208,7 +208,7 @@ public final class JREController extends LauncherComponent {
 
         String url;
 
-        if(info.downloads.containsKey(Os.CURRENT)) url = info.downloads.get(Os.CURRENT);
+        if(info.downloads.containsKey(OSType.CURRENT)) url = info.downloads.get(OSType.CURRENT);
         else {
             log(ERROR, "JRE installation failed because downloads are not available");
             uiProvider.messages().error
@@ -221,7 +221,7 @@ public final class JREController extends LauncherComponent {
 
         new Thread(
                 () -> {
-                    assert Os.CURRENT != null;
+                    assert OSType.CURRENT != null;
 
                     File destination = getJreDirectory(info);
 

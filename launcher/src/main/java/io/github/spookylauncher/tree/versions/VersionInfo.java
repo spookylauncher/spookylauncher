@@ -1,6 +1,6 @@
 package io.github.spookylauncher.tree.versions;
 
-import io.github.spookylauncher.advio.Os;
+import io.github.spookylauncher.advio.OSType;
 import io.github.spookylauncher.log.Logger;
 import io.github.spookylauncher.tree.DownloadableFile;
 import io.github.spookylauncher.tree.GeneralDate;
@@ -27,7 +27,7 @@ public final class VersionInfo {
 
     @SerializedName("categories") public Category[] categories = new Category[0];
 
-    @SerializedName("supportedPlatforms") public List<Os> supportedPlatforms = Arrays.asList(Os.values());
+    @SerializedName("supportedPlatforms") public List<OSType> supportedPlatforms = Arrays.asList(OSType.values());
 
     @SerializedName("launchData") public HashMap<String, Object> launchData = new HashMap<>();
     @SerializedName("articles") public HashMap<String, String> articles = new HashMap<>();

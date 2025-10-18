@@ -1,8 +1,10 @@
 package io.github.spookylauncher.advio;
 
+import com.sun.management.OperatingSystemMXBean;
 import io.github.spookylauncher.advio.collectors.Collector;
 
 import java.io.*;
+import java.lang.management.ManagementFactory;
 import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -13,6 +15,12 @@ import java.util.function.BiFunction;
 import java.util.zip.*;
 
 public final class IOUtils {
+    public static final long MAX_PHYSICAL_MEMORY = getPhysicalMemory();
+
+    private static long getPhysicalMemory() {
+        return ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalPhysicalMemorySize();
+    }
+
     public static List<String> readLines(InputStream in) {
         try {
             List<String> lines = new ArrayList<>();
@@ -252,11 +260,11 @@ public final class IOUtils {
         try {
             String commandName = "";
 
-            switch(Objects.requireNonNull(Os.CURRENT)) {
+            switch(Objects.requireNonNull(OSType.CURRENT)) {
                 case WINDOWS: commandName = "where"; break;
                 case MACOS: commandName = "which"; break;
                 case LINUX: commandName = "locate"; break;
-                default: throw new RuntimeException("Unknown OS: " + Os.CURRENT);
+                default: throw new RuntimeException("Unknown OS: " + OSType.CURRENT);
             }
 
             Process process = Runtime.getRuntime().exec(commandName + " " + processName);
@@ -323,7 +331,7 @@ public final class IOUtils {
     }
 
     public static String getExecutableFormat() {
-        if (Os.CURRENT == Os.WINDOWS) return ".exe";
+        if (OSType.CURRENT == OSType.WINDOWS) return ".exe";
         return "";
     }
 
@@ -343,7 +351,7 @@ public final class IOUtils {
         try {
             String processName;
 
-            switch(Os.CURRENT) {
+            switch(OSType.CURRENT) {
                 case WINDOWS:
                     processName = "tasklist.exe /fo csv /nh";
                     break;
@@ -356,7 +364,7 @@ public final class IOUtils {
                     processName = "ps -T -e";
                     break;
 
-                default: throw new UnsupportedOperationException("Unsupported OS: " + Os.CURRENT);
+                default: throw new UnsupportedOperationException("Unsupported OS: " + OSType.CURRENT);
             }
 
             Process p = Runtime.getRuntime().exec(processName);
@@ -367,7 +375,7 @@ public final class IOUtils {
 
             AtomicInteger tempIndex = new AtomicInteger();
 
-            switch(Os.CURRENT) {
+            switch(OSType.CURRENT) {
                 case WINDOWS:
                     nameExtractFunction = (line, i) -> {
                         line = line.substring(1);
@@ -408,7 +416,7 @@ public final class IOUtils {
                     };
                     break;
 
-                default: throw new UnsupportedOperationException("Unsupported OS: " + Os.CURRENT);
+                default: throw new UnsupportedOperationException("Unsupported OS: " + OSType.CURRENT);
             }
 
             for(int i = 0;i < lines.size();i++) {
