@@ -1,6 +1,5 @@
 package io.github.spookylauncher.components.ui.swing;
 
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.advio.collectors.URLCollector;
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.ui.spi.Button;
@@ -163,7 +162,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
         titlePanelForm.play.setText(versions.isInstalled(info) ? locale.get("play") : locale.get("install"));
 
-        AsyncOperation.run(() -> {
+        new Thread(() -> {
             if(info.getPreviewsCount() > 0) {
                 try {
                     setPreview(new URLCollector
@@ -178,7 +177,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                     log(ERROR, e);
                 }
             } else setPreview(noPreview);
-        });
+        }).start();
 
         String lang = locale.getLanguage();
 
@@ -195,7 +194,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
         final String labelUrl = repo + "/versions/" + info.name + "/label" + (fallback ? "" : "_" + lang) + ".txt";
 
-        AsyncOperation.run(
+        new Thread(
                 () -> {
                     try {
                         titlePanelForm.description.setText(
@@ -206,7 +205,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                         log(ERROR, e);
                     }
                 }
-        );
+        ).start();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.components.ui.spi.UIProvider;
@@ -34,7 +33,7 @@ public final class ProtocolHandler extends LauncherComponent {
 
         IOUtils.deleteTree(new File(Constants.getFile()));
 
-        AsyncOperation.run(
+        new Thread(
                 () -> {
                     ProtocolReader reader = new ProtocolReader();
 
@@ -53,7 +52,7 @@ public final class ProtocolHandler extends LauncherComponent {
                         e.printStackTrace();
                     }
                 }
-        );
+        ).start();
     }
 
     public void handle(MappedBusMessage msg) {

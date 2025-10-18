@@ -1,6 +1,5 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.advio.AsyncOperation;
 import java.util.*;
 import java.util.function.Function;
 
@@ -99,7 +98,7 @@ public final class ComponentsController {
             }
         };
 
-        if(async) AsyncOperation.run(task);
+        if(async) new Thread(task).start();
         else task.run();
     }
 }

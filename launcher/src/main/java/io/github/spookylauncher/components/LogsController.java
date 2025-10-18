@@ -2,7 +2,6 @@ package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.GameStartData;
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.log.Logger;
 import io.github.spookylauncher.util.structures.tuple.Tuple2;
@@ -51,7 +50,7 @@ public final class LogsController extends LauncherComponent {
     }
 
     public void startLogging(long uptime, Process process, List<Tuple2<String, String>> data, File log, File latestLog, Runnable onLoggingEnded) {
-        AsyncOperation.run(
+        new Thread(
                 () -> {
                     try {
                         InputStream in = process.getInputStream();
@@ -96,7 +95,7 @@ public final class LogsController extends LauncherComponent {
                         components.get(ErrorHandler.class).handleException("logCreationFailed", e);
                     }
                 }
-        );
+        ).start();
     }
 
     @Override

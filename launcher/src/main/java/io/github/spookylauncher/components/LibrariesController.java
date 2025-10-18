@@ -4,7 +4,6 @@ import io.github.spookylauncher.components.ui.spi.UIProvider;
 import io.github.spookylauncher.tree.LibrariesCollection;
 import io.github.spookylauncher.tree.LibraryInfo;
 import io.github.spookylauncher.tree.versions.LibrariesManifest;
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.advio.Os;
 import io.github.spookylauncher.advio.collectors.URLCollector;
@@ -110,7 +109,7 @@ public final class LibrariesController extends LauncherComponent {
             );
         }
 
-        AsyncOperation.run(
+        new Thread(
                 () -> {
                     while(true) {
                         if(uninstalledCount.get() <= 0 || !success.get()) {
@@ -119,7 +118,7 @@ public final class LibrariesController extends LauncherComponent {
                         }
                     }
                 }
-        );
+        ).start();
     }
 
     public void install(LibraryInfo lib, Consumer<Boolean> onInstalled) {
@@ -139,7 +138,7 @@ public final class LibrariesController extends LauncherComponent {
             return;
         }
 
-        AsyncOperation.run(
+        new Thread(
                 () -> {
                     assert Os.CURRENT != null;
 
@@ -190,6 +189,6 @@ public final class LibrariesController extends LauncherComponent {
                         onInstalled.accept(success);
                     }
                 }
-        );
+        ).start();
     }
 }

@@ -1,6 +1,5 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.components.ui.spi.TitlePanel;
 import io.github.spookylauncher.components.ui.spi.UIProvider;
 import io.github.spookylauncher.tree.LibrariesCollection;
@@ -58,7 +57,7 @@ public final class VersionsInstaller extends LauncherComponent {
         }
 
         if(onInstalledCallback != null) {
-            AsyncOperation.run(
+            new Thread(
                     () -> {
                         while(true) {
                             if(uninstalledCount.get() <= 0) {
@@ -67,7 +66,7 @@ public final class VersionsInstaller extends LauncherComponent {
                             }
                         }
                     }
-            );
+            ).start();
         }
     }
 
@@ -112,7 +111,7 @@ public final class VersionsInstaller extends LauncherComponent {
 
         log(INFO, "start downloading");
 
-        AsyncOperation.run(
+        new Thread(
                 () -> {
                     uiProvider.panel().setEnabledButtons(false);
 
@@ -147,6 +146,6 @@ public final class VersionsInstaller extends LauncherComponent {
                         uiProvider.panel().getButton(TitlePanel.PLAY).setText(locale.get("play"));
                     }
                 }
-        );
+        ).start();
     }
 }

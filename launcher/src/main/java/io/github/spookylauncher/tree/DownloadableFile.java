@@ -1,8 +1,6 @@
 package io.github.spookylauncher.tree;
 
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.advio.Os;
-import io.github.spookylauncher.advio.collectors.URLCollector;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
@@ -24,10 +22,10 @@ public class DownloadableFile {
         this.downloadUrl = url;
 
         if(autoCalculateSha1) {
-            AsyncOperation.run(
-                    // TODO: new hash calculation
-                    () -> sha1 = ""
-            );
+            new Thread(() -> {
+                // TODO: new hash calculation
+                sha1 = "";
+            }).run();
         }
     }
 

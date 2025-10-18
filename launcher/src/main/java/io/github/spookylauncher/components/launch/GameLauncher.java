@@ -1,7 +1,6 @@
 package io.github.spookylauncher.components.launch;
 
 import io.github.spookylauncher.Constants;
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.debug.LocalLibraries;
@@ -86,7 +85,7 @@ public class GameLauncher extends LauncherComponent {
                 success -> {
                     if(success) {
                         log(Level.INFO, "libraries successfully installed");
-                        AsyncOperation.run(launchTask);
+                        new Thread(launchTask).start();
                     } else
                         log(Level.ERROR, "failed to install libraries");
 

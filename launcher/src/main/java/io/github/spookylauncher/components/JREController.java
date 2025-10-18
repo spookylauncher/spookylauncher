@@ -8,7 +8,6 @@ import io.github.spookylauncher.tree.jre.JREsManifest;
 import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.tree.jre.JreInfo;
 import io.github.spookylauncher.tree.jre.SelectedJavaType;
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.advio.Os;
 import io.github.spookylauncher.advio.IOUtils;
@@ -220,7 +219,7 @@ public final class JREController extends LauncherComponent {
             return;
         }
 
-        AsyncOperation.run(
+        new Thread(
                 () -> {
                     assert Os.CURRENT != null;
 
@@ -257,6 +256,6 @@ public final class JREController extends LauncherComponent {
                         onInstalled.accept(success);
                     }
                 }
-        );
+        ).start();
     }
 }
