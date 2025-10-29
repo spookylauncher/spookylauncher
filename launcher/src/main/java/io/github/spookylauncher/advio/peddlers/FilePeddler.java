@@ -4,6 +4,7 @@ import java.io.*;
 
 public final class FilePeddler extends Peddler {
     public FilePeddler(File file) { this(file.getAbsolutePath()); }
+
     public FilePeddler(String path) {
         super(path);
 
@@ -14,17 +15,15 @@ public final class FilePeddler extends Peddler {
     public void peddleStream(InputStream in) throws IOException {
         in = new BufferedInputStream(in);
 
-        FileOutputStream fos;
-        BufferedOutputStream out = new BufferedOutputStream(fos = new FileOutputStream(path));
+        FileOutputStream out = new FileOutputStream(path);
 
+        byte[] buffer = new byte[4096];
         int len;
 
-        while((len = in.read()) != -1) {
-            out.write(len);
+        while((len = in.read(buffer)) != -1) {
+            out.write(buffer, 0, len);
         }
 
-        out.flush();
         out.close();
-        fos.close();
     }
 }

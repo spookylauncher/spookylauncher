@@ -15,8 +15,10 @@ public class StreamCollector extends Collector {
 
         int len;
 
-        while((len = stream.read()) != -1)
-            baos.write(len);
+        byte[] buf = new byte[4096];
+
+        while((len = stream.read(buf)) != -1)
+            baos.write(buf, 0, len);
 
         stream.close();
 

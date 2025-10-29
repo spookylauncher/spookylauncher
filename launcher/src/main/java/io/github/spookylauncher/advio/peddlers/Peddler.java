@@ -54,7 +54,7 @@ public abstract class Peddler {
     }
 
     public OutputStream asStream() {
-        return asStream(8192);
+        return asStream(4096);
     }
 
     public OutputStream asStream(final int bufferSize) {
