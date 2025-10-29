@@ -31,6 +31,8 @@ public final class PipedPrintStream extends PrintStream {
         Collections.addAll(this.printers, printers);
     }
 
+    // pls cut out my eyes
+
     @Override public void print(final String x) { for(PrintStream printer : this.printers) printer.print(x); }
     @Override public void print(final int x) { for(PrintStream printer : this.printers) printer.print(x); }
     @Override public void print(final long x) { for(PrintStream printer : this.printers) printer.print(x); }
