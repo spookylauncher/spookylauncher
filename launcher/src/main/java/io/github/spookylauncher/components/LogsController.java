@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.text.*;
 import java.util.*;
 
+import static io.github.spookylauncher.log.Level.ERROR;
+
 public final class LogsController extends LauncherComponent {
     private final File launcherDirectory;
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -110,14 +112,14 @@ public final class LogsController extends LauncherComponent {
             File logsDirectory = new File(this.launcherDirectory, "logs");
 
             if(!logsDirectory.exists() && !logsDirectory.mkdirs()) {
-                log(Level.ERROR, "failed to create launcher logs directory");
+                log(ERROR, "failed to create launcher logs directory");
                 return;
             }
 
             final File log = createNewLog(logsDirectory);
 
             if(log == null) {
-                log(Level.ERROR, "failed to create launcher log file");
+                log(ERROR, "failed to create launcher log file");
                 return;
             }
 
@@ -130,10 +132,15 @@ public final class LogsController extends LauncherComponent {
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 fileOut.close();
-                IOUtils.copy(latestLog, log);
+                try {
+                    IOUtils.copy(latestLog, log);
+                } catch (IOException e) {
+                    log(ERROR, "failed to copy log file: ");
+                    log(ERROR, e);
+                }
             }));
         } catch(Exception e) {
-            log(Level.ERROR, "failed to branch logger output");
+            log(ERROR, "failed to branch logger output");
             e.printStackTrace();
         }
     }

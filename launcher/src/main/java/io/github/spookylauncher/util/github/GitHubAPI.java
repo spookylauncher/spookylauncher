@@ -6,6 +6,7 @@ import io.github.spookylauncher.util.github.tree.Tree;
 import io.github.spookylauncher.advio.collectors.URLCollector;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public final class GitHubAPI {
     public static Tree getTreeFromBranch(String user, String repo, String path) throws IOException {
@@ -15,18 +16,28 @@ public final class GitHubAPI {
     public static Tree getTreeFromBranch(String user, String repo, String branch, String path) throws IOException {
         Tree tree = getTree(user, repo, branch);
 
-        if(tree.tree == null || tree.tree.length == 0) return null;
+        if(tree.tree == null) return null;
 
         for(Child child : tree.tree) {
-            if(child.path.equals(path)) return Json.collectJson(new URLCollector(child.url), Tree.class);
+            if(child.path.equals(path)) {
+                try {
+                    return Json.collectJson(new URLCollector(child.url), Tree.class);
+                } catch (URISyntaxException e) {
+                    throw new IOException(e);
+                }
+            }
         }
 
         return null;
     }
 
     public static Tree getTree(String user, String repo, String tree) throws IOException {
-        return Json.collectJson(new URLCollector(
-                "https://api.github.com/repos/" + user + "/" + repo + "/git/trees/" + tree + "?recursive=1"
-        ), Tree.class);
+        try {
+            return Json.collectJson(new URLCollector(
+                    "https://api.github.com/repos/" + user + "/" + repo + "/git/trees/" + tree + "?recursive=1"
+            ), Tree.class);
+        } catch (URISyntaxException e) {
+            throw new IOException(e);
+        }
     }
 }

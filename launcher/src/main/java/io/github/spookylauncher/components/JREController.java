@@ -16,6 +16,7 @@ import io.github.spookylauncher.advio.collectors.URLCollector;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -87,7 +88,17 @@ public final class JREController extends LauncherComponent {
 
             File javaDir;
 
-            for(String javaPath : IOUtils.locate("java")) {
+            String[] jresPaths;
+
+            try {
+                jresPaths = IOUtils.locate("java");
+            } catch(IOException | InterruptedException e) {
+                log(ERROR, "failed to locate jre's: ");
+                log(ERROR, e);
+                return null;
+            }
+
+            for(String javaPath : jresPaths) {
                 javaDir = new File(javaPath).getParentFile().getParentFile();
 
                 ExternalJreInfo jre = new ExternalJreInfo(javaPath);
@@ -138,7 +149,12 @@ public final class JREController extends LauncherComponent {
     public boolean uninstallJre(JreInfo info) {
         if(!isInstalled(info)) return false;
 
-        IOUtils.deleteTree(getJreDirectory(info));
+        try {
+            IOUtils.deleteTree(getJreDirectory(info));
+        } catch (IOException e) {
+            log(ERROR, "failed to delete tree \"" + getJreDirectory(info).getAbsolutePath() + "\"");
+            log(ERROR, e);
+        }
 
         return true;
     }
@@ -236,10 +252,20 @@ public final class JREController extends LauncherComponent {
                         options.subtitleFormat = locale.get("unpackingFormat");
                         options.consumeFullPaths = false;
 
+                        URLCollector urlCollector;
+
+                        try {
+                            urlCollector = new URLCollector(url);
+                        } catch(URISyntaxException e) {
+                            log(ERROR, "failed to install jre: ");
+                            log(ERROR, e);
+                            return;
+                        }
+
                         boolean success = components.get(Downloader.class).unpackZip
                                 (
                                         destination,
-                                        new URLCollector(url),
+                                        urlCollector,
                                         options
                                 );
 

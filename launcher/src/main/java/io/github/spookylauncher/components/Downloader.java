@@ -5,8 +5,10 @@ import io.github.spookylauncher.advio.IOUtils;
 import io.github.spookylauncher.advio.collectors.Collector;
 import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.components.ui.spi.UIProvider;
+import io.github.spookylauncher.log.Logger;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class Downloader extends LauncherComponent {
@@ -82,7 +84,14 @@ public final class Downloader extends LauncherComponent {
         inputAdapter.onCancel = () -> {
             canceled.set(true);
 
-            if(options.deleteOnCancel) IOUtils.deleteTree(destination);
+            if(options.deleteOnCancel) {
+                try {
+                    IOUtils.deleteTree(destination);
+                } catch (IOException e) {
+                    Logger.log(Level.ERROR, "downloader", "failed to delete tree \"" + destination.getAbsolutePath() + "\"");
+                    Logger.log(Level.ERROR, "downloader", e);
+                }
+            }
 
             if(finalOnCancel != null) finalOnCancel.run();
         };

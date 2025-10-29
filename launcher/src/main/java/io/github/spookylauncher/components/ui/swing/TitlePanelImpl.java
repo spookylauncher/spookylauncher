@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import io.github.spookylauncher.util.Locale;
 
@@ -172,7 +173,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                                     + "/previews/preview_"
                                     + (new Random().nextInt(info.getPreviewsCount()) + 1) + ".png"
                             ).collectImage());
-                } catch (IOException e) {
+                } catch (IOException | URISyntaxException e) {
                     log(ERROR, "failed to set preview");
                     log(ERROR, e);
                 }
@@ -200,7 +201,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                         titlePanelForm.description.setText(
                                 new URLCollector(labelUrl).collectString()
                         );
-                    } catch (IOException e) {
+                    } catch (IOException | URISyntaxException e) {
                         log(ERROR, "failed to set description");
                         log(ERROR, e);
                     }

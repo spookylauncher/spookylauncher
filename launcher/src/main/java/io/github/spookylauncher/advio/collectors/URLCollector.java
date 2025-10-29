@@ -7,8 +7,9 @@ import java.io.InputStream;
 public final class URLCollector extends Collector {
 
     private long size = -1;
-    public URLCollector(String url) {
-        super(url.replace(" ", "%20"));
+
+    public URLCollector(String url) throws URISyntaxException {
+        super(new URI(url).toASCIIString());
     }
 
     public InputStream collectBaseInput() throws IOException {

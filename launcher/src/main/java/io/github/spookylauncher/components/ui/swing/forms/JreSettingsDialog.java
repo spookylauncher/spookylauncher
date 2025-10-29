@@ -36,9 +36,9 @@ public class JreSettingsDialog extends JDialog {
 
         setSize(495, 175);
 
-        JreInfo[] jres = jreController.findJres();
-
         javaPathField.setText(optionsController.getOptions().customJavaPath);
+
+        JreInfo[] jres = jreController.findJres();
 
         buttonOK.addActionListener(e -> {
             if (useExternalJreButton.isSelected()) {
@@ -65,7 +65,9 @@ public class JreSettingsDialog extends JDialog {
                 }
 
                 jreController.selectCustomJre(javaPathField.getText());
-            } else jreController.selectJre(jres[jresComboBox.getSelectedIndex()]);
+            } else if(jres != null) {
+                    jreController.selectJre(jres[jresComboBox.getSelectedIndex()]);
+            }
 
             dispose();
         });
@@ -105,12 +107,14 @@ public class JreSettingsDialog extends JDialog {
 
         JreInfo jre;
 
-        for (int i = 0; i < jres.length; i++) {
-            jre = jres[i];
+        if(jres != null) {
+            for (int i = 0; i < jres.length; i++) {
+                jre = jres[i];
 
-            this.jresComboBox.addItem(jre.fullVersion + (jre instanceof ExternalJreInfo ? extPostfix : ""));
+                this.jresComboBox.addItem(jre.fullVersion + (jre instanceof ExternalJreInfo ? extPostfix : ""));
 
-            if (jre.equals(selected)) this.jresComboBox.setSelectedIndex(i);
+                if (jre.equals(selected)) this.jresComboBox.setSelectedIndex(i);
+            }
         }
 
         boolean customJava = options.selectedJavaType == SelectedJavaType.CUSTOM;

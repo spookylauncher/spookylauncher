@@ -10,10 +10,13 @@ import io.github.spookylauncher.advio.collectors.URLCollector;
 import io.github.spookylauncher.log.Level;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+
+import static io.github.spookylauncher.log.Level.ERROR;
 
 public final class LibrariesController extends LauncherComponent {
 
@@ -165,14 +168,22 @@ public final class LibrariesController extends LauncherComponent {
 
                         Downloader downloader = components.get(Downloader.class);
 
-                        URLCollector collector = new URLCollector(url);
+                        URLCollector urlCollector;
+
+                        try {
+                            urlCollector = new URLCollector(url);
+                        } catch(URISyntaxException e) {
+                            log(ERROR, "failed to install library: ");
+                            log(ERROR, e);
+                            return;
+                        }
 
                         boolean success =
                         downloader.downloadOrUnpack
                                 (
                                         !lib.isNative,
                                         destination,
-                                        collector,
+                                        urlCollector,
                                         options
                                 );
 

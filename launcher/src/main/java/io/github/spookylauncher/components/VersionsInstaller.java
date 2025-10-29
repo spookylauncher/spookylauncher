@@ -10,6 +10,7 @@ import io.github.spookylauncher.advio.collectors.URLCollector;
 import io.github.spookylauncher.util.Locale;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -128,14 +129,22 @@ public final class VersionsInstaller extends LauncherComponent {
                                     + "/versions/" + version.name + "/" + version.name + "." + (version.singleJar ? "jar" : "zip")
                             : version.download.getDownloadUrl();
 
-                    URLCollector collector = new URLCollector(fileUrl);
+                    URLCollector urlCollector;
+
+                    try {
+                        urlCollector = new URLCollector(fileUrl);
+                    } catch(URISyntaxException e) {
+                        log(ERROR, "failed to install version: ");
+                        log(ERROR, e);
+                        return;
+                    }
 
                     boolean success =
                     components.get(Downloader.class).downloadOrUnpack
                     (
                             version.singleJar,
                             version.singleJar ? new File(versionDir, "minecraft.jar") : versionDir,
-                            collector,
+                            urlCollector,
                             options
                     );
 
