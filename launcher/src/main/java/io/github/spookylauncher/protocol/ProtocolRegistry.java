@@ -1,6 +1,6 @@
 package io.github.spookylauncher.protocol;
 
-import io.github.spookylauncher.advio.Os;
+import io.github.spookylauncher.io.OSType;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.Translator;
@@ -8,6 +8,7 @@ import io.github.spookylauncher.util.Locale;
 import com.sun.jna.platform.win32.*;
 
 import javax.swing.*;
+import java.io.IOException;
 
 @Deprecated
 public final class ProtocolRegistry extends LauncherComponent {
@@ -19,7 +20,7 @@ public final class ProtocolRegistry extends LauncherComponent {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         RegisterResult result = register();
@@ -33,7 +34,7 @@ public final class ProtocolRegistry extends LauncherComponent {
     }
 
     public boolean isRegistered() {
-        if (Os.CURRENT == Os.WINDOWS) {
+        if (OSType.CURRENT == OSType.WINDOWS) {
             return Advapi32Util.registryKeyExists(WinReg.HKEY_CLASSES_ROOT, PROTOCOL_NAME + "\\shell\\open\\command");
         }
 
@@ -45,7 +46,7 @@ public final class ProtocolRegistry extends LauncherComponent {
 
         String exePath;
 
-        if(Os.CURRENT == Os.WINDOWS) {
+        if(OSType.CURRENT == OSType.WINDOWS) {
             exePath = System.getenv("APPDATA") + "\\.spookylauncher\\spookylauncher.exe";
 
             try {
@@ -62,7 +63,7 @@ public final class ProtocolRegistry extends LauncherComponent {
                 return new RegisterResult(RegisterResult.ACCESS_DENIED);
             }
         } else {
-            System.err.println("spookylaunch protocol can't be registered on this platform (" + Os.CURRENT.toString() + ")");
+            System.err.println("spookylaunch protocol can't be registered on this platform (" + OSType.CURRENT.toString() + ")");
             return new RegisterResult(RegisterResult.NOT_SUPPORTED);
         }
 

@@ -1,16 +1,16 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.components.ui.spi.TitlePanel;
 import io.github.spookylauncher.components.ui.spi.UIProvider;
 import io.github.spookylauncher.tree.LibrariesCollection;
 import io.github.spookylauncher.tree.LibraryInfo;
 import io.github.spookylauncher.tree.versions.LibrariesManifest;
 import io.github.spookylauncher.tree.versions.VersionInfo;
-import io.github.spookylauncher.advio.collectors.URLCollector;
+import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.util.Locale;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -58,7 +58,7 @@ public final class VersionsInstaller extends LauncherComponent {
         }
 
         if(onInstalledCallback != null) {
-            AsyncOperation.run(
+            new Thread(
                     () -> {
                         while(true) {
                             if(uninstalledCount.get() <= 0) {
@@ -67,7 +67,7 @@ public final class VersionsInstaller extends LauncherComponent {
                             }
                         }
                     }
-            );
+            ).start();
         }
     }
 
@@ -112,7 +112,7 @@ public final class VersionsInstaller extends LauncherComponent {
 
         log(INFO, "start downloading");
 
-        AsyncOperation.run(
+        new Thread(
                 () -> {
                     uiProvider.panel().setEnabledButtons(false);
 
@@ -129,14 +129,22 @@ public final class VersionsInstaller extends LauncherComponent {
                                     + "/versions/" + version.name + "/" + version.name + "." + (version.singleJar ? "jar" : "zip")
                             : version.download.getDownloadUrl();
 
-                    URLCollector collector = new URLCollector(fileUrl);
+                    URLCollector urlCollector;
+
+                    try {
+                        urlCollector = new URLCollector(fileUrl);
+                    } catch(URISyntaxException e) {
+                        log(ERROR, "failed to install version: ");
+                        log(ERROR, e);
+                        return;
+                    }
 
                     boolean success =
                     components.get(Downloader.class).downloadOrUnpack
                     (
                             version.singleJar,
                             version.singleJar ? new File(versionDir, "minecraft.jar") : versionDir,
-                            collector,
+                            urlCollector,
                             options
                     );
 
@@ -147,6 +155,6 @@ public final class VersionsInstaller extends LauncherComponent {
                         uiProvider.panel().getButton(TitlePanel.PLAY).setText(locale.get("play"));
                     }
                 }
-        );
+        ).start();
     }
 }

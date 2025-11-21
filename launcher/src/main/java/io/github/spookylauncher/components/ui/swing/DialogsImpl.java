@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components.ui.swing;
 
-import io.github.spookylauncher.advio.InstallAdapter;
+import io.github.spookylauncher.io.InstallAdapter;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.Translator;
@@ -16,8 +16,6 @@ import io.github.spookylauncher.util.structures.tuple.Tuple3;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;

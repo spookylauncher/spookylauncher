@@ -8,16 +8,19 @@ import io.github.spookylauncher.tree.jre.JREsManifest;
 import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.tree.jre.JreInfo;
 import io.github.spookylauncher.tree.jre.SelectedJavaType;
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.advio.Os;
-import io.github.spookylauncher.advio.IOUtils;
-import io.github.spookylauncher.advio.collectors.FileCollector;
-import io.github.spookylauncher.advio.collectors.URLCollector;
+import io.github.spookylauncher.io.OSType;
+import io.github.spookylauncher.io.IOUtils;
+import io.github.spookylauncher.io.collectors.FileCollector;
+import io.github.spookylauncher.io.collectors.URLCollector;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Consumer;
+
+import static io.github.spookylauncher.log.Level.ERROR;
 
 public final class JREController extends LauncherComponent {
     private final File javaDir;
@@ -27,7 +30,7 @@ public final class JREController extends LauncherComponent {
 
     public JREController(ComponentsController components, File javaDir, String manifestDownloaderName) {
         super("JRE Controller", components);
-        this.javaDir = new File(javaDir, Os.CURRENT.name.toLowerCase());
+        this.javaDir = new File(javaDir, OSType.CURRENT.name.toLowerCase());
         this.manifestDownloaderName = manifestDownloaderName;
     }
 
@@ -35,8 +38,17 @@ public final class JREController extends LauncherComponent {
         return ( (ManifestDownloader<JREsManifest>) components.get(manifestDownloaderName)).getManifest();
     }
 
+    private void safeOptionsStore() {
+        try {
+            components.get(OptionsController.class).store();
+        } catch (IOException e) {
+            log(ERROR, "failed to store options");
+            log(ERROR, e);
+        }
+    }
+
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         this.checkJre();
@@ -59,10 +71,11 @@ public final class JREController extends LauncherComponent {
             } else {
                 selectJre(jres[JreInfo.getIndexOfNewer(jres)]);
 
-                optionsController.store();
+                safeOptionsStore();
             }
         }
     }
+
     public JreInfo[] findJres() {
         if(foundJREs == null) {
             List<JreInfo> jres = new ArrayList<>();
@@ -75,12 +88,30 @@ public final class JREController extends LauncherComponent {
 
             File javaDir;
 
-            for(String javaPath : IOUtils.locate("java")) {
+            String[] jresPaths;
+
+            try {
+                jresPaths = IOUtils.locate("java");
+            } catch(IOException | InterruptedException e) {
+                log(ERROR, "failed to locate jre's: ");
+                log(ERROR, e);
+                return null;
+            }
+
+            for(String javaPath : jresPaths) {
                 javaDir = new File(javaPath).getParentFile().getParentFile();
 
                 ExternalJreInfo jre = new ExternalJreInfo(javaPath);
 
-                Properties props = new FileCollector(new File(javaDir, "release")).collectProperties();
+                Properties props;
+
+                try {
+                    props = new FileCollector(new File(javaDir, "release")).collectProperties();
+                } catch (IOException e) {
+                    log(ERROR, "failed to read info of jre \"" + javaPath + "\"");
+                    log(ERROR, e);
+                    continue;
+                }
 
                 jre.vendor = props.getProperty("IMPLEMENTOR");
                 jre.vendor = jre.vendor.substring(1, jre.vendor.length() - 1);
@@ -118,7 +149,12 @@ public final class JREController extends LauncherComponent {
     public boolean uninstallJre(JreInfo info) {
         if(!isInstalled(info)) return false;
 
-        IOUtils.deleteTree(getJreDirectory(info));
+        try {
+            IOUtils.deleteTree(getJreDirectory(info));
+        } catch (IOException e) {
+            log(ERROR, "failed to delete tree \"" + getJreDirectory(info).getAbsolutePath() + "\"");
+            log(ERROR, e);
+        }
 
         return true;
     }
@@ -133,7 +169,7 @@ public final class JREController extends LauncherComponent {
         options.selectedJavaType = SelectedJavaType.EXTERNAL;
         options.selectedJavaPath = new File(executablePath).getAbsolutePath();
 
-        optionsController.store();
+        safeOptionsStore();
 
         return true;
     }
@@ -145,8 +181,9 @@ public final class JREController extends LauncherComponent {
         options.selectedJavaType = SelectedJavaType.CUSTOM;
         options.customJavaPath = new File(executablePath).getAbsolutePath();
 
-        optionsController.store();
+        safeOptionsStore();
     }
+
     public boolean selectJre(JreInfo info) {
         if(info instanceof ExternalJreInfo) return selectExternalJre(((ExternalJreInfo) info).path);
 
@@ -159,7 +196,7 @@ public final class JREController extends LauncherComponent {
         options.selectedJavaType = SelectedJavaType.LAUNCHER;
         options.selectedJavaPath = getJreExecutable(info).getAbsolutePath();
 
-        optionsController.store();
+        safeOptionsStore();
 
         return true;
     }
@@ -176,7 +213,7 @@ public final class JREController extends LauncherComponent {
         if(info instanceof ExternalJreInfo) return new File(((ExternalJreInfo) info).path);
         if(!isInstalled(info)) return null;
 
-        return IOUtils.find("bin/" + (Os.CURRENT == Os.WINDOWS ? "java.exe" : "java"), getJreDirectory(info));
+        return IOUtils.find("bin/" + (OSType.CURRENT == OSType.WINDOWS ? "java.exe" : "java"), getJreDirectory(info));
     }
 
     public void installJre(JreInfo info, Consumer<Boolean> onInstalled) {
@@ -187,9 +224,9 @@ public final class JREController extends LauncherComponent {
 
         String url;
 
-        if(info.downloads.containsKey(Os.CURRENT)) url = info.downloads.get(Os.CURRENT);
+        if(info.downloads.containsKey(OSType.CURRENT)) url = info.downloads.get(OSType.CURRENT);
         else {
-            log(Level.ERROR, "JRE installation failed because downloads are not available");
+            log(ERROR, "JRE installation failed because downloads are not available");
             uiProvider.messages().error
             (
                     locale.get("installationError"),
@@ -198,9 +235,9 @@ public final class JREController extends LauncherComponent {
             return;
         }
 
-        AsyncOperation.run(
+        new Thread(
                 () -> {
-                    assert Os.CURRENT != null;
+                    assert OSType.CURRENT != null;
 
                     File destination = getJreDirectory(info);
 
@@ -215,10 +252,20 @@ public final class JREController extends LauncherComponent {
                         options.subtitleFormat = locale.get("unpackingFormat");
                         options.consumeFullPaths = false;
 
+                        URLCollector urlCollector;
+
+                        try {
+                            urlCollector = new URLCollector(url);
+                        } catch(URISyntaxException e) {
+                            log(ERROR, "failed to install jre: ");
+                            log(ERROR, e);
+                            return;
+                        }
+
                         boolean success = components.get(Downloader.class).unpackZip
                                 (
                                         destination,
-                                        new URLCollector(url),
+                                        urlCollector,
                                         options
                                 );
 
@@ -235,6 +282,6 @@ public final class JREController extends LauncherComponent {
                         onInstalled.accept(success);
                     }
                 }
-        );
+        ).start();
     }
 }

@@ -5,7 +5,7 @@ import io.github.spookylauncher.components.Translator;
 import io.github.spookylauncher.components.VersionsList;
 import io.github.spookylauncher.components.ui.swing.SwingUIProvider;
 import io.github.spookylauncher.tree.versions.VersionInfo;
-import io.github.spookylauncher.util.io.Browser;
+import io.github.spookylauncher.util.Browser;
 
 class OpenArticleEvent extends Event {
 

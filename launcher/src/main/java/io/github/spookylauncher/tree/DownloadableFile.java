@@ -1,10 +1,6 @@
 package io.github.spookylauncher.tree;
 
-import io.github.spookylauncher.advio.AsyncOperation;
-import io.github.spookylauncher.advio.Os;
-import io.github.spookylauncher.advio.collectors.URLCollector;
-import io.github.spookylauncher.advio.security.hash.HashCalculators;
-import io.github.spookylauncher.advio.security.hash.HashingAlgorithm;
+import io.github.spookylauncher.io.OSType;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
@@ -14,7 +10,7 @@ public class DownloadableFile {
     @SerializedName("downloadUrl") public String downloadUrl;
     @SerializedName("sha1") public String sha1;
 
-    @SerializedName("downloadUrls") public HashMap<Os, String> downloadUrls;
+    @SerializedName("downloadUrls") public HashMap<OSType, String> downloadUrls;
 
     public DownloadableFile() {}
 
@@ -26,9 +22,10 @@ public class DownloadableFile {
         this.downloadUrl = url;
 
         if(autoCalculateSha1) {
-            AsyncOperation.run(
-                    () -> sha1 = HashCalculators.get(HashingAlgorithm.SHA1).calculateToHex(new URLCollector(url))
-            );
+            new Thread(() -> {
+                // TODO: new hash calculation
+                sha1 = "";
+            }).run();
         }
     }
 
@@ -38,12 +35,12 @@ public class DownloadableFile {
     }
 
     public String getDownloadUrl() {
-        return getDownloadUrl(Os.CURRENT);
+        return getDownloadUrl(OSType.CURRENT);
     }
 
-    public String getDownloadUrl(Os os) {
+    public String getDownloadUrl(OSType osType) {
         if(downloadUrls == null) return downloadUrl;
 
-        return downloadUrls.get(os);
+        return downloadUrls.get(osType);
     }
 }

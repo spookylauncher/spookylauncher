@@ -1,4 +1,4 @@
-package io.github.spookylauncher.advio.collectors;
+package io.github.spookylauncher.io.collectors;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 public final class FileCollector extends Collector {
 
     public FileCollector(File file) { this(file.getAbsolutePath()); }
+
     public FileCollector(String path) {
         super(path);
 
@@ -14,12 +15,8 @@ public final class FileCollector extends Collector {
     }
 
     @Override
-    public InputStream collectBaseInput() {
-        try {
-            return Files.newInputStream(Paths.get(path));
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+    public InputStream collectBaseInput() throws IOException {
+        return Files.newInputStream(Paths.get(path));
     }
 
     @Override

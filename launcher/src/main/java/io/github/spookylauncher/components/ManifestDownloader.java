@@ -1,8 +1,9 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.util.io.Json;
-import io.github.spookylauncher.advio.collectors.URLCollector;
+import io.github.spookylauncher.util.Json;
+import io.github.spookylauncher.io.collectors.URLCollector;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -28,7 +29,7 @@ public class ManifestDownloader<T> extends LauncherComponent {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         downloadManifest();

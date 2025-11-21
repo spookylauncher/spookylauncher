@@ -4,17 +4,19 @@ import io.github.spookylauncher.components.ui.spi.UIProvider;
 import io.github.spookylauncher.tree.LibrariesCollection;
 import io.github.spookylauncher.tree.LibraryInfo;
 import io.github.spookylauncher.tree.versions.LibrariesManifest;
-import io.github.spookylauncher.advio.AsyncOperation;
 import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.advio.Os;
-import io.github.spookylauncher.advio.collectors.URLCollector;
+import io.github.spookylauncher.io.OSType;
+import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.log.Level;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+
+import static io.github.spookylauncher.log.Level.ERROR;
 
 public final class LibrariesController extends LauncherComponent {
 
@@ -110,7 +112,7 @@ public final class LibrariesController extends LauncherComponent {
             );
         }
 
-        AsyncOperation.run(
+        new Thread(
                 () -> {
                     while(true) {
                         if(uninstalledCount.get() <= 0 || !success.get()) {
@@ -119,7 +121,7 @@ public final class LibrariesController extends LauncherComponent {
                         }
                     }
                 }
-        );
+        ).start();
     }
 
     public void install(LibraryInfo lib, Consumer<Boolean> onInstalled) {
@@ -139,9 +141,9 @@ public final class LibrariesController extends LauncherComponent {
             return;
         }
 
-        AsyncOperation.run(
+        new Thread(
                 () -> {
-                    assert Os.CURRENT != null;
+                    assert OSType.CURRENT != null;
 
                     File destination = getLibraryFile(lib);
 
@@ -166,14 +168,22 @@ public final class LibrariesController extends LauncherComponent {
 
                         Downloader downloader = components.get(Downloader.class);
 
-                        URLCollector collector = new URLCollector(url);
+                        URLCollector urlCollector;
+
+                        try {
+                            urlCollector = new URLCollector(url);
+                        } catch(URISyntaxException e) {
+                            log(ERROR, "failed to install library: ");
+                            log(ERROR, e);
+                            return;
+                        }
 
                         boolean success =
                         downloader.downloadOrUnpack
                                 (
                                         !lib.isNative,
                                         destination,
-                                        collector,
+                                        urlCollector,
                                         options
                                 );
 
@@ -190,6 +200,6 @@ public final class LibrariesController extends LauncherComponent {
                         onInstalled.accept(success);
                     }
                 }
-        );
+        ).start();
     }
 }

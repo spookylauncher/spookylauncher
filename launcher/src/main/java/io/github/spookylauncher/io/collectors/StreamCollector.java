@@ -1,25 +1,26 @@
-package io.github.spookylauncher.advio.collectors;
+package io.github.spookylauncher.io.collectors;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class StreamCollector extends Collector {
     private final byte[] bytes;
 
-    public StreamCollector(InputStream stream) {
+    public StreamCollector(InputStream stream) throws IOException {
         super(null);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         int len;
 
-        try {
-            while((len = stream.read()) != -1) baos.write(len);
-            stream.close();
-        } catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+        byte[] buf = new byte[4096];
+
+        while((len = stream.read(buf)) != -1)
+            baos.write(buf, 0, len);
+
+        stream.close();
 
         bytes = baos.toByteArray();
     }

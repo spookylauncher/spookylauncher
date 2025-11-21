@@ -5,6 +5,7 @@ import io.github.spookylauncher.components.ui.swing.events.EventsRegister;
 import io.github.spookylauncher.components.ui.spi.*;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public final class SwingUIProvider extends LauncherComponent implements UIProvider {
 
@@ -35,7 +36,7 @@ public final class SwingUIProvider extends LauncherComponent implements UIProvid
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         window = new MainWindowImpl(components, this);

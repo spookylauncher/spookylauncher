@@ -1,9 +1,7 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.advio.IOUtils;
+import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.GameStartData;
-import io.github.spookylauncher.advio.AsyncOperation;
-import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.log.Logger;
 import io.github.spookylauncher.util.structures.tuple.Tuple2;
 
@@ -12,6 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.*;
 import java.util.*;
+
+import static io.github.spookylauncher.log.Level.ERROR;
 
 public final class LogsController extends LauncherComponent {
     private final File launcherDirectory;
@@ -51,7 +51,7 @@ public final class LogsController extends LauncherComponent {
     }
 
     public void startLogging(long uptime, Process process, List<Tuple2<String, String>> data, File log, File latestLog, Runnable onLoggingEnded) {
-        AsyncOperation.run(
+        new Thread(
                 () -> {
                     try {
                         InputStream in = process.getInputStream();
@@ -96,11 +96,11 @@ public final class LogsController extends LauncherComponent {
                         components.get(ErrorHandler.class).handleException("logCreationFailed", e);
                     }
                 }
-        );
+        ).start();
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         this.branchLoggerOutput();
@@ -111,14 +111,14 @@ public final class LogsController extends LauncherComponent {
             File logsDirectory = new File(this.launcherDirectory, "logs");
 
             if(!logsDirectory.exists() && !logsDirectory.mkdirs()) {
-                log(Level.ERROR, "failed to create launcher logs directory");
+                log(ERROR, "failed to create launcher logs directory");
                 return;
             }
 
             final File log = createNewLog(logsDirectory);
 
             if(log == null) {
-                log(Level.ERROR, "failed to create launcher log file");
+                log(ERROR, "failed to create launcher log file");
                 return;
             }
 
@@ -131,10 +131,15 @@ public final class LogsController extends LauncherComponent {
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 fileOut.close();
-                IOUtils.copy(latestLog, log);
+                try {
+                    IOUtils.copy(latestLog, log);
+                } catch (IOException e) {
+                    log(ERROR, "failed to copy log file: ");
+                    log(ERROR, e);
+                }
             }));
         } catch(Exception e) {
-            log(Level.ERROR, "failed to branch logger output");
+            log(ERROR, "failed to branch logger output");
             e.printStackTrace();
         }
     }

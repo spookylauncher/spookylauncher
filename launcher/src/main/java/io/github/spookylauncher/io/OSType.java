@@ -1,6 +1,6 @@
-package io.github.spookylauncher.advio;
+package io.github.spookylauncher.io;
 
-public enum Os {
+public enum OSType {
     WINDOWS("Windows", "win"),
     LINUX("Linux", "linux", "unix", "solaris"),
     MACOS("MacOS","mac");
@@ -8,19 +8,19 @@ public enum Os {
     public final String[] patterns;
     public final String name;
 
-    public static final Os CURRENT = getOsByName(System.getProperty("os.name"));
+    public static final OSType CURRENT = getOsByName(System.getProperty("os.name"));
 
-    Os(String name, String... patterns) {
+    OSType(String name, String... patterns) {
         this.name = name;
         this.patterns = patterns;
     }
 
-    public static Os getOsByName(String name) {
+    public static OSType getOsByName(String name) {
         name = name.toLowerCase();
 
-        for(Os os : Os.values()) {
-            for(String pattern : os.patterns) {
-                if(name.contains(pattern)) return os;
+        for(OSType osType : OSType.values()) {
+            for(String pattern : osType.patterns) {
+                if(name.contains(pattern)) return osType;
             }
         }
 

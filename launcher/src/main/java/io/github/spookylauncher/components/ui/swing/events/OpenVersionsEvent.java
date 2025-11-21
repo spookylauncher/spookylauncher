@@ -1,14 +1,14 @@
 package io.github.spookylauncher.components.ui.swing.events;
 
-import io.github.spookylauncher.components.ComponentsController;
-import io.github.spookylauncher.components.OptionsController;
-import io.github.spookylauncher.components.Translator;
-import io.github.spookylauncher.components.VersionsList;
+import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.ui.swing.SwingUIProvider;
 import io.github.spookylauncher.components.ui.swing.forms.VersionsDialog;
 import io.github.spookylauncher.tree.launcher.Options;
 
+import java.io.IOException;
 import java.util.Objects;
+
+import static io.github.spookylauncher.log.Level.ERROR;
 
 final class OpenVersionsEvent extends Event {
 
@@ -33,7 +33,12 @@ final class OpenVersionsEvent extends Event {
 
                     provider.panel().setVersion(versions.getSelectedVersionInfo());
 
-                    optionsController.store();
+                    try {
+                        optionsController.store();
+                    } catch (IOException e) {
+                        versions.log(ERROR, "failed to store options");
+                        versions.log(ERROR, e);
+                    }
                 });
 
         dialog.setResizable(false);

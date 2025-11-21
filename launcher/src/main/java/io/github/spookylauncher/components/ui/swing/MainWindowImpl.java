@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components.ui.swing;
 
-import io.github.spookylauncher.advio.ResourceCollector;
+import io.github.spookylauncher.io.collectors.ResourceCollector;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.events.EventsManager;
@@ -11,6 +11,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+
+import static io.github.spookylauncher.log.Level.ERROR;
 
 class MainWindowImpl extends LauncherComponent implements MainWindow {
 
@@ -21,7 +24,17 @@ class MainWindowImpl extends LauncherComponent implements MainWindow {
     MainWindowImpl(final ComponentsController components, final SwingUIProvider provider) {
         super("Swing API Main Window", components);
 
-        this.icon = new ResourceCollector("icon.png").collectImage();
+        Image icon;
+
+        try {
+            icon = new ResourceCollector("icon.png").collectImage();
+        } catch (IOException e) {
+            icon = null;
+            log(ERROR, "failed to set frame icon");
+            log(ERROR, e);
+        }
+
+        this.icon = icon;
 
         frame = new JFrame("Spooky Launcher");
         frame.setSize(800, 434);

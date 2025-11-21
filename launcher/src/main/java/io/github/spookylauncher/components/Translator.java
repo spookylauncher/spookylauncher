@@ -1,9 +1,10 @@
 package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.advio.Resource;
-import io.github.spookylauncher.advio.ResourceCollector;
+import io.github.spookylauncher.io.Resource;
+import io.github.spookylauncher.io.collectors.ResourceCollector;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import static io.github.spookylauncher.log.Level.*;
@@ -16,7 +17,7 @@ public final class Translator extends LauncherComponent {
     }
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         super.initialize();
 
         this.reloadLocale();
