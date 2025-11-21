@@ -9,7 +9,7 @@ public final class Resource {
                 if(is != null)
                     return true;
             }
-        } catch(final IOException e) {}
+        } catch(final IOException ignored) {}
 
         return false;
     }

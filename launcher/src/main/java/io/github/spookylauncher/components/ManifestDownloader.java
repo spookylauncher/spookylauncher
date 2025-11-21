@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
-import static io.github.spookylauncher.log.Level.*;
 
 public class ManifestDownloader<T> extends LauncherComponent {
 

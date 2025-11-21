@@ -13,8 +13,6 @@ import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static io.github.spookylauncher.log.Logger.*;
-
 public final class ProtocolRequestHandler {
     private static final String LOG_ID = "protocol request handler";
 

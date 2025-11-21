@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.function.Function;
 
 import static io.github.spookylauncher.log.Logger.log;
-import static io.github.spookylauncher.log.Level.*;
 
 public final class ComponentsController {
     private static final String LOG_ID = "components controller";
