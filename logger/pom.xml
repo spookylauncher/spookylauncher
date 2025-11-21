@@ -6,22 +6,15 @@
     <parent>
         <groupId>io.github.spookylauncher</groupId>
         <artifactId>SpookyLauncher</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>beta-1.0.0</version>
     </parent>
 
-    <groupId>io.github.spookylauncher.log</groupId>
     <artifactId>logger</artifactId>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
     <dependencies>
         <dependency>
-            <groupId>io.github.spookylauncher.io</groupId>
+            <groupId>io.github.spookylauncher</groupId>
             <artifactId>io</artifactId>
-            <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

@@ -1,4 +1,4 @@
-package io.github.spookylauncher;
+package io.github.spookylauncher.bootstrap;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import io.github.spookylauncher.io.IOUtils;

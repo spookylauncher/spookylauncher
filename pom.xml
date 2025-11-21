@@ -6,8 +6,9 @@
 
     <groupId>io.github.spookylauncher</groupId>
     <artifactId>SpookyLauncher</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>beta-1.0.0</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>security-rules</module>
         <module>wrapper</module>
@@ -33,4 +34,56 @@
             <version>2.8.9</version>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>io</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>logger</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>util</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>ipc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>components</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>tree</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>security-rules</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>wrapper</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
