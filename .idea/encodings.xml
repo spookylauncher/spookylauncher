@@ -7,12 +7,12 @@
     <file url="file://$PROJECT_DIR$/bootstrap/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/components/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/components/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/io-lib/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/io-lib/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/io/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/io/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ipc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ipc/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/logger-lib/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/logger-lib/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/logger/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/logger/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/logging/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/logging/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/security-rules/src/main/java" charset="UTF-8" />

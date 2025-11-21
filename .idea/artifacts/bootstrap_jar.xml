@@ -4,8 +4,8 @@
     <root id="archive" name="bootstrap.jar">
       <element id="module-output" name="bootstrap" />
       <element id="module-output" name="security-rules" />
-      <element id="module-output" name="io-lib" />
-      <element id="module-output" name="logger-lib" />
+      <element id="module-output" name="io" />
+      <element id="module-output" name="logger" />
       <element id="module-output" name="components" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/formdev/flatlaf/3.5.4/flatlaf-3.5.4.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/intellij/uiDesigner/1.0/uiDesigner-1.0.jar" path-in-jar="/" />

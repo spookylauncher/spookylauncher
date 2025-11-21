@@ -12,8 +12,8 @@
         <module>security-rules</module>
         <module>wrapper</module>
         <module>bootstrap</module>
-        <module>logger-lib</module>
-        <module>io-lib</module>
+        <module>logger</module>
+        <module>io</module>
         <module>components</module>
         <module>ipc</module>
         <module>util</module>

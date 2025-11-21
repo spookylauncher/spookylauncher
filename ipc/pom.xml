@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.spookylauncher.log</groupId>
-            <artifactId>logger-lib</artifactId>
+            <artifactId>logger</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
