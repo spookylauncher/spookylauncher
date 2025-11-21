@@ -66,7 +66,7 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>io.github.spookylauncher</groupId>
+            <groupId>io.github.spookylauncher.log</groupId>
             <artifactId>logger-lib</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>

@@ -8,6 +8,8 @@ import net.arikia.dev.drpc.*;
 
 import java.io.IOException;
 
+import static io.github.spookylauncher.log.Level.*;
+
 public final class DiscordPresenceViewer extends LauncherComponent {
     private static final String APP_ID = "1264356894361780286";
 

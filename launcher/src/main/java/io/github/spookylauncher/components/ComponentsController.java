@@ -3,6 +3,8 @@ package io.github.spookylauncher.components;
 import java.util.*;
 import java.util.function.Function;
 
+import static io.github.spookylauncher.log.Level.ERROR;
+import static io.github.spookylauncher.log.Level.INFO;
 import static io.github.spookylauncher.log.Logger.log;
 
 public final class ComponentsController {

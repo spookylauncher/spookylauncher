@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="logger-lib:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/logger_lib_jar</output-path>
+    <root id="root">
+      <element id="archive" name="logger-lib.jar">
+        <element id="module-output" name="logger-lib" />
+        <element id="module-output" name="io-lib" />
+      </element>
+      <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.9" />
+    </root>
+  </artifact>
+</component>

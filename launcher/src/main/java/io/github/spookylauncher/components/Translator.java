@@ -7,6 +7,8 @@ import io.github.spookylauncher.io.collectors.ResourceCollector;
 import java.io.IOException;
 import java.util.Properties;
 
+import static io.github.spookylauncher.log.Level.*;
+
 public final class Translator extends LauncherComponent {
     private Locale locale;
 

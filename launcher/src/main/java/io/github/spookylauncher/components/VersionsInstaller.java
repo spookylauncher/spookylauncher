@@ -15,6 +15,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
+import static io.github.spookylauncher.log.Level.*;
+
 public final class VersionsInstaller extends LauncherComponent {
 
     private final String librariesManifestDownloaderName;
