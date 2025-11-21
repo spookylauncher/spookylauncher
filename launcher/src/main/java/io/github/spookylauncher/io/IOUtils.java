@@ -21,7 +21,7 @@ public final class IOUtils {
         return ((OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean()).getTotalPhysicalMemorySize();
     }
 
-    private static List<String> readLines(InputStream in) throws IOException {
+    public static List<String> readLines(InputStream in) throws IOException {
         List<String> lines = new ArrayList<>();
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -387,11 +387,6 @@ public final class IOUtils {
     }
 
     public static FileLock lock(File file) throws IOException {
-        try {
-            return new RandomAccessFile(file, "rw").getChannel().tryLock();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return new RandomAccessFile(file, "rw").getChannel().tryLock();
     }
 }
