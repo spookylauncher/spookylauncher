@@ -1,9 +1,9 @@
 package io.github.spookylauncher.util.github;
 
-import io.github.spookylauncher.util.io.Json;
+import io.github.spookylauncher.util.Json;
 import io.github.spookylauncher.util.github.tree.Child;
 import io.github.spookylauncher.util.github.tree.Tree;
-import io.github.spookylauncher.advio.collectors.URLCollector;
+import io.github.spookylauncher.io.collectors.URLCollector;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

@@ -1,7 +1,7 @@
 package io.github.spookylauncher.components.launch;
 
 import io.github.spookylauncher.Constants;
-import io.github.spookylauncher.advio.IOUtils;
+import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.debug.LocalLibraries;
 import io.github.spookylauncher.log.Level;

@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components.ui.swing;
 
-import io.github.spookylauncher.advio.collectors.ResourceCollector;
+import io.github.spookylauncher.io.collectors.ResourceCollector;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.events.EventsManager;

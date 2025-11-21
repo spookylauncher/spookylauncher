@@ -1,4 +1,4 @@
-package io.github.spookylauncher.advio.peddlers;
+package io.github.spookylauncher.io.peddlers;
 
 import java.io.*;
 

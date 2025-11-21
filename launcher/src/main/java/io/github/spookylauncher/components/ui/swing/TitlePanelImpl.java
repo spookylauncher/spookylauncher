@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components.ui.swing;
 
-import io.github.spookylauncher.advio.collectors.URLCollector;
+import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.ui.spi.Button;
 import io.github.spookylauncher.components.ui.spi.Panel;

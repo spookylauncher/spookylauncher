@@ -1,6 +1,6 @@
 package io.github.spookylauncher.tree.versions;
 
-import io.github.spookylauncher.advio.OSType;
+import io.github.spookylauncher.io.OSType;
 import io.github.spookylauncher.log.Logger;
 import io.github.spookylauncher.tree.DownloadableFile;
 import io.github.spookylauncher.tree.GeneralDate;

@@ -2,9 +2,9 @@ package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.tree.launcher.Options;
-import io.github.spookylauncher.advio.collectors.FileCollector;
-import io.github.spookylauncher.advio.peddlers.FilePeddler;
-import io.github.spookylauncher.util.io.Json;
+import io.github.spookylauncher.io.collectors.FileCollector;
+import io.github.spookylauncher.io.peddlers.FilePeddler;
+import io.github.spookylauncher.util.Json;
 
 import java.io.File;
 import java.io.IOException;

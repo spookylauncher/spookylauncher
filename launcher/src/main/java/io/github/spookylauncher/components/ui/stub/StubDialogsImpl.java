@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components.ui.stub;
 
-import io.github.spookylauncher.advio.InstallAdapter;
+import io.github.spookylauncher.io.InstallAdapter;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.ui.spi.*;

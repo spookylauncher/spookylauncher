@@ -1,8 +1,8 @@
-package io.github.spookylauncher.util.io;
+package io.github.spookylauncher.util;
 
-import io.github.spookylauncher.advio.OSType;
-import io.github.spookylauncher.advio.collectors.Collector;
-import io.github.spookylauncher.advio.peddlers.Peddler;
+import io.github.spookylauncher.io.OSType;
+import io.github.spookylauncher.io.collectors.Collector;
+import io.github.spookylauncher.io.peddlers.Peddler;
 import com.google.gson.*;
 import io.github.spookylauncher.tree.GeneralDate;
 import io.github.spookylauncher.tree.GsonGeneralDateAdapter;

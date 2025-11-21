@@ -1,4 +1,4 @@
-package io.github.spookylauncher.advio;
+package io.github.spookylauncher.io;
 
 public enum OSType {
     WINDOWS("Windows", "win"),

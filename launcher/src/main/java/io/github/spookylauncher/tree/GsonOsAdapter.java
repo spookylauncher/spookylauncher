@@ -1,6 +1,6 @@
 package io.github.spookylauncher.tree;
 
-import io.github.spookylauncher.advio.OSType;
+import io.github.spookylauncher.io.OSType;
 import com.google.gson.*;
 
 import java.lang.reflect.Type;

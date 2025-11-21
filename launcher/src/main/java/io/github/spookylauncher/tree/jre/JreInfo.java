@@ -1,6 +1,6 @@
 package io.github.spookylauncher.tree.jre;
 
-import io.github.spookylauncher.advio.OSType;
+import io.github.spookylauncher.io.OSType;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;

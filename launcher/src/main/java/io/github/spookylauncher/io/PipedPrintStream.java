@@ -1,4 +1,4 @@
-package io.github.spookylauncher.util.io;
+package io.github.spookylauncher.io;
 
 import java.io.*;
 import java.util.*;

@@ -9,10 +9,10 @@ import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.tree.jre.JreInfo;
 import io.github.spookylauncher.tree.jre.SelectedJavaType;
 import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.advio.OSType;
-import io.github.spookylauncher.advio.IOUtils;
-import io.github.spookylauncher.advio.collectors.FileCollector;
-import io.github.spookylauncher.advio.collectors.URLCollector;
+import io.github.spookylauncher.io.OSType;
+import io.github.spookylauncher.io.IOUtils;
+import io.github.spookylauncher.io.collectors.FileCollector;
+import io.github.spookylauncher.io.collectors.URLCollector;
 
 import java.io.File;
 import java.io.IOException;

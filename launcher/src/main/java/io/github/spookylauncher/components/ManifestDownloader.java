@@ -1,7 +1,7 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.util.io.Json;
-import io.github.spookylauncher.advio.collectors.URLCollector;
+import io.github.spookylauncher.util.Json;
+import io.github.spookylauncher.io.collectors.URLCollector;
 
 import java.io.IOException;
 import java.util.HashSet;

@@ -1,6 +1,6 @@
 package io.github.spookylauncher.log;
 
-import io.github.spookylauncher.util.io.PipedPrintStream;
+import io.github.spookylauncher.io.PipedPrintStream;
 
 public final class Logger {
     private static final boolean DEBUG = "true".equalsIgnoreCase(System.getenv("SPOOKYDEV"));

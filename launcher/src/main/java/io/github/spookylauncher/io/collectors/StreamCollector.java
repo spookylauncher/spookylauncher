@@ -1,4 +1,4 @@
-package io.github.spookylauncher.advio.collectors;
+package io.github.spookylauncher.io.collectors;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

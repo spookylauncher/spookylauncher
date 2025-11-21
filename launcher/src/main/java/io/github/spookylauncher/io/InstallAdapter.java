@@ -1,4 +1,4 @@
-package io.github.spookylauncher.advio;
+package io.github.spookylauncher.io;
 
 import java.util.function.*;
 

@@ -1,6 +1,6 @@
-package io.github.spookylauncher.advio.collectors;
+package io.github.spookylauncher.io.collectors;
 
-import io.github.spookylauncher.advio.Resource;
+import io.github.spookylauncher.io.Resource;
 
 import java.io.IOException;
 

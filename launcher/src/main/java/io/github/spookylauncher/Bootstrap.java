@@ -1,7 +1,7 @@
 package io.github.spookylauncher;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import io.github.spookylauncher.advio.IOUtils;
+import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.Translator;
 import io.github.spookylauncher.components.events.EventsManager;

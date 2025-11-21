@@ -1,8 +1,8 @@
 package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.advio.Resource;
-import io.github.spookylauncher.advio.collectors.ResourceCollector;
+import io.github.spookylauncher.io.Resource;
+import io.github.spookylauncher.io.collectors.ResourceCollector;
 
 import java.io.IOException;
 import java.util.Properties;

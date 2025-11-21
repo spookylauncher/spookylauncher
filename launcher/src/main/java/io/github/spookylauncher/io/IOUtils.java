@@ -1,7 +1,7 @@
-package io.github.spookylauncher.advio;
+package io.github.spookylauncher.io;
 
 import com.sun.management.OperatingSystemMXBean;
-import io.github.spookylauncher.advio.collectors.Collector;
+import io.github.spookylauncher.io.collectors.Collector;
 
 import java.io.*;
 import java.lang.management.ManagementFactory;

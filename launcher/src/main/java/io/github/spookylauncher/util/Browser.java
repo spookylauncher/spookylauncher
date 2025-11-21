@@ -1,4 +1,4 @@
-package io.github.spookylauncher.util.io;
+package io.github.spookylauncher.util;
 
 public final class Browser {
     public static boolean openURL(String url) {

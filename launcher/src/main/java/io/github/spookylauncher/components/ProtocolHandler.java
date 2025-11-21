@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.advio.IOUtils;
+import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.components.ui.spi.UIProvider;
 import io.github.spookylauncher.ipc.messages.MessageType;

@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components.ui.spi;
 
-import io.github.spookylauncher.advio.InstallAdapter;
+import io.github.spookylauncher.io.InstallAdapter;
 import io.github.spookylauncher.util.structures.tuple.Tuple3;
 
 public interface Dialogs {

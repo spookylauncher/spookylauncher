@@ -5,8 +5,8 @@ import io.github.spookylauncher.tree.LibrariesCollection;
 import io.github.spookylauncher.tree.LibraryInfo;
 import io.github.spookylauncher.tree.versions.LibrariesManifest;
 import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.advio.OSType;
-import io.github.spookylauncher.advio.collectors.URLCollector;
+import io.github.spookylauncher.io.OSType;
+import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.log.Level;
 
 import java.io.File;

@@ -1,6 +1,6 @@
 package io.github.spookylauncher.protocol;
 
-import io.github.spookylauncher.advio.OSType;
+import io.github.spookylauncher.io.OSType;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.Translator;

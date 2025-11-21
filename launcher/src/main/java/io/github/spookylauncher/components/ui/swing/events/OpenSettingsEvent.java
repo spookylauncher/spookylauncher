@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components.ui.swing.events;
 
-import io.github.spookylauncher.advio.IOUtils;
+import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.JREController;
 import io.github.spookylauncher.components.OptionsController;
