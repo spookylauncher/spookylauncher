@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact name="util:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/util_jar</output-path>
+    <root id="root">
+      <element id="archive" name="util.jar">
+        <element id="module-output" name="util" />
+      </element>
+      <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.9" />
+    </root>
+  </artifact>
+</component>

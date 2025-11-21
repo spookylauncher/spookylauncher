@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact name="components:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/components_jar</output-path>
+    <root id="root">
+      <element id="archive" name="components.jar">
+        <element id="module-output" name="components" />
+      </element>
+      <element id="library" level="project" name="Maven: net.java.dev.jna:jna:5.4.0" />
+      <element id="library" level="project" name="Maven: net.java.dev.jna:jna-platform:5.4.0" />
+      <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.9" />
+    </root>
+  </artifact>
+</component>

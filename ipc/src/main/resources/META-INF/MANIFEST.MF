@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: 
+Class-Path: mappedbus-0.5.1.jar gson-2.8.9.jar
+

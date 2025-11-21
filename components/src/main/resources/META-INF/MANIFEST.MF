@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: 
+Class-Path: jna-5.4.0.jar jna-platform-5.4.0.jar gson-2.8.9.jar
+
