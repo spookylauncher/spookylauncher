@@ -12,6 +12,8 @@
         <module>security-rules</module>
         <module>wrapper</module>
         <module>launcher</module>
+        <module>logger-lib</module>
+        <module>io-lib</module>
     </modules>
 
     <properties>
