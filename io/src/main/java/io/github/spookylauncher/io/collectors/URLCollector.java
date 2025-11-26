@@ -22,7 +22,7 @@ public final class URLCollector extends Collector {
         if(con instanceof HttpURLConnection) {
             int response = ((HttpURLConnection)con).getResponseCode();
 
-            if(response >= 400) throw new RuntimeException("HTTP Error " + response);
+            if(response >= 400) throw new IOException("HTTP Error " + response);
         }
 
         size = con.getContentLengthLong();
