@@ -1,6 +1,8 @@
 package io.github.spookylauncher.util;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
@@ -15,6 +17,7 @@ public final class StringUtils {
         else if(o instanceof Map) return valueOf((Map<?, ?>) o);
         else return String.valueOf(o);
     }
+
     public static String valueOf(final Properties props) {
         final StringBuilder builder = new StringBuilder();
 
@@ -31,6 +34,7 @@ public final class StringUtils {
 
         return builder.toString();
     }
+
     public static String valueOf(final Map<?, ?> map) {
         final StringBuilder builder = new StringBuilder();
 
@@ -57,6 +61,7 @@ public final class StringUtils {
         }
         return new String(hexChars);
     }
+
     public static boolean isASCIIString(String str) {
         if(str.isEmpty()) return false;
 
@@ -98,5 +103,14 @@ public final class StringUtils {
         }
 
         return -1;
+    }
+
+    public static String urlEncode(String str) {
+        try {
+            return new URI(null, null, str, null).toASCIIString();
+        } catch(URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import io.github.spookylauncher.util.Locale;
+import io.github.spookylauncher.util.StringUtils;
 
 import static io.github.spookylauncher.log.Level.ERROR;
 
@@ -169,7 +170,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                     setPreview(new URLCollector
                             (
                                     components.get(ManifestsURLs.class).getBaseDataURL() + "/versions/"
-                                    + info.name
+                                    + StringUtils.urlEncode(info.name)
                                     + "/previews/preview_"
                                     + (new Random().nextInt(info.getPreviewsCount()) + 1) + ".png"
                             ).collectImage());
@@ -193,7 +194,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
         final String repo = this.components.get(ManifestsURLs.class).getBaseDataURL();
 
-        final String labelUrl = repo + "/versions/" + info.name + "/label" + (fallback ? "" : "_" + lang) + ".txt";
+        final String labelUrl = repo + "/versions/" + StringUtils.urlEncode(info.name) + "/label" + (fallback ? "" : "_" + lang) + ".txt";
 
         new Thread(
                 () -> {

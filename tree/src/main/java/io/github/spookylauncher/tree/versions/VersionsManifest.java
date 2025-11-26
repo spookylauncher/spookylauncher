@@ -3,6 +3,7 @@ package io.github.spookylauncher.tree.versions;
 import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.util.Json;
 import com.google.gson.annotations.SerializedName;
+import io.github.spookylauncher.util.StringUtils;
 
 import java.util.HashMap;
 
@@ -20,7 +21,7 @@ public final class VersionsManifest {
         if(cachedVersions.containsKey(version)) return cachedVersions.get(version);
 
         try {
-            VersionInfo info = Json.collectJson(new URLCollector(repo + "/versions/" + version + "/" + version + ".json"), VersionInfo.class);
+            VersionInfo info = Json.collectJson(new URLCollector(repo + "/versions/" + StringUtils.urlEncode(version) + "/" + StringUtils.urlEncode(version) + ".json"), VersionInfo.class);
 
             cachedVersions.put(version, info);
 

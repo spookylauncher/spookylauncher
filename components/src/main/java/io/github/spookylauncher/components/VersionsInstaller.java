@@ -8,6 +8,7 @@ import io.github.spookylauncher.tree.versions.LibrariesManifest;
 import io.github.spookylauncher.tree.versions.VersionInfo;
 import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.util.Locale;
+import io.github.spookylauncher.util.StringUtils;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -126,7 +127,7 @@ public final class VersionsInstaller extends LauncherComponent {
 
                     String fileUrl = version.download == null ?
                             this.components.get(ManifestsURLs.class).getBaseDataURL()
-                                    + "/versions/" + version.name + "/" + version.name + "." + (version.singleJar ? "jar" : "zip")
+                                    + "/versions/" + StringUtils.urlEncode(version.name) + "/" + StringUtils.urlEncode(version.name) + "." + (version.singleJar ? "jar" : "zip")
                             : version.download.getDownloadUrl();
 
                     URLCollector urlCollector;
