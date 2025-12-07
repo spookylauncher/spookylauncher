@@ -9,5 +9,14 @@
         <version>beta-1.0.0</version>
     </parent>
 
-    <artifactId>security-rules</artifactId>
+    <artifactId>logger</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.spookylauncher</groupId>
+            <artifactId>io</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
 </project>

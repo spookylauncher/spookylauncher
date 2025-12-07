@@ -3,44 +3,50 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>io.github.spookylauncher</groupId>
         <artifactId>SpookyLauncher</artifactId>
         <version>beta-1.0.0</version>
     </parent>
 
-    <artifactId>wrapper</artifactId>
+    <artifactId>bootstrap</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>io.github.spookylauncher</groupId>
             <artifactId>security-rules</artifactId>
+            <scope>compile</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>9.7.1</version>
+            <groupId>io.github.spookylauncher</groupId>
+            <artifactId>io</artifactId>
+            <scope>compile</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm-commons</artifactId>
-            <version>9.7.1</version>
+            <groupId>io.github.spookylauncher</groupId>
+            <artifactId>logger</artifactId>
+            <scope>compile</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm-tree</artifactId>
-            <version>9.7.1</version>
+            <groupId>io.github.spookylauncher</groupId>
+            <artifactId>components</artifactId>
+            <scope>compile</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm-util</artifactId>
-            <version>9.7.1</version>
+            <groupId>io.github.spookylauncher</groupId>
+            <artifactId>util</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.spookylauncher</groupId>
+            <artifactId>ipc</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.spookylauncher</groupId>
+            <artifactId>swing-ui</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -51,7 +57,7 @@
                 <version>3.6.0</version>
                 <executions>
                     <execution>
-                        <id>wrapper</id>
+                        <id>launcher</id>
 
                         <phase>package</phase>
                         <goals>
@@ -62,7 +68,7 @@
                             <descriptors>
                                 <descriptor>src/main/assembly/assembly.xml</descriptor>
                             </descriptors>
-                            <finalName>wrapper</finalName>
+                            <finalName>launcher</finalName>
                         </configuration>
                     </execution>
                 </executions>

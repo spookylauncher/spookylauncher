@@ -9,5 +9,6 @@
         <version>beta-1.0.0</version>
     </parent>
 
-    <artifactId>security-rules</artifactId>
+    <artifactId>io</artifactId>
+
 </project>
