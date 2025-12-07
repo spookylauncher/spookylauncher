@@ -3,14 +3,14 @@ package io.github.spookylauncher.components;
 import io.github.spookylauncher.components.events.EventsManager;
 import io.github.spookylauncher.components.events.Events;
 import io.github.spookylauncher.components.launch.GameLauncher;
-import io.github.spookylauncher.components.ui.swing.SwingUIProvider;
-import io.github.spookylauncher.components.ui.spi.UIProvider;
+import io.github.spookylauncher.components.ui.UIProvider;
 import io.github.spookylauncher.tree.jre.JREsManifest;
 import io.github.spookylauncher.tree.launcher.LauncherManifest;
 import io.github.spookylauncher.tree.mirrors.MirrorsManifest;
 import io.github.spookylauncher.tree.versions.LibrariesManifest;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 public final class ComponentsRegister {
@@ -26,7 +26,7 @@ public final class ComponentsRegister {
         this.launcherDirectory = new File(workDirectory, "launcher");
     }
 
-    private void createComponents(List<Integer> priority, List<Integer> async) {
+    private void createComponents(String uiImpl, List<Integer> priority, List<Integer> async) {
         String launcherManifestDownloaderName = "launcher_manifest";
         String librariesManifestDownloaderName = "libraries_manifest";
         String JREsManifestDownloaderName = "jres_manifest";
@@ -44,7 +44,20 @@ public final class ComponentsRegister {
         int discordPresenceViewer = controller.put(new DiscordPresenceViewer(controller));
         int gameLauncher = controller.put(new GameLauncher(controller, librariesManifestDownloaderName, this.workDirectory));
         int translator = controller.put(new Translator(controller));
-        int uiProvider = controller.put(UIProvider.class, new SwingUIProvider(controller, JREsManifestDownloaderName));
+
+
+        final LauncherComponent uiProviderInstance;
+
+        try {
+            Class<?> clazz = Class.forName(uiImpl);
+            Constructor<?> constr = clazz.getConstructor(ComponentsController.class, String.class);
+            uiProviderInstance = (LauncherComponent) constr.newInstance(controller, JREsManifestDownloaderName);
+        } catch(Exception e) {
+            System.err.printf("ui implementation \"%s\"\n is missing or not properly structured:", uiImpl);
+            throw new RuntimeException(e);
+        }
+
+        int uiProvider = controller.put(UIProvider.class, uiProviderInstance);
         int downloader = controller.put(new Downloader(controller));
         int errorHandler = controller.put(new ErrorHandler(controller));
         int protocolHandler = controller.put(new ProtocolHandler(controller));
@@ -76,8 +89,8 @@ public final class ComponentsRegister {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> eventsManager.emitAndUnsubscribeAll(Events.SHUTDOWN)));
     }
 
-    public void createComponents() {
-        createComponents(priority, async);
+    public void createComponents(String uiImpl) {
+        createComponents(uiImpl, priority, async);
     }
 
     public void initializeComponents() {

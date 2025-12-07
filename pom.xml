@@ -19,6 +19,9 @@
         <module>ipc</module>
         <module>util</module>
         <module>tree</module>
+        <module>ui</module>
+        <module>stub-ui</module>
+        <module>swing-ui</module>
     </modules>
 
     <properties>
@@ -64,6 +67,24 @@
             <dependency>
                 <groupId>io.github.spookylauncher</groupId>
                 <artifactId>components</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>stub-ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>swing-ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

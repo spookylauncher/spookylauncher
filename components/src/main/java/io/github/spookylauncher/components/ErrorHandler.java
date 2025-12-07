@@ -1,7 +1,7 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.components.ui.spi.UIProvider;
-import io.github.spookylauncher.components.ui.spi.Messages;
+import io.github.spookylauncher.components.ui.UIProvider;
+import io.github.spookylauncher.components.ui.Messages;
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.util.StringUtils;
 

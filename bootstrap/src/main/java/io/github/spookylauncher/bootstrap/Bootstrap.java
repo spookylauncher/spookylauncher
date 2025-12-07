@@ -20,6 +20,7 @@ import java.nio.channels.FileLock;
 import java.util.function.Consumer;
 
 public final class Bootstrap implements Runnable {
+    private static final String UI_IMPLEMENTATION = "io.github.spookylauncher.components.ui.swing.SwingUIProvider";
     private static final String LOG_ID = "bootstrap";
 
     public final File workDirectory;
@@ -92,7 +93,7 @@ public final class Bootstrap implements Runnable {
 
         final ComponentsRegister reg = new ComponentsRegister(controller, this.workDirectory);
 
-        reg.createComponents();
+        reg.createComponents(UI_IMPLEMENTATION);
 
         if(this.protocolConsumer != null) this.protocolConsumer.accept(controller);
 

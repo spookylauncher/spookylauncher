@@ -1,8 +1,8 @@
 package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.log.Level;
-import io.github.spookylauncher.components.ui.spi.UIProvider;
-import io.github.spookylauncher.components.ui.spi.Messages;
+import io.github.spookylauncher.components.ui.UIProvider;
+import io.github.spookylauncher.components.ui.Messages;
 import io.github.spookylauncher.tree.jre.ExternalJreInfo;
 import io.github.spookylauncher.tree.jre.JREsManifest;
 import io.github.spookylauncher.tree.launcher.Options;

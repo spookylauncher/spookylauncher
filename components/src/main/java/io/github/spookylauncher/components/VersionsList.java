@@ -1,7 +1,7 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.components.ui.spi.TitlePanel;
-import io.github.spookylauncher.components.ui.spi.UIProvider;
+import io.github.spookylauncher.components.ui.TitlePanel;
+import io.github.spookylauncher.components.ui.UIProvider;
 import io.github.spookylauncher.tree.versions.VersionInfo;
 import io.github.spookylauncher.tree.versions.VersionsManifest;
 import java.io.File;

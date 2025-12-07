@@ -2,7 +2,7 @@ package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.log.Level;
-import io.github.spookylauncher.components.ui.spi.UIProvider;
+import io.github.spookylauncher.components.ui.UIProvider;
 import io.github.spookylauncher.ipc.messages.MessageType;
 import io.github.spookylauncher.protocol.ProtocolReader;
 import io.github.spookylauncher.ipc.Constants;
