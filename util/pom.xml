@@ -17,10 +17,5 @@
             <artifactId>io</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>io.github.spookylauncher</groupId>
-            <artifactId>logger</artifactId>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 </project>

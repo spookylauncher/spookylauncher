@@ -7,10 +7,11 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
-
-import static io.github.spookylauncher.log.Level.*;
+import java.util.logging.Logger;
 
 public class ManifestDownloader<T> extends LauncherComponent {
+
+    private static final Logger LOG = Logger.getLogger("manifest downloader");
 
     private final Class<T> manifestClass;
     private final String manifestUrl;
@@ -37,7 +38,7 @@ public class ManifestDownloader<T> extends LauncherComponent {
     }
 
     public boolean downloadManifest() {
-        log(INFO, "manifest downloading started (" + manifestUrl + ")");
+        LOG.info("manifest downloading started (" + manifestUrl + ")");
         try {
             this.manifest = Json.collectJson(new URLCollector(manifestUrl), manifestClass);
 
@@ -49,11 +50,12 @@ public class ManifestDownloader<T> extends LauncherComponent {
 
             onDownloaded.removeAll(toRemove);
 
-            log(INFO, "manifest successfully downloaded");
+            LOG.info("manifest successfully downloaded");
 
             return true;
         } catch(Exception e) {
-            log(ERROR, "failed to download manifest \"" + manifestUrl + "\"");
+            LOG.severe("failed to download manifest \"" + manifestUrl + "\"");
+            LOG.throwing("io.github.spookylauncher.components.ManifestDownloader", "downloadManifest", e);
             components.get(ErrorHandler.class).handleException("manifestLoadError", e);
             return false;
         }

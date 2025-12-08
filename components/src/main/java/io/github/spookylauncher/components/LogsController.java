@@ -2,7 +2,6 @@ package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.GameStartData;
-import io.github.spookylauncher.log.Logger;
 import io.github.spookylauncher.util.structures.tuple.Tuple2;
 
 import java.io.*;
@@ -10,10 +9,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.*;
 import java.util.*;
-
-import static io.github.spookylauncher.log.Level.ERROR;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 public final class LogsController extends LauncherComponent {
+    private static final Logger LOG = Logger.getLogger("logs controller");
+
     private final File launcherDirectory;
     private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -99,48 +100,43 @@ public final class LogsController extends LauncherComponent {
         ).start();
     }
 
+    private FileHandler getHandler(Logger root, File file) throws IOException {
+        final FileHandler handler = new FileHandler(file.getAbsolutePath());
+
+        handler.setFormatter(root.getHandlers()[0].getFormatter());
+        handler.setEncoding("UTF-8");
+
+        return handler;
+    }
+
     @Override
     public void initialize() throws IOException {
         super.initialize();
 
-        this.branchLoggerOutput();
-    }
-
-    private void branchLoggerOutput() {
         try {
             File logsDirectory = new File(this.launcherDirectory, "logs");
 
             if(!logsDirectory.exists() && !logsDirectory.mkdirs()) {
-                log(ERROR, "failed to create launcher logs directory");
+                LOG.severe("failed to create launcher logs directory");
                 return;
             }
 
             final File log = createNewLog(logsDirectory);
 
             if(log == null) {
-                log(ERROR, "failed to create launcher log file");
+                LOG.severe("failed to create launcher log file");
                 return;
             }
 
             final File latestLog = new File(logsDirectory, "latest.log");
 
-            final PrintStream fileOut = new PrintStream(latestLog, "UTF-8");
+            Logger rootLogger = Logger.getLogger("");
 
-            Logger.out.addPrinter(fileOut);
-            Logger.err.addPrinter(fileOut);
-
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                fileOut.close();
-                try {
-                    IOUtils.copy(latestLog, log);
-                } catch (IOException e) {
-                    log(ERROR, "failed to copy log file: ");
-                    log(ERROR, e);
-                }
-            }));
+            rootLogger.addHandler(getHandler(rootLogger, log));
+            rootLogger.addHandler(getHandler(rootLogger, latestLog));
         } catch(Exception e) {
-            log(ERROR, "failed to branch logger output");
-            e.printStackTrace();
+            LOG.severe("failed to branch logger output");
+            LOG.throwing("LogsController", "initialize", e);
         }
     }
 }

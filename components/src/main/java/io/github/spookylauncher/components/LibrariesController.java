@@ -7,7 +7,6 @@ import io.github.spookylauncher.tree.versions.LibrariesManifest;
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.io.OSType;
 import io.github.spookylauncher.io.collectors.URLCollector;
-import io.github.spookylauncher.log.Level;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -15,10 +14,11 @@ import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-
-import static io.github.spookylauncher.log.Level.ERROR;
+import java.util.logging.Logger;
 
 public final class LibrariesController extends LauncherComponent {
+
+    private static final Logger LOG = Logger.getLogger("libraries controller");
 
     private final File libsDir;
     private final String manifestDownloaderName;
@@ -73,7 +73,7 @@ public final class LibrariesController extends LauncherComponent {
     }
 
     public void install(LibrariesCollection collection, Consumer<Boolean> onInstalled) {
-        log(Level.INFO, "start installing libraries collection \"" + collection.name + "\"");
+        LOG.info("start installing libraries collection \"" + collection.name + "\"");
 
         LibrariesManifest manifest = getManifest();
 
@@ -125,7 +125,7 @@ public final class LibrariesController extends LauncherComponent {
     }
 
     public void install(LibraryInfo lib, Consumer<Boolean> onInstalled) {
-        log(Level.INFO, "started library installing, name: \"" + lib.name + "\", version: " + lib.version);
+        LOG.info("started library installing, name: \"" + lib.name + "\", version: " + lib.version);
 
         final Locale locale = components.get(Translator.class).getLocale();
         final UIProvider uiProvider = components.get(UIProvider.class);
@@ -133,7 +133,7 @@ public final class LibrariesController extends LauncherComponent {
         String url;
 
         if((url = lib.jar.getDownloadUrl()) == null) {
-            log(Level.ERROR, "failed to install library because download is not available");
+            LOG.severe("failed to install library because download is not available");
             uiProvider.messages().error(
                     locale.get("installationError"),
                     String.format(locale.get("libDownloadNotFounded"), lib.name)
@@ -173,8 +173,8 @@ public final class LibrariesController extends LauncherComponent {
                         try {
                             urlCollector = new URLCollector(url);
                         } catch(URISyntaxException e) {
-                            log(ERROR, "failed to install library: ");
-                            log(ERROR, e);
+                            LOG.severe("failed to install library: ");
+                            LOG.throwing("io.github.spookylauncher.components.LibrariesController", "install", e);
                             return;
                         }
 
@@ -190,12 +190,12 @@ public final class LibrariesController extends LauncherComponent {
                         uiProvider.panel().setEnabledButtons(true);
 
                         if(!success) {
-                            log(Level.INFO, "library installation canceled by user");
+                            LOG.info("library installation canceled by user");
                             uiProvider.messages().info(
                                     locale.get("libInstallationFailed"),
                                     locale.get("operationCanceledByUser")
                             );
-                        } else log(Level.INFO, "library successfully installed");
+                        } else LOG.info("library successfully installed");
 
                         onInstalled.accept(success);
                     }

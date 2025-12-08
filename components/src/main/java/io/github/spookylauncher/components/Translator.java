@@ -6,10 +6,11 @@ import io.github.spookylauncher.io.collectors.ResourceCollector;
 
 import java.io.IOException;
 import java.util.Properties;
-
-import static io.github.spookylauncher.log.Level.*;
+import java.util.logging.Logger;
 
 public final class Translator extends LauncherComponent {
+    private static final Logger LOG = Logger.getLogger("translator");
+
     private Locale locale;
 
     public Translator(ComponentsController components) {
@@ -38,7 +39,7 @@ public final class Translator extends LauncherComponent {
     }
 
     public void reloadLocale() {
-        log(INFO, "locale loading started");
+        LOG.info("locale loading started");
 
         String localeResource = "locales/" + components.get(OptionsController.class).getOptions().locale + ".properties";
 
@@ -48,9 +49,10 @@ public final class Translator extends LauncherComponent {
 
         try {
             props.load(new ResourceCollector(localeResource).collectReader());
-            log(INFO, "locale successfully loaded");
+            LOG.info("locale successfully loaded");
         } catch(Exception e) {
-            log(INFO, "failed to load locale");
+            LOG.severe("failed to load locale");
+            LOG.throwing("io.github.spookylauncher.components.Translator", "reloadLocale", e);
             components.get(ErrorHandler.class).handleException("Failed to load locale", e);
         }
 

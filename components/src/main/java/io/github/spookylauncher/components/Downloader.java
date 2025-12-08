@@ -3,15 +3,16 @@ package io.github.spookylauncher.components;
 import io.github.spookylauncher.io.InstallAdapter;
 import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.io.collectors.Collector;
-import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.components.ui.UIProvider;
-import io.github.spookylauncher.log.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Logger;
 
 public final class Downloader extends LauncherComponent {
+    private static final Logger LOG = Logger.getLogger("downloader");
+
     public Downloader(ComponentsController components) {
         super("Downloader", components);
     }
@@ -24,7 +25,7 @@ public final class Downloader extends LauncherComponent {
     public boolean download(File destination, Collector collector, Options options) {
         AtomicBoolean canceled = new AtomicBoolean();
 
-        log(Level.INFO, "starting downloading of some resource to \"" + destination.getAbsolutePath() + "\"");
+        LOG.info("starting downloading of some resource to \"" + destination.getAbsolutePath() + "\"");
 
         try {
             InstallAdapter adapter = createInstallAdapter(destination, options, canceled);
@@ -39,7 +40,7 @@ public final class Downloader extends LauncherComponent {
                 adapter.onEnd.run();
             }
         } catch(Exception e) {
-            log(Level.ERROR, "downloading failed");
+            LOG.severe("downloading failed");
             components.get(ErrorHandler.class).handleException("installationError", e);
         }
 
@@ -49,7 +50,7 @@ public final class Downloader extends LauncherComponent {
     public boolean unpackZip(File destination, Collector collector, Options options) {
         AtomicBoolean canceled = new AtomicBoolean();
 
-        log(Level.INFO, "starting downloading and unpacking some resource to \"" + destination.getAbsolutePath() + "\"");
+        LOG.info("starting downloading and unpacking some resource to \"" + destination.getAbsolutePath() + "\"");
 
         try {
             InstallAdapter adapter = createInstallAdapter(destination, options, canceled);
@@ -62,7 +63,8 @@ public final class Downloader extends LauncherComponent {
                 adapter.onEnd.run();
             }
         } catch(Exception e) {
-            log(Level.ERROR, "downloading and unpacking failed");
+            LOG.severe("downloading and unpacking failed");
+            LOG.throwing("io.github.spookylauncher.components.Downloader", "unpackZip", e);
             components.get(ErrorHandler.class).handleException("installationError", e);
         }
 
@@ -88,8 +90,8 @@ public final class Downloader extends LauncherComponent {
                 try {
                     IOUtils.deleteTree(destination);
                 } catch (IOException e) {
-                    Logger.log(Level.ERROR, "downloader", "failed to delete tree \"" + destination.getAbsolutePath() + "\"");
-                    Logger.log(Level.ERROR, "downloader", e);
+                    LOG.severe("failed to delete tree \"" + destination.getAbsolutePath() + "\"");
+                    LOG.throwing("io.github.spookylauncher.components.Downloader", "createInstallAdapter", e);
                 }
             }
 

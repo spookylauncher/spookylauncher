@@ -1,7 +1,6 @@
 package io.github.spookylauncher.protocol;
 
 import io.github.spookylauncher.components.ComponentsController;
-import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.components.ProtocolHandler;
 import io.github.spookylauncher.util.uri.QueryParser;
 import io.github.spookylauncher.util.StringUtils;
@@ -12,26 +11,25 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import static io.github.spookylauncher.log.Logger.log;
+import java.util.logging.Logger;
 
 public final class ProtocolRequestHandler {
-    private static final String LOG_ID = "protocol request handler";
+    private static final Logger LOG = Logger.getLogger("protocol request handler");
 
     public static Consumer<ComponentsController> createConsumer(final String uriStr, final boolean hasActiveLauncherInstance) throws UnsupportedEncodingException, URISyntaxException {
-        log(Level.INFO, LOG_ID,"parsing request");
+        LOG.info("parsing request");
 
-        log(Level.DEBUG, LOG_ID, "parsing uri");
+        LOG.info("parsing uri");
 
         final URI uri = new URI(uriStr);
 
-        log(Level.DEBUG, LOG_ID, "parsing query");
+        LOG.fine("parsing query");
 
         final Map<String, String> query = QueryParser.parse(uri.getRawQuery());
 
-        log(Level.DEBUG, LOG_ID, "uri: " + uri);
-        log(Level.DEBUG, LOG_ID, "raw query: " + uri.getRawQuery());
-        log(Level.DEBUG, LOG_ID, "query: " + StringUtils.valueOf(query));
+        LOG.fine("uri: " + uri);
+        LOG.fine("raw query: " + uri.getRawQuery());
+        LOG.fine("query: " + StringUtils.valueOf(query));
 
         return
         (c) -> {
