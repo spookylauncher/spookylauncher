@@ -29,12 +29,17 @@ public final class Bootstrap implements Runnable {
     private final boolean hasActiveInstance;
 
     public static void main(String[] args) throws IOException {
+        Logger rootLogger = Logger.getLogger("");
+
+        for(Handler handler : rootLogger.getHandlers())
+            rootLogger.removeHandler(handler);
+
         ConsoleHandler consoleHandler = new ConsoleHandler();
-        consoleHandler.setLevel(Level.ALL);
+        consoleHandler.setLevel(Level.INFO);
         consoleHandler.setFormatter(new LogFormatter());
 
-        Logger.getLogger("").addHandler(consoleHandler);
-        Logger.getLogger("").setLevel(Level.ALL);
+        rootLogger.addHandler(consoleHandler);
+        rootLogger.setLevel(Level.INFO);
 
         FlatDarkLaf.setup();
 
