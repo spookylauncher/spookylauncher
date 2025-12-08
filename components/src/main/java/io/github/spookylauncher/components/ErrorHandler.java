@@ -22,8 +22,6 @@ public final class ErrorHandler extends LauncherComponent {
 
         final Messages messages = components.get(UIProvider.class).messages();
 
-        ex.printStackTrace();
-
         messages.error(get(locale, titleKey, titleKey), message);
     }
 

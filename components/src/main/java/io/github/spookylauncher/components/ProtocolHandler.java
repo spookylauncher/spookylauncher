@@ -1,7 +1,6 @@
 package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.io.IOUtils;
-import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.components.ui.UIProvider;
 import io.github.spookylauncher.ipc.messages.MessageType;
 import io.github.spookylauncher.protocol.ProtocolReader;
@@ -15,8 +14,11 @@ import io.mappedbus.MappedBusMessage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public final class ProtocolHandler extends LauncherComponent {
+    private static final Logger LOG = Logger.getLogger("protocol handler");
+
     public ProtocolHandler(ComponentsController components) {
         super("Protocol Handler", components);
     }
@@ -59,7 +61,7 @@ public final class ProtocolHandler extends LauncherComponent {
         final UIProvider uiProvider = components.get(UIProvider.class);
         final Locale locale = components.get(Translator.class).getLocale();
 
-        log(Level.INFO, "handling IPC message: " + MessageType.get(msg.type()));
+        LOG.info("handling IPC message: " + MessageType.get(msg.type()));
 
         if(msg instanceof SelectVersion) {
             String versionName = ( (SelectVersion) msg).versionName;
@@ -72,7 +74,7 @@ public final class ProtocolHandler extends LauncherComponent {
 
             if(info != null) uiProvider.panel().setVersion(info);
             else {
-                log(Level.ERROR, "version \"" + versionName + "\" specified in IPC message not found");
+                LOG.severe("version \"" + versionName + "\" specified in IPC message not found");
                 uiProvider.messages().error(locale.get("error"), String.format(locale.get("versionNotFounded"), versionName));
             }
         } else if(msg instanceof IpcError) {
@@ -80,7 +82,7 @@ public final class ProtocolHandler extends LauncherComponent {
 
             String errorMessage = String.format(locale.get(err.format), err.args);
 
-            log(Level.ERROR, "ipc error: " + errorMessage);
+            LOG.severe("ipc error: " + errorMessage);
 
             uiProvider.messages().error(locale.get("error"), "IPC: " + errorMessage);
         } else if(msg instanceof FrameTopFront) {
@@ -88,7 +90,7 @@ public final class ProtocolHandler extends LauncherComponent {
         } else {
             String msgType = msg.getClass().getSimpleName();
 
-            log(Level.ERROR, "unsupported ipc message: " + msgType);
+            LOG.severe("unsupported ipc message: " + msgType);
 
             uiProvider.messages().error(locale.get("error"), String.format(locale.get("ipcUnsupportedMsg"), msgType));
         }

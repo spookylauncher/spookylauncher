@@ -13,7 +13,6 @@
         <module>security-rules</module>
         <module>wrapper</module>
         <module>bootstrap</module>
-        <module>logger</module>
         <module>io</module>
         <module>components</module>
         <module>ipc</module>
@@ -43,12 +42,6 @@
             <dependency>
                 <groupId>io.github.spookylauncher</groupId>
                 <artifactId>io</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.github.spookylauncher</groupId>
-                <artifactId>logger</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

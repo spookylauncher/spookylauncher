@@ -1,9 +1,7 @@
 package io.github.spookylauncher.ipc;
 
-import io.github.spookylauncher.log.Level;
-import io.github.spookylauncher.log.Logger;
-
 import java.io.File;
+import java.util.logging.Logger;
 
 public final class Constants {
     private static String file;
@@ -19,7 +17,7 @@ public final class Constants {
 
         final File launcherDir = new File(workDir, "launcher");
 
-        if(!launcherDir.exists() && !launcherDir.mkdirs()) Logger.log(Level.ERROR, "ipc constants", "failed to create launcher directory");
+        if(!launcherDir.exists() && !launcherDir.mkdirs()) Logger.getLogger("ipc constants").severe("failed to create launcher directory");
 
         file = new File(launcherDir, "ipc_mapped_bus.bin").getAbsolutePath();
     }

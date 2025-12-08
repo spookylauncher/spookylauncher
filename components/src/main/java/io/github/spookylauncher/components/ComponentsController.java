@@ -2,13 +2,10 @@ package io.github.spookylauncher.components;
 
 import java.util.*;
 import java.util.function.Function;
-
-import static io.github.spookylauncher.log.Level.ERROR;
-import static io.github.spookylauncher.log.Level.INFO;
-import static io.github.spookylauncher.log.Logger.log;
+import java.util.logging.Logger;
 
 public final class ComponentsController {
-    private static final String LOG_ID = "components controller";
+    private static final Logger LOG = Logger.getLogger("components controller");
     private final HashMap<Class<?>, Integer> componentsByClass = new HashMap<>();
     private final HashMap<String, Integer> componentsByName = new HashMap<>();
     private final List<LauncherComponent> components = new ArrayList<>();
@@ -79,7 +76,7 @@ public final class ComponentsController {
 
         Runnable task = () -> {
             try {
-                log(INFO, LOG_ID, "initializing \"" + component.getName() + "\" launcher component");
+                LOG.info("initializing \"" + component.getName() + "\" launcher component");
 
                 component.initialize();
 
@@ -94,8 +91,8 @@ public final class ComponentsController {
                     set.clear();
                 }
             } catch(Exception e) {
-                log(ERROR, LOG_ID, "failed to initialize \"" + component.getName() + "\" launcher component:");
-                log(ERROR, LOG_ID, e);
+                LOG.severe("failed to initialize \"" + component.getName() + "\" launcher component:");
+                LOG.throwing("io.github.spookylauncher.components.ComponentsController", "initializeComponent", e);
             }
         };
 

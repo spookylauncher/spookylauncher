@@ -7,10 +7,10 @@ import io.github.spookylauncher.util.Locale;
 import net.arikia.dev.drpc.*;
 
 import java.io.IOException;
-
-import static io.github.spookylauncher.log.Level.*;
+import java.util.logging.Logger;
 
 public final class DiscordPresenceViewer extends LauncherComponent {
+    private static final Logger LOG = Logger.getLogger("discord presence viewer");
     private static final String APP_ID = "1264356894361780286";
 
     public DiscordPresenceViewer(ComponentsController components) {
@@ -26,17 +26,17 @@ public final class DiscordPresenceViewer extends LauncherComponent {
                     try {
                         components.get(EventsManager.class).subscribe(Events.SHUTDOWN, args -> {
                             active = false;
-                            log(INFO, "disconnecting from discord client...");
+                            LOG.info("disconnecting from discord client...");
                             DiscordRPC.discordShutdown();
                         });
 
                         DiscordEventHandlers handlers = new DiscordEventHandlers.Builder()
-                                .setReadyEventHandler(user -> log(INFO, "successfully connected to discord client"))
+                                .setReadyEventHandler(user -> LOG.info("successfully connected to discord client"))
                                 .setErroredEventHandler((code, message) -> {
-                                    log(ERROR, "error occurred in Discord RPC: #" + code + ": " + message);
+                                    LOG.severe("error occurred in Discord RPC: #" + code + ": " + message);
                                 })
                                 .setDisconnectedEventHandler((code, message) -> {
-                                            log(INFO, "disconnected from discord client: #" + code + ": " + message);
+                                            LOG.info("disconnected from discord client: #" + code + ": " + message);
                                         }
                                 )
                                 .build();
@@ -47,10 +47,10 @@ public final class DiscordPresenceViewer extends LauncherComponent {
 
                         while(active) {
                             DiscordRPC.discordRunCallbacks();
-                            Thread.sleep(100L);
+                            Thread.sleep(100L); // reducing the load on the processor
                         }
                     } catch(final Exception e) {
-                        e.printStackTrace();
+                        LOG.throwing("io.github.spookylauncher.components.DiscordPresenceViewer", "initialize", e);
                     }
                 }
         ).start();
@@ -59,7 +59,7 @@ public final class DiscordPresenceViewer extends LauncherComponent {
     }
 
     public void showMenuPresence() {
-        log(INFO, "switching to menu rich presence");
+        LOG.info("switching to menu rich presence");
 
         DiscordRPC.discordUpdatePresence(
                 new DiscordRichPresence.Builder(components.get(Translator.class).getLocale().get("inMenu"))
@@ -70,7 +70,7 @@ public final class DiscordPresenceViewer extends LauncherComponent {
     }
 
     public void showGamePresence(VersionInfo version) {
-        log(INFO, "switching to game rich presence (version: " + version.name + ")");
+        LOG.info("switching to game rich presence (version: " + version.name + ")");
 
         Locale locale = components.get(Translator.class).getLocale();
 

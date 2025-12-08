@@ -14,12 +14,14 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.logging.Logger;
+
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.util.StringUtils;
 
-import static io.github.spookylauncher.log.Level.ERROR;
-
 class TitlePanelImpl extends LauncherComponent implements TitlePanel {
+
+    private static final Logger LOG = Logger.getLogger("swing ui");
 
     private final Map<String, JButton> buttons = new HashMap<>();
 
@@ -175,8 +177,8 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                                     + (new Random().nextInt(info.getPreviewsCount()) + 1) + ".png"
                             ).collectImage());
                 } catch (IOException | URISyntaxException e) {
-                    log(ERROR, "failed to set preview");
-                    log(ERROR, e);
+                    LOG.severe("failed to set preview");
+                    LOG.throwing("io.github.spookylauncher.components.ui.swing.TitlePanelImpl", "setVersion", e);
                 }
             } else setPreview(noPreview);
         }).start();
@@ -203,8 +205,8 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                                 new URLCollector(labelUrl).collectString()
                         );
                     } catch (IOException | URISyntaxException e) {
-                        log(ERROR, "failed to set description");
-                        log(ERROR, e);
+                        LOG.severe("failed to set description");
+                        LOG.throwing("io.github.spookylauncher.components.ui.swing.TitlePanelImpl", "setVersion", e);
                     }
                 }
         ).start();

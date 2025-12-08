@@ -15,10 +15,11 @@ import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-
-import static io.github.spookylauncher.log.Level.*;
+import java.util.logging.Logger;
 
 public final class VersionsInstaller extends LauncherComponent {
+
+    private static final Logger LOG = Logger.getLogger("versions installer");
 
     private final String librariesManifestDownloaderName;
     private final String mirrorsManifestDownloaderName;
@@ -73,14 +74,14 @@ public final class VersionsInstaller extends LauncherComponent {
     }
 
     public void install(VersionInfo version) {
-        log(INFO, "start installing version: " + version.name);
+        LOG.info("start installing version: " + version.name);
 
         final Locale locale = components.get(Translator.class).getLocale();
         final VersionsList versions = components.get(VersionsList.class);
         final UIProvider uiProvider = components.get(UIProvider.class);
 
         if(versions.isInstalled(version)) {
-            log(INFO, "installation canceled because version already installed");
+            LOG.info("installation canceled because version already installed");
             uiProvider.messages().warning(locale.get("installationError"), locale.get("versionAlreadyInstalled"));
             return;
         }
@@ -88,7 +89,7 @@ public final class VersionsInstaller extends LauncherComponent {
         LibrariesController libsController = components.get(LibrariesController.class);
         LibrariesManifest manifest = ( (ManifestDownloader<LibrariesManifest>) components.get(librariesManifestDownloaderName)).getManifest();
 
-        log(INFO, "installing version dependencies");
+        LOG.info("installing version dependencies");
 
         if(version.libraries != null) {
             for(LibraryInfo library : version.libraries) {
@@ -106,12 +107,12 @@ public final class VersionsInstaller extends LauncherComponent {
         File versionDir = new File(versions.versionsDirectory, version.name);
 
         if(!versionDir.mkdirs()) {
-            log(ERROR, "failed to create version directory");
+            LOG.severe("failed to create version directory");
             uiProvider.messages().warning(locale.get("installationError"), locale.get("versionDirectoryCreationFailed"));
             return;
         }
 
-        log(INFO, "start downloading");
+        LOG.info("start downloading");
 
         new Thread(
                 () -> {
@@ -135,8 +136,8 @@ public final class VersionsInstaller extends LauncherComponent {
                     try {
                         urlCollector = new URLCollector(fileUrl);
                     } catch(URISyntaxException e) {
-                        log(ERROR, "failed to install version: ");
-                        log(ERROR, e);
+                        LOG.severe("failed to install version: ");
+                        LOG.throwing("io.github.spookylauncher.VersionsInstaller", "install", e);
                         return;
                     }
 
@@ -152,7 +153,7 @@ public final class VersionsInstaller extends LauncherComponent {
                     uiProvider.panel().setEnabledButtons(true);
 
                     if(success) {
-                        log(INFO, "version successfully installed");
+                        LOG.info("version successfully installed");
                         uiProvider.panel().getButton(TitlePanel.PLAY).setText(locale.get("play"));
                     }
                 }

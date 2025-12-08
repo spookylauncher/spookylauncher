@@ -1,6 +1,5 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.io.collectors.FileCollector;
 import io.github.spookylauncher.io.peddlers.FilePeddler;
@@ -8,8 +7,11 @@ import io.github.spookylauncher.util.Json;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public final class OptionsController extends LauncherComponent {
+    private static final Logger LOG = Logger.getLogger("options controller");
+
     private Options options;
 
     private final File optionsFile;
@@ -22,7 +24,7 @@ public final class OptionsController extends LauncherComponent {
     public Options getOptions() { return this.options; }
 
     public void load() throws IOException {
-        log(Level.INFO, "loading options");
+        LOG.info("loading options");
         options = Json.collectJson(new FileCollector(optionsFile), Options.class);
     }
 
@@ -31,7 +33,7 @@ public final class OptionsController extends LauncherComponent {
     }
 
     public void store(boolean canShowRpc) throws IOException {
-        log(Level.INFO, "saving options");
+        LOG.info("saving options");
 
         Json.peddleJson(new FilePeddler(optionsFile), options);
 

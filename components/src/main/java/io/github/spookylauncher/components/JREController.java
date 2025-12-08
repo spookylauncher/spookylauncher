@@ -1,6 +1,5 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.components.ui.UIProvider;
 import io.github.spookylauncher.components.ui.Messages;
 import io.github.spookylauncher.tree.jre.ExternalJreInfo;
@@ -19,10 +18,11 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Consumer;
-
-import static io.github.spookylauncher.log.Level.ERROR;
+import java.util.logging.Logger;
 
 public final class JREController extends LauncherComponent {
+    private static final Logger LOG = Logger.getLogger("jre controller");
+
     private final File javaDir;
     private JreInfo[] foundJREs;
 
@@ -42,8 +42,8 @@ public final class JREController extends LauncherComponent {
         try {
             components.get(OptionsController.class).store();
         } catch (IOException e) {
-            log(ERROR, "failed to store options");
-            log(ERROR, e);
+            LOG.severe("failed to store options");
+            LOG.throwing("io.github.spookylauncher.components.JREController", "safeOptionsStore", e);
         }
     }
 
@@ -65,7 +65,7 @@ public final class JREController extends LauncherComponent {
             JreInfo[] jres = findJres();
 
             if(jres.length == 0) {
-                log(Level.WARNING, "no available JREs");
+                LOG.warning("no available JREs");
 
                 messages.error(locale.get("error"), locale.get("noJre"));
             } else {
@@ -93,8 +93,8 @@ public final class JREController extends LauncherComponent {
             try {
                 jresPaths = IOUtils.locate("java");
             } catch(IOException | InterruptedException e) {
-                log(ERROR, "failed to locate jre's: ");
-                log(ERROR, e);
+                LOG.severe("failed to locate jre's: ");
+                LOG.throwing("io.github.spookylauncher.components.JREController", "findJres", e);
                 return null;
             }
 
@@ -108,8 +108,8 @@ public final class JREController extends LauncherComponent {
                 try {
                     props = new FileCollector(new File(javaDir, "release")).collectProperties();
                 } catch (IOException e) {
-                    log(ERROR, "failed to read info of jre \"" + javaPath + "\"");
-                    log(ERROR, e);
+                    LOG.severe("failed to read info of jre \"" + javaPath + "\"");
+                    LOG.throwing("io.github.spookylauncher.components.JREController", "findJres", e);
                     continue;
                 }
 
@@ -124,7 +124,7 @@ public final class JREController extends LauncherComponent {
 
                     jre.majorVersion = Integer.parseInt(splits[0].equals("1") ? splits[1] : splits[0]);
                 } catch(Exception e) {
-                    e.printStackTrace();
+                    LOG.throwing("io.github.spookylauncher.components.JREController", "findJres", e);
                     jre.majorVersion = -1;
                 }
 
@@ -152,8 +152,8 @@ public final class JREController extends LauncherComponent {
         try {
             IOUtils.deleteTree(getJreDirectory(info));
         } catch (IOException e) {
-            log(ERROR, "failed to delete tree \"" + getJreDirectory(info).getAbsolutePath() + "\"");
-            log(ERROR, e);
+            LOG.severe("failed to delete tree \"" + getJreDirectory(info).getAbsolutePath() + "\"");
+            LOG.throwing("io.github.spookylauncher.components.JREController", "uninstallJre", e);
         }
 
         return true;
@@ -217,7 +217,7 @@ public final class JREController extends LauncherComponent {
     }
 
     public void installJre(JreInfo info, Consumer<Boolean> onInstalled) {
-        log(Level.INFO, "start installing JRE " + info.fullVersion + ". Vendor: " + info.vendor + ", Major version: " + info.majorVersion);
+        LOG.info("start installing JRE " + info.fullVersion + ". Vendor: " + info.vendor + ", Major version: " + info.majorVersion);
 
         final Locale locale = components.get(Translator.class).getLocale();
         final UIProvider uiProvider = components.get(UIProvider.class);
@@ -226,7 +226,7 @@ public final class JREController extends LauncherComponent {
 
         if(info.downloads.containsKey(OSType.CURRENT)) url = info.downloads.get(OSType.CURRENT);
         else {
-            log(ERROR, "JRE installation failed because downloads are not available");
+            LOG.severe("JRE installation failed because downloads are not available");
             uiProvider.messages().error
             (
                     locale.get("installationError"),
@@ -257,8 +257,8 @@ public final class JREController extends LauncherComponent {
                         try {
                             urlCollector = new URLCollector(url);
                         } catch(URISyntaxException e) {
-                            log(ERROR, "failed to install jre: ");
-                            log(ERROR, e);
+                            LOG.severe("failed to install jre: ");
+                            LOG.throwing("io.github.spookylauncher.components.JREController", "installJre", e);
                             return;
                         }
 
@@ -272,12 +272,12 @@ public final class JREController extends LauncherComponent {
                         uiProvider.panel().setEnabledButtons(true);
 
                         if(!success) {
-                            log(Level.INFO, "JRE installation canceled by user");
+                            LOG.info("JRE installation canceled by user");
                             uiProvider.messages().info(
                                 locale.get("jreInstallationFailed"),
                                 locale.get("operationCanceledByUser")
                             );
-                        } else log(Level.INFO, "JRE successfully installed");
+                        } else LOG.info("JRE successfully installed");
 
                         onInstalled.accept(success);
                     }

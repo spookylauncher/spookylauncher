@@ -7,10 +7,11 @@ import io.github.spookylauncher.tree.launcher.Options;
 
 import java.io.IOException;
 import java.util.Objects;
-
-import static io.github.spookylauncher.log.Level.ERROR;
+import java.util.logging.Logger;
 
 final class OpenVersionsEvent extends Event {
+
+    private static final Logger LOG = Logger.getLogger("open versions event");
 
     OpenVersionsEvent(final ComponentsController components, final SwingUIProvider provider) {
         super(components, provider);
@@ -36,8 +37,8 @@ final class OpenVersionsEvent extends Event {
                     try {
                         optionsController.store();
                     } catch (IOException e) {
-                        versions.log(ERROR, "failed to store options");
-                        versions.log(ERROR, e);
+                        LOG.severe("failed to store options");
+                        LOG.throwing("io.github.spookylauncher.components.ui.swing.events.OpenVersionsEvent", "run", e);
                     }
                 });
 

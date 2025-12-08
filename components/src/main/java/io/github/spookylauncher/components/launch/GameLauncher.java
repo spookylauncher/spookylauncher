@@ -4,7 +4,6 @@ import io.github.spookylauncher.Constants;
 import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.debug.LocalLibraries;
-import io.github.spookylauncher.log.Level;
 import io.github.spookylauncher.GameStartData;
 import io.github.spookylauncher.components.LogsController;
 import io.github.spookylauncher.components.ui.UIProvider;
@@ -22,8 +21,11 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class GameLauncher extends LauncherComponent {
+    private static final Logger LOG = Logger.getLogger("game launcher");
+
     private final String manifestDownloaderName;
     private final File workDirectory;
     private final File logsDirectory;
@@ -35,7 +37,7 @@ public class GameLauncher extends LauncherComponent {
         this.workDirectory = workDirectory;
         this.logsDirectory = new File(this.workDirectory, "logs");
 
-        if(!this.logsDirectory.exists() && !this.logsDirectory.mkdirs()) log(Level.ERROR, "failed to create game logs directory!");
+        if(!this.logsDirectory.exists() && !this.logsDirectory.mkdirs()) LOG.severe("failed to create game logs directory!");
     }
     public void launch(final VersionInfo version) {
         final Locale locale = components.get(Translator.class).getLocale();
@@ -45,7 +47,7 @@ public class GameLauncher extends LauncherComponent {
         final VersionsInstaller versionsInstaller = components.get(VersionsInstaller.class);
 
         if(options.selectedJavaType == null) {
-            log(Level.ERROR, "no selected java");
+            LOG.severe("no selected java");
             uiProvider.messages().error(locale.get("error"), locale.get("noJre"));
             return;
         }
@@ -78,16 +80,16 @@ public class GameLauncher extends LauncherComponent {
             }
         };
 
-        log(Level.INFO, "installing libraries for version " + version.name);
+        LOG.info("installing libraries for version " + version.name);
 
         versionsInstaller.installLibraries(
                 version,
                 success -> {
                     if(success) {
-                        log(Level.INFO, "libraries successfully installed");
+                        LOG.info("libraries successfully installed");
                         new Thread(launchTask).start();
                     } else
-                        log(Level.ERROR, "failed to install libraries");
+                        LOG.info("failed to install libraries");
 
                 }
         );
@@ -254,7 +256,7 @@ public class GameLauncher extends LauncherComponent {
             data.process = builder.start();
             data.uptime = System.currentTimeMillis();
 
-            log(Level.INFO, "launching game");
+            LOG.info("launching game");
 
             logs.startLogging(data, log, latestLog, () -> {
                 final UIProvider uiProvider = components.get(UIProvider.class);
@@ -266,7 +268,8 @@ public class GameLauncher extends LauncherComponent {
 
             return true;
         } catch(Exception e) {
-            log(Level.ERROR, "failed to launch game");
+            LOG.severe("failed to launch game");
+            LOG.throwing("io.github.spookylauncher.components.launch.GameLauncher", "startProcess", e);
             components.get(ErrorHandler.class).handleException("startError", e);
             return false;
         }
