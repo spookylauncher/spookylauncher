@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class LibrariesController extends LauncherComponent {
@@ -119,6 +120,12 @@ public final class LibrariesController extends LauncherComponent {
                             onInstalled.accept(success.get());
                             break;
                         }
+
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            LOG.logp(Level.WARNING, "io.github.spookylauncher.components.LibrariesController", "install", "THROW", e);
+                        }
                     }
                 }
         ).start();
@@ -141,65 +148,59 @@ public final class LibrariesController extends LauncherComponent {
             return;
         }
 
-        new Thread(
-                () -> {
-                    assert OSType.CURRENT != null;
+        assert OSType.CURRENT != null;
 
-                    File destination = getLibraryFile(lib);
+        File destination = getLibraryFile(lib);
 
-                    if(!isInstalled(lib)) {
+        if(!isInstalled(lib)) {
 
-                        if(lib.isNative) {
-                            destination.mkdirs();
-                        } else {
-                            File parent = destination.getParentFile();
+            if(lib.isNative) {
+                destination.mkdirs();
+            } else {
+                File parent = destination.getParentFile();
 
-                            if(parent != null) parent.mkdirs();
-                        }
+                if(parent != null) parent.mkdirs();
+            }
 
-                        uiProvider.panel().setEnabledButtons(false);
+            uiProvider.panel().setEnabledButtons(false);
 
-                        Downloader.Options options = new Downloader.Options();
+            Downloader.Options options = new Downloader.Options();
 
-                        options.title = String.format(locale.get("libInstallation"), lib.name);
-                        options.subtitleFormat = locale.get("downloadingFormat");
-                        options.subtitle = lib.name + "-" + lib.version;
-                        options.consumeFullPaths = false;
+            options.title = String.format(locale.get("libInstallation"), lib.name);
+            options.subtitleFormat = locale.get("downloadingFormat");
+            options.subtitle = lib.name + "-" + lib.version;
+            options.consumeFullPaths = false;
 
-                        Downloader downloader = components.get(Downloader.class);
+            Downloader downloader = components.get(Downloader.class);
 
-                        URLCollector urlCollector;
+            URLCollector urlCollector;
 
-                        try {
-                            urlCollector = new URLCollector(url);
-                        } catch(URISyntaxException e) {
-                            LOG.severe("failed to install library: ");
-                            LOG.throwing("io.github.spookylauncher.components.LibrariesController", "install", e);
-                            return;
-                        }
+            try {
+                urlCollector = new URLCollector(url);
+            } catch(URISyntaxException e) {
+                LOG.severe("failed to install library: ");
+                LOG.throwing("io.github.spookylauncher.components.LibrariesController", "install", e);
+                return;
+            }
 
-                        boolean success =
-                        downloader.downloadOrUnpack
-                                (
-                                        !lib.isNative,
-                                        destination,
-                                        urlCollector,
-                                        options
-                                );
 
-                        uiProvider.panel().setEnabledButtons(true);
+            Downloader.IDownloadMethod method = lib.isNative ? downloader::downloadAndUnpackZip : downloader::download;
 
-                        if(!success) {
-                            LOG.info("library installation canceled by user");
-                            uiProvider.messages().info(
-                                    locale.get("libInstallationFailed"),
-                                    locale.get("operationCanceledByUser")
-                            );
-                        } else LOG.info("library successfully installed");
+            method.download(destination, urlCollector, options,
+                success -> {
+                    uiProvider.panel().setEnabledButtons(true);
 
-                        onInstalled.accept(success);
-                    }
+                    if(!success) {
+                        LOG.info("library installation canceled by user");
+                        uiProvider.messages().info(
+                                locale.get("libInstallationFailed"),
+                                locale.get("operationCanceledByUser")
+                        );
+                    } else LOG.info("library successfully installed, name: \"" + lib.name + "\", version: " + lib.version);
+
+                    onInstalled.accept(success);
                 }
-        ).start();
+            );
+        }
     }
 }

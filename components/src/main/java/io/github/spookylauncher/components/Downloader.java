@@ -7,68 +7,91 @@ import io.github.spookylauncher.components.ui.UIProvider;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Downloader extends LauncherComponent {
     private static final Logger LOG = Logger.getLogger("downloader");
+    private final Executor executor = Executors.newCachedThreadPool();
 
     public Downloader(ComponentsController components) {
         super("Downloader", components);
     }
 
-    public boolean downloadOrUnpack(boolean download, File destination, Collector collector, Options options) {
-        if(download) return download(destination, collector, options);
-        else return unpackZip(destination, collector, options);
+    public interface IDownloadMethod {
+        void download(File destination, Collector collector, Options options, Consumer<Boolean> onInstalled);
     }
 
-    public boolean download(File destination, Collector collector, Options options) {
-        AtomicBoolean canceled = new AtomicBoolean();
+    public void download(File destination, Collector collector, Options options, Consumer<Boolean> onInstalled) {
+        synchronized (Downloader.class) {
+            AtomicBoolean canceled = new AtomicBoolean();
 
-        LOG.info("starting downloading of some resource to \"" + destination.getAbsolutePath() + "\"");
+            LOG.info("starting downloading of some resource to \"" + destination.getAbsolutePath() + "\"");
 
-        try {
-            InstallAdapter adapter = createInstallAdapter(destination, options, canceled);
+            try {
+                InstallAdapter adapter = createInstallAdapter(destination, options, canceled);
 
-            if(adapter != null) {
-                adapter.consumeFullPaths = options.consumeFullPaths;
+                if(adapter != null) {
+                    adapter.consumeFullPaths = options.consumeFullPaths;
 
-                adapter.titleConsumer.accept(String.format(options.subtitleFormat, options.subtitle));
+                    adapter.titleConsumer.accept(String.format(options.subtitleFormat, options.subtitle));
 
-                IOUtils.install(collector, destination, adapter);
+                    executor.execute(() -> {
+                        try {
+                            IOUtils.install(collector, destination, adapter);
+                        } catch (IOException e) {
+                            LOG.severe("downloading failed");
+                            LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.Downloader", "download", "THROW", e);
+                        }
 
-                adapter.onEnd.run();
+                        adapter.onEnd.run();
+
+                        onInstalled.accept(!canceled.get());
+                    });
+                }
+            } catch(Exception e) {
+                LOG.severe("downloading failed");
+                LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.Downloader", "download", "THROW", e);
+                components.get(ErrorHandler.class).handleException("installationError", e);
             }
-        } catch(Exception e) {
-            LOG.severe("downloading failed");
-            components.get(ErrorHandler.class).handleException("installationError", e);
         }
-
-        return !canceled.get();
     }
 
-    public boolean unpackZip(File destination, Collector collector, Options options) {
-        AtomicBoolean canceled = new AtomicBoolean();
+    public void downloadAndUnpackZip(File destination, Collector collector, Options options, Consumer<Boolean> onInstalled) {
+        synchronized (Downloader.class) {
+            AtomicBoolean canceled = new AtomicBoolean();
 
-        LOG.info("starting downloading and unpacking some resource to \"" + destination.getAbsolutePath() + "\"");
+            LOG.info("starting downloading and unpacking some resource to \"" + destination.getAbsolutePath() + "\"");
 
-        try {
-            InstallAdapter adapter = createInstallAdapter(destination, options, canceled);
+            try {
+                InstallAdapter adapter = createInstallAdapter(destination, options, canceled);
 
-            if(adapter != null) {
-                adapter.consumeFullPaths = options.consumeFullPaths;
+                if (adapter != null) {
+                    adapter.consumeFullPaths = options.consumeFullPaths;
 
-                IOUtils.unzip(collector, destination, adapter);
+                    executor.execute(() -> {
+                        try {
+                            IOUtils.unzip(collector, destination, adapter);
+                        } catch (IOException e) {
+                            LOG.severe("downloading failed");
+                            LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.Downloader", "download", "THROW", e);
+                        }
 
-                adapter.onEnd.run();
+                        adapter.onEnd.run();
+
+                        onInstalled.accept(!canceled.get());
+                    });
+                }
+            } catch (Exception e) {
+                LOG.severe("downloading and unpacking failed");
+                LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.Downloader", "download", "THROW", e);
+                components.get(ErrorHandler.class).handleException("installationError", e);
             }
-        } catch(Exception e) {
-            LOG.severe("downloading and unpacking failed");
-            LOG.throwing("io.github.spookylauncher.components.Downloader", "unpackZip", e);
-            components.get(ErrorHandler.class).handleException("installationError", e);
         }
-
-        return !canceled.get();
     }
 
     private InstallAdapter createInstallAdapter(File destination, Options options, AtomicBoolean canceled) {
@@ -84,6 +107,8 @@ public final class Downloader extends LauncherComponent {
         Runnable finalOnCancel = onCancel;
 
         inputAdapter.onCancel = () -> {
+            System.out.println(123123);
+
             canceled.set(true);
 
             if(options.deleteOnCancel) {
@@ -99,7 +124,7 @@ public final class Downloader extends LauncherComponent {
         };
 
         return options.ui ?
-                components.get(UIProvider.class).dialogs().createInstallationDialog(
+                components.get(UIProvider.class).dialogs().createInstallationView(
                         options.title,
                         options.subtitleFormat,
                         inputAdapter
