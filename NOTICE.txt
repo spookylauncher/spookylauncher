@@ -16,3 +16,11 @@ The software components identified above are licensed to you under the Apache Li
 Portions Copyright (c) 2015 caplogic
 
 ---
+
+---
+This product includes software developed by JetBrains s.r.o. (https://www.jetbrains.com).
+
+The software components identified above are licensed to you under the Apache License 2.0, a copy of which is available as LICENSE-APACHE2.
+
+Portions Copyright (c) 2000 JetBrains s.r.o.
+---
