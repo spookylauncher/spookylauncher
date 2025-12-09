@@ -15,6 +15,7 @@ import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class VersionsInstaller extends LauncherComponent {
@@ -67,6 +68,12 @@ public final class VersionsInstaller extends LauncherComponent {
                                 onInstalledCallback.accept(success.get());
                                 break;
                             }
+
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                LOG.logp(Level.WARNING, "io.github.spookylauncher.components.VersionsInstaller", "installLibraries", "THROW", e);
+                            }
                         }
                     }
             ).start();
@@ -114,42 +121,39 @@ public final class VersionsInstaller extends LauncherComponent {
 
         LOG.info("start downloading");
 
-        new Thread(
-                () -> {
-                    uiProvider.panel().setEnabledButtons(false);
+        uiProvider.panel().setEnabledButtons(false);
 
-                    Downloader.Options options = new Downloader.Options();
+        Downloader.Options options = new Downloader.Options();
 
-                    options.title = locale.get("versionInstallation");
-                    options.subtitleFormat = locale.get("unpackingFormat");
+        options.title = locale.get("versionInstallation");
+        options.subtitleFormat = locale.get("unpackingFormat");
 
-                    options.subtitleFormat = locale.get("downloadingFormat");
-                    options.subtitle = version.name;
+        options.subtitleFormat = locale.get("downloadingFormat");
+        options.subtitle = version.name;
 
-                    String fileUrl = version.download == null ?
-                            this.components.get(ManifestsURLs.class).getBaseDataURL()
-                                    + "/versions/" + StringUtils.urlEncode(version.name) + "/" + StringUtils.urlEncode(version.name) + "." + (version.singleJar ? "jar" : "zip")
-                            : version.download.getDownloadUrl();
+        String fileUrl = version.download == null ?
+                this.components.get(ManifestsURLs.class).getBaseDataURL()
+                        + "/versions/" + StringUtils.urlEncode(version.name) + "/" + StringUtils.urlEncode(version.name) + "." + (version.singleJar ? "jar" : "zip")
+                : version.download.getDownloadUrl();
 
-                    URLCollector urlCollector;
+        URLCollector urlCollector;
 
-                    try {
-                        urlCollector = new URLCollector(fileUrl);
-                    } catch(URISyntaxException e) {
-                        LOG.severe("failed to install version: ");
-                        LOG.throwing("io.github.spookylauncher.VersionsInstaller", "install", e);
-                        return;
-                    }
+        try {
+            urlCollector = new URLCollector(fileUrl);
+        } catch(URISyntaxException e) {
+            LOG.severe("failed to install version: ");
+            LOG.throwing("io.github.spookylauncher.VersionsInstaller", "install", e);
+            return;
+        }
 
-                    boolean success =
-                    components.get(Downloader.class).downloadOrUnpack
-                    (
-                            version.singleJar,
-                            version.singleJar ? new File(versionDir, "minecraft.jar") : versionDir,
-                            urlCollector,
-                            options
-                    );
+        Downloader downloader = components.get(Downloader.class);
 
+        Downloader.IDownloadMethod method = version.singleJar ? downloader::download : downloader::downloadAndUnpackZip;
+        method.download(
+                version.singleJar ? new File(versionDir, "minecraft.jar") : versionDir,
+                urlCollector,
+                options,
+                success -> {
                     uiProvider.panel().setEnabledButtons(true);
 
                     if(success) {
@@ -157,6 +161,6 @@ public final class VersionsInstaller extends LauncherComponent {
                         uiProvider.panel().getButton(TitlePanel.PLAY).setText(locale.get("play"));
                     }
                 }
-        ).start();
+        );
     }
 }

@@ -262,24 +262,24 @@ public final class JREController extends LauncherComponent {
                             return;
                         }
 
-                        boolean success = components.get(Downloader.class).unpackZip
-                                (
-                                        destination,
-                                        urlCollector,
-                                        options
-                                );
+                        components.get(Downloader.class).downloadAndUnpackZip(
+                                destination,
+                                urlCollector,
+                                options,
+                                success -> {
+                                    uiProvider.panel().setEnabledButtons(true);
 
-                        uiProvider.panel().setEnabledButtons(true);
+                                    if(!success) {
+                                        LOG.info("JRE installation canceled by user");
+                                        uiProvider.messages().info(
+                                                locale.get("jreInstallationFailed"),
+                                                locale.get("operationCanceledByUser")
+                                        );
+                                    } else LOG.info("JRE successfully installed");
 
-                        if(!success) {
-                            LOG.info("JRE installation canceled by user");
-                            uiProvider.messages().info(
-                                locale.get("jreInstallationFailed"),
-                                locale.get("operationCanceledByUser")
-                            );
-                        } else LOG.info("JRE successfully installed");
-
-                        onInstalled.accept(success);
+                                    onInstalled.accept(success);
+                                }
+                        );
                     }
                 }
         ).start();

@@ -11,5 +11,8 @@ public interface Dialogs {
 
     Tuple3<Label, ProgressBar, Dialog> createProgressDialog(String title);
 
-    InstallAdapter createInstallationDialog(String title, String subTitleFormat, InstallAdapter inputAdapter);
+    // third argument is function closing the dialog
+    Tuple3<Label, ProgressBar, Runnable> createProgressView();
+
+    InstallAdapter createInstallationView(String title, String subTitleFormat, InstallAdapter inputAdapter);
 }

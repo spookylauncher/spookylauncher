@@ -3,12 +3,12 @@ package io.github.spookylauncher.components.ui.swing;
 import io.github.spookylauncher.components.ui.*;
 import io.github.spookylauncher.components.ui.Dialog;
 import io.github.spookylauncher.components.ui.Label;
+import io.github.spookylauncher.components.ui.swing.forms.MultiProgressDialog;
 import io.github.spookylauncher.io.InstallAdapter;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.Translator;
 import io.github.spookylauncher.components.ui.swing.forms.ConfirmDialog;
-import io.github.spookylauncher.components.ui.swing.forms.MultiProgressDialog;
 import io.github.spookylauncher.components.ui.swing.forms.ProgressPanel;
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.util.structures.tuple.Tuple2;
@@ -16,8 +16,6 @@ import io.github.spookylauncher.util.structures.tuple.Tuple3;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class DialogsImpl extends LauncherComponent implements Dialogs {
@@ -26,7 +24,7 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
 
     private final TitlePanelImpl titlePanel;
 
-    private final Map<String, JDialog> multiProgressDialogsMap = new HashMap<>();
+    private MultiProgressDialog multiProgressDialog;
 
     DialogsImpl(final ComponentsController components, final SwingUIProvider provider) {
         super("Swing API Dialogs", components);
@@ -69,62 +67,88 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
 
     @Override
     public Tuple3<Label, ProgressBar, Dialog> createProgressDialog(String title) {
-        Tuple2<JLabel, JProgressBar> tuple = createSwingProgressDialog(title);
+        Tuple3<JLabel, JProgressBar, JDialog> tuple = createSwingProgressDialog(title);
 
         Label label;
 
         return new Tuple3<>(
                 label = SPIFactory.getLabel(tuple.x),
                 SPIFactory.getProgressBar(tuple.y),
-                SPIFactory.getDialog(getMultiProgressDialog("1"), label)); // TODO
+                SPIFactory.getDialog(tuple.z, label));
     }
 
-    private JDialog getMultiProgressDialog(String name) {
-        JDialog dialog = multiProgressDialogsMap.get(name);
+    @Override
+    public Tuple3<Label, ProgressBar, Runnable> createProgressView() {
+        Tuple3<JLabel, JProgressBar, Runnable> tuple = createSwingProgressView();
 
-        if(dialog == null)
-            multiProgressDialogsMap.put(name, dialog = new MultiProgressDialog());
-
-        return dialog;
+        return new Tuple3<>(
+                SPIFactory.getLabel(tuple.x),
+                SPIFactory.getProgressBar(tuple.y),
+                tuple.z
+        );
     }
 
-    private void closeMultiProgressDialog(String name) {
-        if(multiProgressDialogsMap.containsKey(name)) {
-            JDialog dialog = multiProgressDialogsMap.get(name);
-            dialog.setVisible(false);
-            dialog.dispose();
-            multiProgressDialogsMap.remove(name);
-        }
-    }
-
-    private Tuple2<JLabel, JProgressBar> createSwingProgressDialog(String title) {
-        ProgressPanel panel = new ProgressPanel();
-
-        JDialog dialog = getMultiProgressDialog(null); // TODO;
-
-        dialog.setTitle("");
-
-        ((MultiProgressDialog)dialog).scrollPane.add(panel.panel);
-
+    private void setupSwingDialog(JDialog dialog) {
         dialog.setResizable(false);
         dialog.setLocationRelativeTo(provider.getFrame());
 
-        dialog.setSize(486, 500);
+        dialog.setSize(525, 150);
 
         dialog.setIconImage(provider.window().getIcon());
 
         dialog.setVisible(true);
+    }
 
-        return new Tuple2<>(panel.label, panel.progressBar);
+    private MultiProgressDialog getMultiProgressDialog() {
+        if(multiProgressDialog == null) {
+            multiProgressDialog = new MultiProgressDialog();
+            setupSwingDialog(multiProgressDialog);
+        }
+
+        return multiProgressDialog;
+    }
+
+    private void closeMultiProgressDialog() {
+        if(multiProgressDialog != null) {
+            JDialog dialog = multiProgressDialog;
+            dialog.setVisible(false);
+            dialog.dispose();
+            multiProgressDialog = null;
+        }
+    }
+
+    private Tuple3<JLabel, JProgressBar, Runnable> createSwingProgressView() {
+        ProgressPanel panel = new ProgressPanel();
+
+        panel.panel.setPreferredSize(new Dimension(525, 50));
+        panel.panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+
+        getMultiProgressDialog().addPanel(panel.panel);
+
+        return new Tuple3<>(panel.label, panel.progressBar, () -> getMultiProgressDialog().removePanel(panel.panel));
+    }
+
+    private Tuple3<JLabel, JProgressBar, JDialog> createSwingProgressDialog(String title) {
+        ProgressPanel panel = new ProgressPanel();
+
+        JDialog dialog = new JDialog();
+        dialog.setTitle(title);
+        dialog.setContentPane(panel.panel);
+        setupSwingDialog(dialog);
+
+        return new Tuple3<>(panel.label, panel.progressBar, dialog);
     }
 
     @Override
-    public InstallAdapter createInstallationDialog(String title, String subTitleFormat, InstallAdapter inputAdapter) {
+    public InstallAdapter createInstallationView(String title, String subTitleFormat, InstallAdapter inputAdapter) {
         AtomicBoolean abortInstall = new AtomicBoolean();
 
         Locale locale = components.get(Translator.class).getLocale();
 
-        Tuple2<JLabel, JProgressBar> tuple = createSwingProgressDialog(locale.get(title));
+        // createSwingProgressDialog(locale.get(title))
+
+        Tuple3<JLabel, JProgressBar, Runnable> tuple = createSwingProgressView();
+        JPanel panel = (JPanel) tuple.y.getParent();
 
         titlePanel.setEnabledButtons(false, TitlePanel.PLAY, TitlePanel.VERSIONS);
 
@@ -147,17 +171,8 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
         adapter.cancelSupplier = () -> (hasCancelSupplier && inputAdapter.cancelSupplier.get()) || abortInstall.get();
 
         adapter.onEnd = () -> {
-            tuple.y.setVisible(false);
-
-            if(tuple.y.getParent() != null) {
-                Container parent = tuple.y.getParent();
-
-                parent.remove(tuple.y);
-
-                Component[] comps = parent.getComponents();
-
-                if(comps == null || comps.length == 0)
-                    closeMultiProgressDialog(null); // TODO
+            if(getMultiProgressDialog().removePanel(panel)) {
+                closeMultiProgressDialog();
             }
         };
 

@@ -54,7 +54,7 @@ public final class IOUtils {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         int nRead;
-        byte[] data = new byte[16384];
+        byte[] data = new byte[4096];
 
         while ((nRead = in.read(data, 0, data.length)) != -1)
             buffer.write(data, 0, nRead);
@@ -70,7 +70,7 @@ public final class IOUtils {
         int len;
         int counter = 0;
 
-        byte[] buffer = new byte[16384];
+        byte[] buffer = new byte[4096];
 
         while((len = in.read(buffer)) != -1) {
             out.write(buffer, 0, len);
@@ -79,7 +79,6 @@ public final class IOUtils {
 
             if(hasCancelSupplier && adapter.cancelSupplier.get()) {
                 cancel = true;
-                break;
             } else if(hasProgressConsumer) adapter.progressConsumer.accept(counter);
         }
 
@@ -127,7 +126,7 @@ public final class IOUtils {
             ef = new File(dest, e.getName());
 
             if(e.isDirectory()) {
-                if(!ef.mkdirs())
+                if(!ef.exists() && !ef.mkdirs())
                     throw new IOException("Failed to create directory " + ef.getAbsolutePath());
                 continue;
             }
@@ -141,9 +140,6 @@ public final class IOUtils {
 
                 fns.titleConsumer.accept(name);
             }
-
-            if(!ef.getParentFile().mkdirs())
-                throw new IOException("Failed to create directory " + ef.getParentFile().getAbsolutePath());
 
             out = Files.newOutputStream(ef.toPath());
 

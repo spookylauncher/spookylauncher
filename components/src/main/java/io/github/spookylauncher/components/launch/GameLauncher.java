@@ -21,6 +21,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GameLauncher extends LauncherComponent {
@@ -193,20 +194,20 @@ public class GameLauncher extends LauncherComponent {
         cmd.add("-Dfile.encoding=UTF-8");
         cmd.add("-Dorg.lwjgl.util.Debug=true");
 
-        if(libraryPath.length() != 0) {
+        if(!libraryPath.isEmpty()) {
             cmd.add("-Djava.library.path=" + libraryPath);
 
             cmd.addAll(specialLibraryPath);
         }
 
-        if(classPath.length() != 0) {
+        if(!classPath.isEmpty()) {
             cmd.add("-cp");
             cmd.add(classPath);
         }
 
-        cmd.add(Constants.WRAPPER_MAIN);
+        //cmd.add(Constants.WRAPPER_MAIN);
 
-        //cmd.add(version.getLaunchProperty("main", "Start"));
+        cmd.add(version.getLaunchProperty("main", Constants.DEFAULT_MC_MAIN)); // TODO wrapper yo
 
         final Properties properties = new Properties();
 
@@ -269,7 +270,7 @@ public class GameLauncher extends LauncherComponent {
             return true;
         } catch(Exception e) {
             LOG.severe("failed to launch game");
-            LOG.throwing("io.github.spookylauncher.components.launch.GameLauncher", "startProcess", e);
+            LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.launch.GameLauncher", "startProcess", "THROW", e);
             components.get(ErrorHandler.class).handleException("startError", e);
             return false;
         }

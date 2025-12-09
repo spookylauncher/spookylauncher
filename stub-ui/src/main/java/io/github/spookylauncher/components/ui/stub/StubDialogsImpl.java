@@ -24,10 +24,17 @@ class StubDialogsImpl extends LauncherComponent implements Dialogs {
     public Dialog showConfirmDialog(Runnable ok, String title, String message, Runnable cancel) { return null; }
 
     @Override
-    public Tuple3<Label, ProgressBar, Dialog> createProgressDialog(String title) { return null; }
+    public Tuple3<Label, ProgressBar, Dialog> createProgressDialog(String title) {
+        return null;
+    }
 
     @Override
-    public InstallAdapter createInstallationDialog(String title, String subTitleFormat, InstallAdapter inputAdapter) {
+    public Tuple3<Label, ProgressBar, Runnable> createProgressView() {
+        return null;
+    }
+
+    @Override
+    public InstallAdapter createInstallationView(String title, String subTitleFormat, InstallAdapter inputAdapter) {
         return null;
     }
 }
