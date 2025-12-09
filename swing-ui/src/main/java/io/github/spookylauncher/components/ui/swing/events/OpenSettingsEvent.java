@@ -1,5 +1,6 @@
 package io.github.spookylauncher.components.ui.swing.events;
 
+import io.github.spookylauncher.components.ui.swing.beauty.UIBeautician;
 import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.JREController;
@@ -43,6 +44,7 @@ class OpenSettingsEvent extends Event {
         dialog.setSize(480, 225);
         dialog.setLocationRelativeTo(provider.getFrame());
         dialog.setResizable(false);
+        UIBeautician.comb(dialog);
 
         dialog.setVisible(true);
     }

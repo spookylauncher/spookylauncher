@@ -3,6 +3,7 @@ package io.github.spookylauncher.components.ui.swing;
 import io.github.spookylauncher.components.ui.*;
 import io.github.spookylauncher.components.ui.Dialog;
 import io.github.spookylauncher.components.ui.Label;
+import io.github.spookylauncher.components.ui.swing.beauty.UIBeautician;
 import io.github.spookylauncher.components.ui.swing.forms.MultiProgressDialog;
 import io.github.spookylauncher.io.InstallAdapter;
 import io.github.spookylauncher.components.ComponentsController;
@@ -62,6 +63,8 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
 
         dialog.setVisible(true);
 
+        UIBeautician.comb(dialog);
+
         return dialog;
     }
 
@@ -97,6 +100,8 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
         dialog.setIconImage(provider.window().getIcon());
 
         dialog.setVisible(true);
+
+        UIBeautician.comb(dialog);
     }
 
     private MultiProgressDialog getMultiProgressDialog() {
@@ -125,6 +130,8 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
 
         getMultiProgressDialog().addPanel(panel.panel);
 
+        UIBeautician.comb(panel.panel);
+
         return new Tuple3<>(panel.label, panel.progressBar, () -> getMultiProgressDialog().removePanel(panel.panel));
     }
 
@@ -135,6 +142,8 @@ class DialogsImpl extends LauncherComponent implements Dialogs {
         dialog.setTitle(title);
         dialog.setContentPane(panel.panel);
         setupSwingDialog(dialog);
+
+        UIBeautician.comb(panel.panel);
 
         return new Tuple3<>(panel.label, panel.progressBar, dialog);
     }

@@ -1,5 +1,6 @@
 package io.github.spookylauncher.components.ui.swing;
 
+import io.github.spookylauncher.components.ui.swing.beauty.UIBeautician;
 import io.github.spookylauncher.io.collectors.ResourceCollector;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
@@ -58,6 +59,8 @@ class MainWindowImpl extends LauncherComponent implements MainWindow {
         frame.setLocationRelativeTo(null);
 
         provider.setFrame(frame);
+
+        UIBeautician.comb(frame);
     }
 
     @Override

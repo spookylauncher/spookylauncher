@@ -26,6 +26,12 @@
 
         <dependency>
             <groupId>io.github.spookylauncher</groupId>
+            <artifactId>io</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.spookylauncher</groupId>
             <artifactId>components</artifactId>
             <scope>compile</scope>
         </dependency>
