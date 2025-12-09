@@ -24,3 +24,9 @@ The software components identified above are licensed to you under the Apache Li
 
 Portions Copyright (c) 2000 JetBrains s.r.o.
 ---
+
+---
+This product includes font created by Andrew Tyler (https://www.AndrewTyler.net and font@andrewtyler.net).
+
+Portions Copyright (c) Andrew Tyler 2014
+---
