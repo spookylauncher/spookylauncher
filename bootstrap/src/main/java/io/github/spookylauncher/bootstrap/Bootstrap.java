@@ -1,6 +1,5 @@
 package io.github.spookylauncher.bootstrap;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.Translator;
@@ -40,8 +39,6 @@ public final class Bootstrap implements Runnable {
 
         rootLogger.addHandler(consoleHandler);
         rootLogger.setLevel(Level.INFO);
-
-        FlatDarkLaf.setup();
 
         final File workDir = new File(System.getenv("APPDATA"), ".spookylauncher");
 

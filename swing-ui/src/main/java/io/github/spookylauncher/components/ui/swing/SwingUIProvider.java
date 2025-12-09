@@ -1,5 +1,7 @@
 package io.github.spookylauncher.components.ui.swing;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.ui.*;
 import io.github.spookylauncher.components.ui.swing.events.EventsRegister;
@@ -38,6 +40,8 @@ public final class SwingUIProvider extends LauncherComponent implements UIProvid
     @Override
     public void initialize() throws IOException {
         super.initialize();
+
+        FlatDarkLaf.setup();
 
         window = new MainWindowImpl(components, this);
         panel = new TitlePanelImpl(components, frame);
