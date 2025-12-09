@@ -33,7 +33,6 @@ public final class UIBeautician {
             }
 
             if(component instanceof JDialog) {
-                System.out.println(92929229);
                 combSwing((JDialog) component);
             }
 
