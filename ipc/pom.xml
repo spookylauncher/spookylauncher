@@ -10,12 +10,4 @@
     </parent>
 
     <artifactId>ipc</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>io.mappedbus</groupId>
-            <artifactId>mappedbus</artifactId>
-            <version>0.5.1</version>
-        </dependency>
-    </dependencies>
 </project>

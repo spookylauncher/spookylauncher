@@ -1,0 +1,18 @@
+Spooky Launcher
+
+Copyright (c) 2025 Spooky Launcher
+
+E-mail: spookylaunch@gmail.com
+Website: https://spookylauncher.github.io
+
+This project is distributed under the license terms specified in the LICENSE file
+
+---
+
+This product includes software components developed by Mappedbus, https://github.com/caplogic/Mappedbus
+
+The software components identified above are licensed to you under the Apache License 2.0, a copy of which is available as LICENSE-APACHE2.
+
+Portions Copyright (c) 2015 caplogic
+
+---
