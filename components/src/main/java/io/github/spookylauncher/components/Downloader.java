@@ -38,7 +38,7 @@ public final class Downloader extends LauncherComponent {
                 if(adapter != null) {
                     adapter.consumeFullPaths = options.consumeFullPaths;
 
-                    adapter.titleConsumer.accept(String.format(options.subtitleFormat, options.subtitle));
+                    adapter.titleConsumer.accept(options.subtitle);
 
                     executor.execute(() -> {
                         try {
@@ -107,8 +107,6 @@ public final class Downloader extends LauncherComponent {
         Runnable finalOnCancel = onCancel;
 
         inputAdapter.onCancel = () -> {
-            System.out.println(123123);
-
             canceled.set(true);
 
             if(options.deleteOnCancel) {
