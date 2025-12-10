@@ -88,7 +88,7 @@ public final class Downloader extends LauncherComponent {
                 }
             } catch (Exception e) {
                 LOG.severe("downloading and unpacking failed");
-                LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.Downloader", "download", "THROW", e);
+                LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.Downloader", "download", "Throw!", e);
                 components.get(ErrorHandler.class).handleException("installationError", e);
             }
         }
@@ -114,7 +114,7 @@ public final class Downloader extends LauncherComponent {
                     IOUtils.deleteTree(destination);
                 } catch (IOException e) {
                     LOG.severe("failed to delete tree \"" + destination.getAbsolutePath() + "\"");
-                    LOG.throwing("io.github.spookylauncher.components.Downloader", "createInstallAdapter", e);
+                    LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.Downloader", "createInstallAdapter", "Throw!", e);
                 }
             }
 

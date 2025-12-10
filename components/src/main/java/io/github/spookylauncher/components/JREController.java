@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class JREController extends LauncherComponent {
@@ -43,7 +44,7 @@ public final class JREController extends LauncherComponent {
             components.get(OptionsController.class).store();
         } catch (IOException e) {
             LOG.severe("failed to store options");
-            LOG.throwing("io.github.spookylauncher.components.JREController", "safeOptionsStore", e);
+            LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.JREController", "safeOptionsStore", "Throw!", e);
         }
     }
 
@@ -94,7 +95,7 @@ public final class JREController extends LauncherComponent {
                 jresPaths = IOUtils.locate("java");
             } catch(IOException | InterruptedException e) {
                 LOG.severe("failed to locate jre's: ");
-                LOG.throwing("io.github.spookylauncher.components.JREController", "findJres", e);
+                LOG.logp(Level.SEVERE,"io.github.spookylauncher.components.JREController", "findJres", "Throw!", e);
                 return null;
             }
 
@@ -109,7 +110,7 @@ public final class JREController extends LauncherComponent {
                     props = new FileCollector(new File(javaDir, "release")).collectProperties();
                 } catch (IOException e) {
                     LOG.severe("failed to read info of jre \"" + javaPath + "\"");
-                    LOG.throwing("io.github.spookylauncher.components.JREController", "findJres", e);
+                    LOG.logp(Level.SEVERE,"io.github.spookylauncher.components.JREController", "findJres", "Throw!", e);
                     continue;
                 }
 
@@ -124,7 +125,7 @@ public final class JREController extends LauncherComponent {
 
                     jre.majorVersion = Integer.parseInt(splits[0].equals("1") ? splits[1] : splits[0]);
                 } catch(Exception e) {
-                    LOG.throwing("io.github.spookylauncher.components.JREController", "findJres", e);
+                    LOG.logp(Level.SEVERE,"io.github.spookylauncher.components.JREController", "findJres", "Throw!", e);
                     jre.majorVersion = -1;
                 }
 
@@ -153,7 +154,7 @@ public final class JREController extends LauncherComponent {
             IOUtils.deleteTree(getJreDirectory(info));
         } catch (IOException e) {
             LOG.severe("failed to delete tree \"" + getJreDirectory(info).getAbsolutePath() + "\"");
-            LOG.throwing("io.github.spookylauncher.components.JREController", "uninstallJre", e);
+            LOG.logp(Level.SEVERE,"io.github.spookylauncher.components.JREController", "uninstallJre", "Throw!", e);
         }
 
         return true;
@@ -258,7 +259,7 @@ public final class JREController extends LauncherComponent {
                             urlCollector = new URLCollector(url);
                         } catch(URISyntaxException e) {
                             LOG.severe("failed to install jre: ");
-                            LOG.throwing("io.github.spookylauncher.components.JREController", "installJre", e);
+                            LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.JREController", "installJre", "Throw!", e);
                             return;
                         }
 

@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.text.*;
 import java.util.*;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class LogsController extends LauncherComponent {
@@ -136,7 +137,7 @@ public final class LogsController extends LauncherComponent {
             rootLogger.addHandler(getHandler(rootLogger, latestLog));
         } catch(Exception e) {
             LOG.severe("failed to branch logger output");
-            LOG.throwing("LogsController", "initialize", e);
+            LOG.logp(Level.SEVERE,"io.github.spoookylauncher.components.LogsController", "initialize", "Throw!", e);
         }
     }
 }

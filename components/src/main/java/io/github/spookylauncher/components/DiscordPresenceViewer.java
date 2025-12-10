@@ -7,6 +7,7 @@ import io.github.spookylauncher.util.Locale;
 import net.arikia.dev.drpc.*;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class DiscordPresenceViewer extends LauncherComponent {
@@ -50,7 +51,7 @@ public final class DiscordPresenceViewer extends LauncherComponent {
                             Thread.sleep(100L); // reducing the load on the processor
                         }
                     } catch(final Exception e) {
-                        LOG.throwing("io.github.spookylauncher.components.DiscordPresenceViewer", "initialize", e);
+                        LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.DiscordPresenceViewer", "initialize", "Throw!", e);
                     }
                 }
         ).start();

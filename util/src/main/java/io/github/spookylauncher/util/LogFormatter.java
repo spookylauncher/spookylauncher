@@ -1,5 +1,7 @@
 package io.github.spookylauncher.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
@@ -26,19 +28,29 @@ public class LogFormatter extends Formatter {
         return sb.toString();
     }
 
+    private String exceptionToString(Throwable e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        return sw.toString();
+    }
+
     @Override
     public String format(LogRecord record) {
-        String res = "[" + formatField(LEVEL_FIELD_LENGTH, record.getLevel().getName()) + "] " +
+        StringBuilder res = new StringBuilder("[" + formatField(LEVEL_FIELD_LENGTH, record.getLevel().getName()) + "] " +
                 Instant.ofEpochMilli(record.getMillis())
                         .atZone(ZoneId.of("Europe/Moscow"))
                         .format(formatter) +
-                " [" + formatField(LOGGER_FIELD_LENGTH, record.getLoggerName()) + "] " +
-                formatMessage(record);
+                " [" + formatField(LOGGER_FIELD_LENGTH, record.getLoggerName()) + "] " + formatMessage(record));
+
 
         if(record.getThrown() != null) {
-            res += " : " + record.getSourceClassName() + "." +
-                    record.getSourceMethodName() + "(): " +
-                    record.getThrown().toString();
+            res.append(" ");
+            if(record.getThrown() != null) {
+                res.append(exceptionToString(record.getThrown()));
+            } else {
+                res.append(record.getSourceClassName()).append(".").append(record.getSourceMethodName()).append("()");
+            }
         }
 
         return res + System.lineSeparator();

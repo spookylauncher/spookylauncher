@@ -5,6 +5,7 @@ import io.github.spookylauncher.components.ErrorHandler;
 import io.github.spookylauncher.components.LauncherComponent;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class EventsManager extends LauncherComponent {
@@ -55,7 +56,7 @@ public final class EventsManager extends LauncherComponent {
                 handler.invoke(args);
             } catch(Exception e) {
                 LOG.severe("exception occurred in event handler \"" + handler + "\"");
-                LOG.throwing("io.github.spookylauncher.components.events.EventsManager", "emit", e);
+                LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.events.EventsManager", "emit", "Throw!", e);
             }
         }
     }

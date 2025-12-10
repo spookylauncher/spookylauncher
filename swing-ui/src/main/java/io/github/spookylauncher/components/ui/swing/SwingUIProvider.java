@@ -50,7 +50,7 @@ public final class SwingUIProvider extends LauncherComponent implements UIProvid
         SynthLookAndFeel synth = new SynthLookAndFeel();
 
         try {
-            synth.load(Resource.getInput("theme.xml"), getClass());
+            synth.load(Resource.getInput("style.xml"), getClass());
         } catch (Exception e) {
             throw new IOException(e);
         }
