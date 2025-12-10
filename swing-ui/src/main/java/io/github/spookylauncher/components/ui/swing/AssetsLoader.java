@@ -18,11 +18,15 @@ public final class AssetsLoader {
     public static void load() {
         for(Tuple2<String, Float> fontData : FONTS) {
             try {
-                GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(
-                        Font.createFont(
-                                Font.TRUETYPE_FONT, Resource.getInput(fontData.x)
-                        ).deriveFont(fontData.y)
+                Font font = Font.createFont(
+                        Font.TRUETYPE_FONT, Resource.getInput(fontData.x)
                 );
+
+                GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(
+                        font.deriveFont(fontData.y)
+                );
+
+                LOG.info(String.format("font \"%s\" successfully loaded and registered", font.getName()));
             } catch(Exception e) {
                 LOG.severe("failed to load font \"" + fontData.x + "\"");
                 LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ui.swing.FontLoader", "loadFonts", "THROW", e);
