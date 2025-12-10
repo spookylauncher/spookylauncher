@@ -1,0 +1,14 @@
+<synth>
+    <style id="defaultStyle">
+        <font name="Segoe UI" size="14"/>
+        <state value="ENABLED">
+            <color type="BACKGROUND" value="#F0F0F0"/>
+            <color type="FOREGROUND" value="#000000"/>
+        </state>
+        <state value="PRESSED">
+            <color type="BACKGROUND" value="#D0D0D0"/>
+        </state>
+    </style>
+
+    <bind style="defaultStyle" type="region" key=".*"/>
+</synth>

@@ -1,7 +1,6 @@
 package io.github.spookylauncher.components.ui.swing;
 
 import io.github.spookylauncher.components.*;
-import io.github.spookylauncher.components.ui.swing.beauty.UIBeautician;
 import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.components.ui.Button;
 import io.github.spookylauncher.components.ui.Panel;
@@ -58,8 +57,6 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
         setVersion(null);
 
         setEnabledButtons(false, PLAY, VERSIONS);
-
-        UIBeautician.comb(titlePanelForm.panel1);
     }
 
     @Override

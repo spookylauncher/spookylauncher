@@ -2,7 +2,6 @@ package io.github.spookylauncher.components.ui.swing.events;
 
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.ui.swing.SwingUIProvider;
-import io.github.spookylauncher.components.ui.swing.beauty.UIBeautician;
 import io.github.spookylauncher.components.ui.swing.forms.VersionsDialog;
 import io.github.spookylauncher.tree.launcher.Options;
 
@@ -50,8 +49,6 @@ final class OpenVersionsEvent extends Event {
         dialog.setLocationRelativeTo(provider.getFrame());
 
         dialog.buttonCancel.setText(components.get(Translator.class).get("cancel"));
-
-        UIBeautician.comb(dialog);
 
         dialog.setVisible(true);
     }

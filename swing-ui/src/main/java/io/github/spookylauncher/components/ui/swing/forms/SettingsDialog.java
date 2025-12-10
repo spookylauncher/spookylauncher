@@ -2,7 +2,6 @@ package io.github.spookylauncher.components.ui.swing.forms;
 
 import io.github.spookylauncher.components.JREController;
 import io.github.spookylauncher.components.ui.Messages;
-import io.github.spookylauncher.components.ui.swing.beauty.UIBeautician;
 import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.components.Translator;
 import io.github.spookylauncher.components.OptionsController;
@@ -173,8 +172,6 @@ public class SettingsDialog extends JDialog {
                     dialog.setTitle(getTitle());
 
                     dialog.setIconImage(getIconImages().get(0));
-
-                    UIBeautician.comb(dialog);
 
                     dialog.setVisible(true);
                 }
