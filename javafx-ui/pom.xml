@@ -17,10 +17,29 @@
             <artifactId>javafx-controls</artifactId>
             <version>21.0.2</version>
         </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>21.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.spookylauncher</groupId>
+            <artifactId>ui</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.spookylauncher</groupId>
+            <artifactId>io</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.spookylauncher</groupId>
+            <artifactId>components</artifactId>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>
