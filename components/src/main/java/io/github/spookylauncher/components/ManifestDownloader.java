@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ManifestDownloader<T> extends LauncherComponent {
@@ -55,7 +56,7 @@ public class ManifestDownloader<T> extends LauncherComponent {
             return true;
         } catch(Exception e) {
             LOG.severe("failed to download manifest \"" + manifestUrl + "\"");
-            LOG.throwing("io.github.spookylauncher.components.ManifestDownloader", "downloadManifest", e);
+            LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ManifestDownloader", "downloadManifest", "Throw!", e);
             components.get(ErrorHandler.class).handleException("manifestLoadError", e);
             return false;
         }

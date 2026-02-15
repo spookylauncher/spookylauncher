@@ -2,6 +2,7 @@ package io.github.spookylauncher.components;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class ComponentsController {
@@ -9,6 +10,7 @@ public final class ComponentsController {
     private final HashMap<Class<?>, Integer> componentsByClass = new HashMap<>();
     private final HashMap<String, Integer> componentsByName = new HashMap<>();
     private final List<LauncherComponent> components = new ArrayList<>();
+    private final List<Integer> initialized = new ArrayList<>();
 
     private final HashMap<Integer, Set<Function<ComponentsController, Boolean>> > onInitializedEvents = new HashMap<>();
 
@@ -21,6 +23,22 @@ public final class ComponentsController {
         else set = onInitializedEvents.get(componentIndex);
 
         set.add(consumer);
+    }
+
+    public boolean isInitialized(String name) {
+        return isInitialized(components.get(componentsByName.get(name)));
+    }
+
+    public <T> boolean isInitialized(Class<T> clazz) {
+        return isInitialized(components.get(componentsByClass.get(clazz)));
+    }
+
+    public boolean isInitialized(LauncherComponent component) {
+        return initialized.contains(getIndex(component));
+    }
+
+    public boolean isInitialized(int componentIndex) {
+        return initialized.contains(componentIndex);
     }
 
     public int getIndex(LauncherComponent component) {
@@ -80,6 +98,8 @@ public final class ComponentsController {
 
                 component.initialize();
 
+                initialized.add(index);
+
                 if(onInitializedEvents.containsKey(index)) {
                     Set<Function<ComponentsController, Boolean>> set = onInitializedEvents.get(index);
 
@@ -92,7 +112,7 @@ public final class ComponentsController {
                 }
             } catch(Exception e) {
                 LOG.severe("failed to initialize \"" + component.getName() + "\" launcher component:");
-                LOG.throwing("io.github.spookylauncher.components.ComponentsController", "initializeComponent", e);
+                LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ComponentsController", "initializeComponent", "Throw!", e);
             }
         };
 

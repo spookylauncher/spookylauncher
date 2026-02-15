@@ -34,7 +34,7 @@ public class JreSettingsDialog extends JDialog {
         setResizable(false);
         getRootPane().setDefaultButton(buttonOK);
 
-        setSize(495, 175);
+        setSize(580, 175);
 
         javaPathField.setText(optionsController.getOptions().customJavaPath);
 

@@ -6,8 +6,8 @@
       <xy x="20" y="20" width="724" height="412"/>
     </constraints>
     <properties>
-      <background color="-13487566"/>
-      <foreground color="-13487566"/>
+      <background color="-1"/>
+      <foreground color="-1"/>
     </properties>
     <border type="none" title=""/>
     <children>
@@ -62,7 +62,7 @@
           <component id="59330" class="javax.swing.JTextArea" binding="description">
             <constraints/>
             <properties>
-              <background color="-13487566"/>
+              <background color="-1"/>
               <editable value="false"/>
               <font name="Consolas" size="14"/>
               <foreground color="-1"/>

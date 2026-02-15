@@ -1,5 +1,6 @@
 package io.github.spookylauncher.bootstrap;
 
+import io.github.spookylauncher.components.ui.UIProvider;
 import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.Translator;
@@ -149,6 +150,11 @@ public final class Bootstrap implements Runnable {
         });
 
         reg.initializeComponents();
+
+        if(protocolConsumer == null && !controller.isInitialized(UIProvider.class)) {
+            LOG.severe("no ui, exiting");
+            System.exit(1);
+        }
     }
 
 }

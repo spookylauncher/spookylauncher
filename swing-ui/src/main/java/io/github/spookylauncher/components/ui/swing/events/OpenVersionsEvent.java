@@ -7,6 +7,7 @@ import io.github.spookylauncher.tree.launcher.Options;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 final class OpenVersionsEvent extends Event {
@@ -38,13 +39,13 @@ final class OpenVersionsEvent extends Event {
                         optionsController.store();
                     } catch (IOException e) {
                         LOG.severe("failed to store options");
-                        LOG.throwing("io.github.spookylauncher.components.ui.swing.events.OpenVersionsEvent", "run", e);
+                        LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ui.swing.events.OpenVersionsEvent", "run", "Throw!", e);
                     }
                 });
 
         dialog.setResizable(false);
 
-        dialog.setSize(225, 303);
+        dialog.setSize(250, 303);
 
         dialog.setLocationRelativeTo(provider.getFrame());
 

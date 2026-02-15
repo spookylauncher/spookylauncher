@@ -11,7 +11,6 @@ import io.github.spookylauncher.components.Translator;
 import io.github.spookylauncher.components.ui.swing.forms.ConfirmDialog;
 import io.github.spookylauncher.components.ui.swing.forms.ProgressPanel;
 import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.util.structures.tuple.Tuple2;
 import io.github.spookylauncher.util.structures.tuple.Tuple3;
 
 import javax.swing.*;

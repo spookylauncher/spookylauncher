@@ -1,16 +1,21 @@
 package io.github.spookylauncher.components.ui.swing;
 
-import com.formdev.flatlaf.FlatDarkLaf;
+import javax.swing.plaf.synth.*;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.ui.*;
 import io.github.spookylauncher.components.ui.swing.events.EventsRegister;
+import io.github.spookylauncher.io.Resource;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class SwingUIProvider extends LauncherComponent implements UIProvider {
 
+    private static final Logger LOG = Logger.getLogger("swing ui");
     private JFrame frame;
 
     private final String jresManifestDownloaderName;
@@ -40,6 +45,8 @@ public final class SwingUIProvider extends LauncherComponent implements UIProvid
     @Override
     public void initialize() throws IOException {
         super.initialize();
+
+        AssetsLoader.load();
 
         FlatDarkLaf.setup();
 

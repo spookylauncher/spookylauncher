@@ -179,7 +179,7 @@ public final class LibrariesController extends LauncherComponent {
                 urlCollector = new URLCollector(url);
             } catch(URISyntaxException e) {
                 LOG.severe("failed to install library: ");
-                LOG.throwing("io.github.spookylauncher.components.LibrariesController", "install", e);
+                LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.LibrariesController", "install", "Throw!", e);
                 return;
             }
 

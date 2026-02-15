@@ -6,6 +6,7 @@ import io.github.spookylauncher.io.collectors.ResourceCollector;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Translator extends LauncherComponent {
@@ -52,7 +53,7 @@ public final class Translator extends LauncherComponent {
             LOG.info("locale successfully loaded");
         } catch(Exception e) {
             LOG.severe("failed to load locale");
-            LOG.throwing("io.github.spookylauncher.components.Translator", "reloadLocale", e);
+            LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.Translator", "reloadLocale", "Throw!", e);
             components.get(ErrorHandler.class).handleException("Failed to load locale", e);
         }
 

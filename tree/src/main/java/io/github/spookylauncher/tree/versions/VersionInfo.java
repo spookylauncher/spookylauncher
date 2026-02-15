@@ -11,6 +11,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class VersionInfo {
@@ -60,7 +61,7 @@ public final class VersionInfo {
                 previewsTree = GitHubAPI.getTreeFromBranch("spookylauncher", "Spooky-Launcher", "launcher/" + name + "/previews");
             } catch (IOException e) {
                 LOG.severe("failed to get previews count");
-                LOG.throwing("io.github.spookylauncher.tree.versions.VersionInfo", "getPreviewsCount", e);
+                LOG.logp(Level.SEVERE, "io.github.spookylauncher.tree.versions.VersionInfo", "getPreviewsCount", "Throw!", e);
             }
 
             if(previewsTree == null) previewsCount = 0;

@@ -142,7 +142,7 @@ public final class VersionsInstaller extends LauncherComponent {
             urlCollector = new URLCollector(fileUrl);
         } catch(URISyntaxException e) {
             LOG.severe("failed to install version: ");
-            LOG.throwing("io.github.spookylauncher.VersionsInstaller", "install", e);
+            LOG.logp(Level.SEVERE, "io.github.spookylauncher.VersionsInstaller", "install", "Throw!", e);
             return;
         }
 

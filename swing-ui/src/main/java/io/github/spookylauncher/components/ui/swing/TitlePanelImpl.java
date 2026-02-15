@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import io.github.spookylauncher.util.Locale;
@@ -178,7 +179,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                             ).collectImage());
                 } catch (IOException | URISyntaxException e) {
                     LOG.severe("failed to set preview");
-                    LOG.throwing("io.github.spookylauncher.components.ui.swing.TitlePanelImpl", "setVersion", e);
+                    LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ui.swing.TitlePanelImpl", "setVersion", "Throw!", e);
                 }
             } else setPreview(noPreview);
         }).start();
@@ -206,7 +207,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                         );
                     } catch (IOException | URISyntaxException e) {
                         LOG.severe("failed to set description");
-                        LOG.throwing("io.github.spookylauncher.components.ui.swing.TitlePanelImpl", "setVersion", e);
+                        LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ui.swing.TitlePanelImpl", "setVersion", "Throw!", e);
                     }
                 }
         ).start();

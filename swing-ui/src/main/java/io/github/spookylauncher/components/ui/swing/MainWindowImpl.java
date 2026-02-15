@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class MainWindowImpl extends LauncherComponent implements MainWindow {
@@ -32,7 +33,7 @@ class MainWindowImpl extends LauncherComponent implements MainWindow {
         } catch (IOException e) {
             icon = null;
             LOG.severe("failed to set frame icon");
-            LOG.throwing("io.github.spookylauncher.components.ui.swing.MainWindowImpl", "<init>", e);
+            LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ui.swing.MainWindowImpl", "<init>", "Throw!", e);
         }
 
         this.icon = icon;
