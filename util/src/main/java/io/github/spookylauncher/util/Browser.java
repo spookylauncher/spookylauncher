@@ -18,7 +18,7 @@ public final class Browser {
                 String[] browsers = { "google-chrome", "firefox", "mozilla", "epiphany", "konqueror",
                         "netscape", "opera", "links", "lynx" };
 
-                StringBuffer cmdBuilder = new StringBuffer();
+                StringBuilder cmdBuilder = new StringBuilder();
                 for (int i = 0; i < browsers.length; i++)
                     if(i == 0)
                         cmdBuilder.append(String.format(    "%s \"%s\"", browsers[i], url));
