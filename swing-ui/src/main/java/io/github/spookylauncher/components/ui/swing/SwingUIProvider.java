@@ -2,6 +2,7 @@ package io.github.spookylauncher.components.ui.swing;
 
 import javax.swing.plaf.synth.*;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.ui.*;
 import io.github.spookylauncher.components.ui.swing.events.EventsRegister;
@@ -47,29 +48,7 @@ public final class SwingUIProvider extends LauncherComponent implements UIProvid
 
         AssetsLoader.load();
 
-        SynthLookAndFeel synth = new SynthLookAndFeel();
-
-        try {
-            synth.load(Resource.getInput("style.xml"), getClass());
-        } catch (Exception e) {
-            throw new IOException(e);
-        }
-
-        try {
-            UIManager.setLookAndFeel(synth);
-        } catch (UnsupportedLookAndFeelException e) {
-            LOG.warning("failed to initialize Synth L&F");
-            LOG.logp(Level.WARNING, "io.github.spookylauncher.components.ui.swing.SwingUIProvider", "initialize", "THROW", e);
-            LOG.warning("initializing system L&F instead");
-
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception ex) {
-                LOG.severe("failed to initialize swing ui");
-                LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ui.swing.SwingUIProvider", "initialize", "THROW", ex);
-                return;
-            }
-        }
+        FlatDarkLaf.setup();
 
         window = new MainWindowImpl(components, this);
         panel = new TitlePanelImpl(components, frame);
