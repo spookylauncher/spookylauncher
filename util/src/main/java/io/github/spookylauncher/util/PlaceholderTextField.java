@@ -39,7 +39,7 @@ public class PlaceholderTextField extends JTextField {
     protected void paintComponent(final Graphics pG) {
         super.paintComponent(pG);
 
-        if (placeholder == null || placeholder.length() == 0 || getText().length() > 0) {
+        if (placeholder == null || placeholder.isEmpty() || !getText().isEmpty()) {
             return;
         }
 

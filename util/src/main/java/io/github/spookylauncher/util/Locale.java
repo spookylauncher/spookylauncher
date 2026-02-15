@@ -21,7 +21,7 @@ public final class Locale {
         if(!props.containsKey(key)) value = key;
         else value = props.getProperty(key);
 
-        if(value != null && value.length() > 0) {
+        if(value != null && !value.isEmpty()) {
             char[] chars = value.toCharArray();
 
             chars[0] = Character.toUpperCase(chars[0]);
