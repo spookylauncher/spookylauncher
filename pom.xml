@@ -21,6 +21,7 @@
         <module>ui</module>
         <module>stub-ui</module>
         <module>swing-ui</module>
+        <module>javafx-ui</module>
     </modules>
 
     <properties>
@@ -78,6 +79,12 @@
             <dependency>
                 <groupId>io.github.spookylauncher</groupId>
                 <artifactId>swing-ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.github.spookylauncher</groupId>
+                <artifactId>javafx-ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
