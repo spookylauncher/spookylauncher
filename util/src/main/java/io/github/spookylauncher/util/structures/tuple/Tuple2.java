@@ -1,6 +1,7 @@
 package io.github.spookylauncher.util.structures.tuple;
 
 public class Tuple2<X, Y> {
+
     public final X x;
     public final Y y;
 

@@ -8,5 +8,5 @@ public enum DevStage {
     @SerializedName("beta")
     BETA,
     @SerializedName("release")
-    RELEASE
+    RELEASE,
 }

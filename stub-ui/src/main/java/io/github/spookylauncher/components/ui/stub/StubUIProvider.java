@@ -3,19 +3,19 @@ package io.github.spookylauncher.components.ui.stub;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.ui.*;
-
 import java.io.IOException;
 
-public final class StubUIProvider extends LauncherComponent implements UIProvider {
+public final class StubUIProvider
+    extends LauncherComponent
+    implements UIProvider
+{
 
     private Dialogs dialogs;
     private TitlePanel panel;
     private MainWindow window;
     private Messages messages;
 
-    public StubUIProvider(
-            final ComponentsController components
-    ) {
+    public StubUIProvider(final ComponentsController components) {
         super("Stub UI Provider", components);
     }
 

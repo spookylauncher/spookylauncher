@@ -3,6 +3,7 @@ package io.github.spookylauncher.ipc.messages;
 import java.io.*;
 
 public class IpcError extends AdvancedMappedBusMessage {
+
     public String format;
     public Object[] args;
 
@@ -16,7 +17,7 @@ public class IpcError extends AdvancedMappedBusMessage {
         format = in.readUTF();
         args = new Object[in.readInt()];
 
-        for(int i = 0; i < args.length; i++) args[i] = in.readUTF();
+        for (int i = 0; i < args.length; i++) args[i] = in.readUTF();
     }
 
     @Override
@@ -24,6 +25,6 @@ public class IpcError extends AdvancedMappedBusMessage {
         out.writeUTF(format);
         out.writeInt(args.length);
 
-        for(Object arg : args) out.writeUTF(String.valueOf(arg));
+        for (Object arg : args) out.writeUTF(String.valueOf(arg));
     }
 }

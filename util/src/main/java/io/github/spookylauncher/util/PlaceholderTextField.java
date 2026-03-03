@@ -8,14 +8,13 @@ public class PlaceholderTextField extends JTextField {
 
     private String placeholder;
 
-    public PlaceholderTextField() {
-    }
+    public PlaceholderTextField() {}
 
     public PlaceholderTextField(
-            final Document pDoc,
-            final String pText,
-            final int pColumns)
-    {
+        final Document pDoc,
+        final String pText,
+        final int pColumns
+    ) {
         super(pDoc, pText, pColumns);
     }
 
@@ -39,21 +38,26 @@ public class PlaceholderTextField extends JTextField {
     protected void paintComponent(final Graphics pG) {
         super.paintComponent(pG);
 
-        if (placeholder == null || placeholder.isEmpty() || !getText().isEmpty()) {
+        if (
+            placeholder == null || placeholder.isEmpty() || !getText().isEmpty()
+        ) {
             return;
         }
 
         final Graphics2D g = (Graphics2D) pG;
         g.setRenderingHint(
-                RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+            RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON
+        );
         g.setColor(getDisabledTextColor());
-        g.drawString(placeholder, getInsets().left, pG.getFontMetrics()
-                .getMaxAscent() + getInsets().top);
+        g.drawString(
+            placeholder,
+            getInsets().left,
+            pG.getFontMetrics().getMaxAscent() + getInsets().top
+        );
     }
 
     public void setPlaceholder(final String s) {
         placeholder = s;
     }
-
 }

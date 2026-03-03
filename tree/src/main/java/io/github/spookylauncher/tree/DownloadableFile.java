@@ -1,16 +1,22 @@
 package io.github.spookylauncher.tree;
 
-import io.github.spookylauncher.io.OSType;
 import com.google.gson.annotations.SerializedName;
-
+import io.github.spookylauncher.io.OSType;
 import java.util.HashMap;
 
 public class DownloadableFile {
-    @SerializedName("name") public String name;
-    @SerializedName("downloadUrl") public String downloadUrl;
-    @SerializedName("sha1") public String sha1;
 
-    @SerializedName("downloadUrls") public HashMap<OSType, String> downloadUrls;
+    @SerializedName("name")
+    public String name;
+
+    @SerializedName("downloadUrl")
+    public String downloadUrl;
+
+    @SerializedName("sha1")
+    public String sha1;
+
+    @SerializedName("downloadUrls")
+    public HashMap<OSType, String> downloadUrls;
 
     public DownloadableFile() {}
 
@@ -21,11 +27,12 @@ public class DownloadableFile {
     public DownloadableFile(String url, boolean autoCalculateSha1) {
         this.downloadUrl = url;
 
-        if(autoCalculateSha1) {
+        if (autoCalculateSha1) {
             new Thread(() -> {
                 // TODO: new hash calculation
                 sha1 = "";
-            }).run();
+            })
+                .run();
         }
     }
 
@@ -39,7 +46,7 @@ public class DownloadableFile {
     }
 
     public String getDownloadUrl(OSType osType) {
-        if(downloadUrls == null) return downloadUrl;
+        if (downloadUrls == null) return downloadUrl;
 
         return downloadUrls.get(osType);
     }

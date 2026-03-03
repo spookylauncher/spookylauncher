@@ -2,7 +2,6 @@ package io.github.spookylauncher.wrapper.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import java.io.Reader;
 
 public final class Json {
@@ -18,7 +17,9 @@ public final class Json {
         return (prettyPrinting ? PRETTY_PRINTING_GSON : GSON).toJson(o);
     }
 
-    public static <T> T fromJson(Reader reader, Class<T> clazz) { return GSON.fromJson(reader, clazz); }
+    public static <T> T fromJson(Reader reader, Class<T> clazz) {
+        return GSON.fromJson(reader, clazz);
+    }
 
     public static <T> T fromJson(String str, Class<T> clazz) {
         return GSON.fromJson(str, clazz);

@@ -3,6 +3,7 @@ package io.github.spookylauncher.util;
 import java.util.Properties;
 
 public final class Locale {
+
     private final Properties props;
     private final String language;
 
@@ -18,10 +19,10 @@ public final class Locale {
     public String get(String key) {
         String value;
 
-        if(!props.containsKey(key)) value = key;
+        if (!props.containsKey(key)) value = key;
         else value = props.getProperty(key);
 
-        if(value != null && !value.isEmpty()) {
+        if (value != null && !value.isEmpty()) {
             char[] chars = value.toCharArray();
 
             chars[0] = Character.toUpperCase(chars[0]);

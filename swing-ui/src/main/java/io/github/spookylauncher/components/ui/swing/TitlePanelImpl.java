@@ -1,14 +1,14 @@
 package io.github.spookylauncher.components.ui.swing;
 
 import io.github.spookylauncher.components.*;
-import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.components.ui.Button;
 import io.github.spookylauncher.components.ui.Panel;
 import io.github.spookylauncher.components.ui.TitlePanel;
 import io.github.spookylauncher.components.ui.swing.forms.TitlePanelForm;
+import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.tree.versions.VersionInfo;
-
-import javax.swing.*;
+import io.github.spookylauncher.util.Locale;
+import io.github.spookylauncher.util.StringUtils;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -16,9 +16,7 @@ import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.util.StringUtils;
+import javax.swing.*;
 
 class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
@@ -38,10 +36,13 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
     TitlePanelImpl(final ComponentsController components, final JFrame frame) {
         super("Swing API Title Panel", components);
-
         this.noPreview = new BufferedImage(100, 50, BufferedImage.TYPE_INT_RGB);
 
-        this.noPreview.getGraphics().drawString("=)", noPreview.getWidth() / 2, noPreview.getHeight() / 2);
+        this.noPreview.getGraphics().drawString(
+            "=)",
+            noPreview.getWidth() / 2,
+            noPreview.getHeight() / 2
+        );
 
         frame.setContentPane((titlePanelForm = new TitlePanelForm()).panel1);
 
@@ -67,35 +68,38 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
     @Override
     public Button getButton(String button) {
-        if(!spiButtons.containsKey(button)) {
+        if (!spiButtons.containsKey(button)) {
             JButton jbutton = buttons.get(button);
 
-            spiButtons.put(button, new Button() {
-                @Override
-                public void addActionEvent(Runnable rn) {
-                    jbutton.addActionListener(e -> rn.run());
-                }
+            spiButtons.put(
+                button,
+                new Button() {
+                    @Override
+                    public void addActionEvent(Runnable rn) {
+                        jbutton.addActionListener(e -> rn.run());
+                    }
 
-                @Override
-                public void setEnabled(boolean enabled) {
-                    jbutton.setEnabled(enabled);
-                }
+                    @Override
+                    public void setEnabled(boolean enabled) {
+                        jbutton.setEnabled(enabled);
+                    }
 
-                @Override
-                public boolean isEnabled() {
-                    return jbutton.isEnabled();
-                }
+                    @Override
+                    public boolean isEnabled() {
+                        return jbutton.isEnabled();
+                    }
 
-                @Override
-                public String getText() {
-                    return jbutton.getText();
-                }
+                    @Override
+                    public String getText() {
+                        return jbutton.getText();
+                    }
 
-                @Override
-                public void setText(String text) {
-                    jbutton.setText(text);
+                    @Override
+                    public void setText(String text) {
+                        jbutton.setText(text);
+                    }
                 }
-            });
+            );
         }
 
         return spiButtons.get(button);
@@ -113,10 +117,11 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
     @Override
     public void setEnabledButtons(boolean enabled, String... buttons) {
-        if(buttons == null || buttons.length == 0) {
-            for(String button : this.buttons.keySet()) setEnabledButton(button, enabled);
+        if (buttons == null || buttons.length == 0) {
+            for (String button : this.buttons.keySet())
+                setEnabledButton(button, enabled);
         } else {
-            for(String button : buttons) setEnabledButton(button, enabled);
+            for (String button : buttons) setEnabledButton(button, enabled);
         }
     }
 
@@ -124,7 +129,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
     public void setLocale(Locale locale) {
         this.locale = locale;
 
-        for(Map.Entry<String, JButton> entry : buttons.entrySet())
+        for (Map.Entry<String, JButton> entry : buttons.entrySet())
             entry.getValue().setText(locale.get(entry.getKey()));
     }
 
@@ -135,13 +140,16 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
     @Override
     public void setPreview(Image image) {
-        titlePanelForm.preview.setIcon(new ImageIcon(
-                image.getScaledInstance(500, 300, Image.SCALE_DEFAULT)));
+        titlePanelForm.preview.setIcon(
+            new ImageIcon(
+                image.getScaledInstance(500, 300, Image.SCALE_DEFAULT)
+            )
+        );
     }
 
     @Override
     public void setVersion(VersionInfo info) {
-        if(info == null) {
+        if (info == null) {
             titlePanelForm.versionName.setText("...");
             titlePanelForm.releaseDate.setText("");
             titlePanelForm.credit.setText("");
@@ -159,58 +167,90 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
 
         titlePanelForm.releaseDate.setText(info.releaseDate.toString());
 
-        titlePanelForm.credit.setText(locale.get("developer") + ": " + info.developer);
+        titlePanelForm.credit.setText(
+            locale.get("developer") + ": " + info.developer
+        );
 
         titlePanelForm.openArticle.setEnabled(true);
 
         titlePanelForm.play.setEnabled(true);
 
-        titlePanelForm.play.setText(versions.isInstalled(info) ? locale.get("play") : locale.get("install"));
+        titlePanelForm.play.setText(
+            versions.isInstalled(info)
+                ? locale.get("play")
+                : locale.get("install")
+        );
 
         new Thread(() -> {
-            if(info.getPreviewsCount() > 0) {
+            if (info.getPreviewsCount() > 0) {
                 try {
-                    setPreview(new URLCollector
-                            (
-                                    components.get(ManifestsURLs.class).getBaseDataURL() + "/versions/"
-                                    + StringUtils.urlEncode(info.name)
-                                    + "/previews/preview_"
-                                    + (new Random().nextInt(info.getPreviewsCount()) + 1) + ".png"
-                            ).collectImage());
+                    setPreview(
+                        new URLCollector(
+                            components
+                                    .get(ManifestsURLs.class)
+                                    .getBaseDataURL() +
+                                "/versions/" +
+                                StringUtils.urlEncode(info.name) +
+                                "/previews/preview_" +
+                                (new Random().nextInt(info.getPreviewsCount()) +
+                                    1) +
+                                ".png"
+                        ).collectImage()
+                    );
                 } catch (IOException | URISyntaxException e) {
                     LOG.severe("failed to set preview");
-                    LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ui.swing.TitlePanelImpl", "setVersion", "Throw!", e);
+                    LOG.logp(
+                        Level.SEVERE,
+                        "io.github.spookylauncher.components.ui.swing.TitlePanelImpl",
+                        "setVersion",
+                        "Throw!",
+                        e
+                    );
                 }
             } else setPreview(noPreview);
-        }).start();
+        })
+            .start();
 
         String lang = locale.getLanguage();
 
         boolean fallback = true;
 
-        for(String label : info.labels) {
-            if(lang.equals(label)) {
+        for (String label : info.labels) {
+            if (lang.equals(label)) {
                 fallback = false;
                 break;
             }
         }
 
-        final String repo = this.components.get(ManifestsURLs.class).getBaseDataURL();
+        final String repo = this.components.get(
+            ManifestsURLs.class
+        ).getBaseDataURL();
 
-        final String labelUrl = repo + "/versions/" + StringUtils.urlEncode(info.name) + "/label" + (fallback ? "" : "_" + lang) + ".txt";
+        final String labelUrl =
+            repo +
+            "/versions/" +
+            StringUtils.urlEncode(info.name) +
+            "/label" +
+            (fallback ? "" : "_" + lang) +
+            ".txt";
 
-        new Thread(
-                () -> {
-                    try {
-                        titlePanelForm.description.setText(
-                                new URLCollector(labelUrl).collectString()
-                        );
-                    } catch (IOException | URISyntaxException e) {
-                        LOG.severe("failed to set description");
-                        LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ui.swing.TitlePanelImpl", "setVersion", "Throw!", e);
-                    }
-                }
-        ).start();
+        new Thread(() -> {
+            try {
+                titlePanelForm.description.setText(
+                    new URLCollector(labelUrl).collectString()
+                );
+            } catch (IOException | URISyntaxException e) {
+                LOG.severe("failed to set description");
+                LOG.logp(
+                    Level.SEVERE,
+                    "io.github.spookylauncher.components.ui.swing.TitlePanelImpl",
+                    "setVersion",
+                    "Throw!",
+                    e
+                );
+            }
+        })
+            .start();
     }
 
     @Override

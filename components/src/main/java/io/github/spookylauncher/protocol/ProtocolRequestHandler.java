@@ -2,10 +2,9 @@ package io.github.spookylauncher.protocol;
 
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.ProtocolHandler;
-import io.github.spookylauncher.util.uri.QueryParser;
-import io.github.spookylauncher.util.StringUtils;
 import io.github.spookylauncher.components.VersionsList;
-
+import io.github.spookylauncher.util.StringUtils;
+import io.github.spookylauncher.util.uri.QueryParser;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,9 +13,15 @@ import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 public final class ProtocolRequestHandler {
-    private static final Logger LOG = Logger.getLogger("protocol request handler");
 
-    public static Consumer<ComponentsController> createConsumer(final String uriStr, final boolean hasActiveLauncherInstance) throws UnsupportedEncodingException, URISyntaxException {
+    private static final Logger LOG = Logger.getLogger(
+        "protocol request handler"
+    );
+
+    public static Consumer<ComponentsController> createConsumer(
+        final String uriStr,
+        final boolean hasActiveLauncherInstance
+    ) throws UnsupportedEncodingException, URISyntaxException {
         LOG.info("parsing request");
 
         LOG.info("parsing uri");
@@ -31,39 +36,49 @@ public final class ProtocolRequestHandler {
         LOG.fine("raw query: " + uri.getRawQuery());
         LOG.fine("query: " + StringUtils.valueOf(query));
 
-        return
-        (c) -> {
-            ProtocolSender sender = hasActiveLauncherInstance ? new ProtocolSender() : new ProtocolSender(c.get(ProtocolHandler.class));
+        return c -> {
+            ProtocolSender sender = hasActiveLauncherInstance
+                ? new ProtocolSender()
+                : new ProtocolSender(c.get(ProtocolHandler.class));
 
             Runnable sendTask = () -> {
                 try {
                     sender.open();
 
-                    if(!query.containsKey("command")) sender.sendIpcError("ipcNoCommandParam");
+                    if (!query.containsKey("command")) sender.sendIpcError(
+                        "ipcNoCommandParam"
+                    );
                     else {
                         String rawCommand = query.get("command");
 
                         CommandType type = CommandType.parse(rawCommand);
 
-                        if(type == null) sender.sendIpcError("ipcUnknownCmd", rawCommand);
+                        if (type == null) sender.sendIpcError(
+                            "ipcUnknownCmd",
+                            rawCommand
+                        );
                         else if (type == CommandType.SELECT_VERSION) {
                             final String fragment = uri.getFragment();
 
-                            if (fragment == null) sender.sendIpcError("ipcFragmentExpected");
+                            if (fragment == null) sender.sendIpcError(
+                                "ipcFragmentExpected"
+                            );
                             else sender.sendSelectVersion(fragment);
                         }
                     }
                     sender.close();
-                } catch(Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             };
 
-            if(hasActiveLauncherInstance) sendTask.run();
-            else c.get(VersionsList.class).addOnDownloadedEvent(() -> {
-                sendTask.run();
-                return true;
-            });
+            if (hasActiveLauncherInstance) sendTask.run();
+            else c
+                .get(VersionsList.class)
+                .addOnDownloadedEvent(() -> {
+                    sendTask.run();
+                    return true;
+                });
         };
     }
 }

@@ -3,13 +3,17 @@ package io.github.spookylauncher.io;
 import java.io.*;
 
 public final class Resource {
+
     public static boolean exists(String resource) {
         try {
-            try(final InputStream is = Resource.class.getResourceAsStream("/" + resource)) {
-                if(is != null)
-                    return true;
+            try (
+                final InputStream is = Resource.class.getResourceAsStream(
+                    "/" + resource
+                )
+            ) {
+                if (is != null) return true;
             }
-        } catch(final IOException ignored) {}
+        } catch (final IOException ignored) {}
 
         return false;
     }

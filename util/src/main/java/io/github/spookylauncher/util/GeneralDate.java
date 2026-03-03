@@ -1,13 +1,18 @@
 package io.github.spookylauncher.util;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.time.*;
 
 public class GeneralDate {
-    @SerializedName("year") public int year;
-    @SerializedName("month") public int month;
-    @SerializedName("day") public int day;
+
+    @SerializedName("year")
+    public int year;
+
+    @SerializedName("month")
+    public int month;
+
+    @SerializedName("day")
+    public int day;
 
     public GeneralDate() {}
 
@@ -21,5 +26,9 @@ public class GeneralDate {
         return year + "/" + month + "/" + day;
     }
 
-    public long toTimestamp() { return LocalDateTime.of(year, month, day, 0, 0).toInstant(ZoneOffset.UTC).toEpochMilli(); }
+    public long toTimestamp() {
+        return LocalDateTime.of(year, month, day, 0, 0)
+            .toInstant(ZoneOffset.UTC)
+            .toEpochMilli();
+    }
 }

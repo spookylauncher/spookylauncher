@@ -6,9 +6,9 @@ import org.objectweb.asm.tree.InsnList;
 
 public interface InstructionsTransformer {
     boolean transform(
-            AbstractInsnNode insn,
-            InstructionsVisitor visitor,
-            InsnList insns,
-            ClassTransformer transformer
+        AbstractInsnNode insn,
+        InstructionsVisitor visitor,
+        InsnList insns,
+        ClassTransformer transformer
     );
 }

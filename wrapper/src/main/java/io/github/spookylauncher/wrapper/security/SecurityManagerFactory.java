@@ -1,9 +1,8 @@
 package io.github.spookylauncher.wrapper.security;
 
 import io.github.spookylauncher.wrapper.security.file.FilesChecker;
-
-import java.util.*;
 import java.io.File;
+import java.util.*;
 
 public final class SecurityManagerFactory {
 
@@ -18,9 +17,7 @@ public final class SecurityManagerFactory {
     private final Set<File> librariesFiles = new HashSet<>();
 
     private final Set<File> executables = new HashSet<>();
-    private CheckMode
-    filesCheckerMode, permissionsCheckerMode,
-    executeCheckerMode, nativeLinkCheckerMode, networkCheckerMode;
+    private CheckMode filesCheckerMode, permissionsCheckerMode, executeCheckerMode, nativeLinkCheckerMode, networkCheckerMode;
 
     private Set<String> ignoredPackages = new HashSet<>();
 
@@ -29,36 +26,40 @@ public final class SecurityManagerFactory {
         return this;
     }
 
-    public SecurityManagerFactory addIgnoredPackages(String... ignoredPackages) {
+    public SecurityManagerFactory addIgnoredPackages(
+        String... ignoredPackages
+    ) {
         return addIgnoredPackages(Arrays.asList(ignoredPackages));
     }
 
-    public SecurityManagerFactory setIgnoredPackages(String... ignoredPackages) {
+    public SecurityManagerFactory setIgnoredPackages(
+        String... ignoredPackages
+    ) {
         return setIgnoredPackages(Arrays.asList(ignoredPackages));
     }
 
-    public SecurityManagerFactory addIgnoredPackages(Collection<String> ignoredPackages) {
+    public SecurityManagerFactory addIgnoredPackages(
+        Collection<String> ignoredPackages
+    ) {
         this.ignoredPackages.addAll(ignoredPackages);
         return this;
     }
 
-    public SecurityManagerFactory setIgnoredPackages(Collection<String> ignoredPackages) {
+    public SecurityManagerFactory setIgnoredPackages(
+        Collection<String> ignoredPackages
+    ) {
         this.ignoredPackages.clear();
         return addIgnoredPackages(ignoredPackages);
     }
 
     private NetworkChecker getNetworkChecker() {
-        if(networkChecker == null && !hosts.isEmpty()) {
-            return new NetworkChecker(
-                        networkCheckerMode,
-                        hosts
-                    );
+        if (networkChecker == null && !hosts.isEmpty()) {
+            return new NetworkChecker(networkCheckerMode, hosts);
         } else return networkChecker;
     }
 
-    public SecurityManagerFactory addPorts(String host, int...ports) {
-        for(int port : ports)
-            addPorts(host, port);
+    public SecurityManagerFactory addPorts(String host, int... ports) {
+        for (int port : ports) addPorts(host, port);
 
         return this;
     }
@@ -67,9 +68,12 @@ public final class SecurityManagerFactory {
         return addPorts(host, Arrays.asList(ports));
     }
 
-    public SecurityManagerFactory addPorts(String host, Collection<Integer> ports) {
-        for(Integer port : ports) {
-            if(port != null) addPort(host, port);
+    public SecurityManagerFactory addPorts(
+        String host,
+        Collection<Integer> ports
+    ) {
+        for (Integer port : ports) {
+            if (port != null) addPort(host, port);
         }
 
         return this;
@@ -78,7 +82,10 @@ public final class SecurityManagerFactory {
     public SecurityManagerFactory addPort(String host, int port) {
         Set<Integer> ports;
 
-        if(this.hosts.containsKey(host)) ports = this.hosts.computeIfAbsent(host, k -> new HashSet<>());
+        if (this.hosts.containsKey(host)) ports = this.hosts.computeIfAbsent(
+            host,
+            k -> new HashSet<>()
+        );
         else {
             ports = new HashSet<>();
             this.hosts.put(host, ports);
@@ -95,23 +102,22 @@ public final class SecurityManagerFactory {
     }
 
     public SecurityManagerFactory addHost(String host) {
-        if(!this.hosts.containsKey(host))
-            this.hosts.put(host, null);
+        if (!this.hosts.containsKey(host)) this.hosts.put(host, null);
 
         return this;
     }
 
-    public SecurityManagerFactory addHosts(String...hosts) {
+    public SecurityManagerFactory addHosts(String... hosts) {
         return this.addHosts(Arrays.asList(hosts));
     }
 
-    public SecurityManagerFactory setHosts(String...hosts) {
+    public SecurityManagerFactory setHosts(String... hosts) {
         return this.setHosts(Arrays.asList(hosts));
     }
 
     public SecurityManagerFactory addHosts(Collection<String> hosts) {
-        for(String host : hosts) {
-            if(!this.hosts.containsKey(host)) this.hosts.put(host, null);
+        for (String host : hosts) {
+            if (!this.hosts.containsKey(host)) this.hosts.put(host, null);
         }
 
         return this;
@@ -149,51 +155,56 @@ public final class SecurityManagerFactory {
         FilesChecker filesChecker = getFilesChecker();
 
         return new SimpleSecurityManager(
-                getPermissionsChecker(filesChecker),
-                filesChecker,
-                getNativeLinkChecker(),
-                getExecuteChecker(),
-                getNetworkChecker(),
-                ignoredPackages
+            getPermissionsChecker(filesChecker),
+            filesChecker,
+            getNativeLinkChecker(),
+            getExecuteChecker(),
+            getNetworkChecker(),
+            ignoredPackages
         );
     }
 
     private FilesChecker getFilesChecker() {
-        if(filesChecker == null && !(fileAccesses.isEmpty() && directoriesAccesses.isEmpty())) {
+        if (
+            filesChecker == null &&
+            !(fileAccesses.isEmpty() && directoriesAccesses.isEmpty())
+        ) {
             return new FilesChecker(
-                            filesCheckerMode,
-                            fileAccesses,
-                            directoriesAccesses
-                    );
+                filesCheckerMode,
+                fileAccesses,
+                directoriesAccesses
+            );
         } else return filesChecker;
     }
 
-    private PermissionsChecker getPermissionsChecker(FilesChecker filesChecker) {
-        if(permissionsChecker == null && !permissions.isEmpty()) {
+    private PermissionsChecker getPermissionsChecker(
+        FilesChecker filesChecker
+    ) {
+        if (permissionsChecker == null && !permissions.isEmpty()) {
             return new PermissionsChecker(
-                            permissionsCheckerMode,
-                            permissions,
-                            filesChecker
-                    );
+                permissionsCheckerMode,
+                permissions,
+                filesChecker
+            );
         } else return permissionsChecker;
     }
 
     private NativeLinkChecker getNativeLinkChecker() {
-        if(nativeLinkChecker == null && !(librariesNames.isEmpty() && librariesFiles.isEmpty()) ) {
+        if (
+            nativeLinkChecker == null &&
+            !(librariesNames.isEmpty() && librariesFiles.isEmpty())
+        ) {
             return new NativeLinkChecker(
-                    nativeLinkCheckerMode,
-                    librariesNames,
-                    librariesFiles
+                nativeLinkCheckerMode,
+                librariesNames,
+                librariesFiles
             );
         } else return nativeLinkChecker;
     }
 
     private ExecuteChecker getExecuteChecker() {
-        if(executeChecker == null && !executables.isEmpty()) {
-            return new ExecuteChecker(
-                    executeCheckerMode,
-                    executables
-            );
+        if (executeChecker == null && !executables.isEmpty()) {
+            return new ExecuteChecker(executeCheckerMode, executables);
         } else return executeChecker;
     }
 
@@ -207,11 +218,11 @@ public final class SecurityManagerFactory {
         return this;
     }
 
-    public SecurityManagerFactory addExecutables(File...executables) {
+    public SecurityManagerFactory addExecutables(File... executables) {
         return addExecutables(Arrays.asList(executables));
     }
 
-    public SecurityManagerFactory setExecutables(File...executables) {
+    public SecurityManagerFactory setExecutables(File... executables) {
         return setExecutables(Arrays.asList(executables));
     }
 
@@ -230,20 +241,24 @@ public final class SecurityManagerFactory {
         return this;
     }
 
-    public SecurityManagerFactory setLibrariesFiles(File...librariesFiles) {
+    public SecurityManagerFactory setLibrariesFiles(File... librariesFiles) {
         return setLibrariesFiles(Arrays.asList(librariesFiles));
     }
 
-    public SecurityManagerFactory addLibrariesFiles(File...librariesFiles) {
+    public SecurityManagerFactory addLibrariesFiles(File... librariesFiles) {
         return addLibrariesFiles(Arrays.asList(librariesFiles));
     }
 
-    public SecurityManagerFactory addLibrariesFiles(Collection<File> librariesFiles) {
+    public SecurityManagerFactory addLibrariesFiles(
+        Collection<File> librariesFiles
+    ) {
         this.librariesFiles.addAll(librariesFiles);
         return this;
     }
 
-    public SecurityManagerFactory setLibrariesFiles(Collection<File> librariesFiles) {
+    public SecurityManagerFactory setLibrariesFiles(
+        Collection<File> librariesFiles
+    ) {
         this.librariesFiles.clear();
         return addLibrariesFiles(librariesFiles);
     }
@@ -258,20 +273,24 @@ public final class SecurityManagerFactory {
         return this;
     }
 
-    public SecurityManagerFactory setLibrariesNames(String...librariesNames) {
+    public SecurityManagerFactory setLibrariesNames(String... librariesNames) {
         return setLibrariesNames(Arrays.asList(librariesNames));
     }
 
-    public SecurityManagerFactory addLibrariesNames(String...librariesNames) {
+    public SecurityManagerFactory addLibrariesNames(String... librariesNames) {
         return addLibrariesNames(Arrays.asList(librariesNames));
     }
 
-    public SecurityManagerFactory addLibrariesNames(Collection<String> librariesNames) {
+    public SecurityManagerFactory addLibrariesNames(
+        Collection<String> librariesNames
+    ) {
         this.librariesNames.addAll(librariesNames);
         return this;
     }
 
-    public SecurityManagerFactory setLibrariesNames(Collection<String> librariesNames) {
+    public SecurityManagerFactory setLibrariesNames(
+        Collection<String> librariesNames
+    ) {
         this.librariesNames.clear();
         return addLibrariesNames(librariesNames);
     }
@@ -286,20 +305,24 @@ public final class SecurityManagerFactory {
         return this;
     }
 
-    public SecurityManagerFactory addPermissions(String...permissions) {
+    public SecurityManagerFactory addPermissions(String... permissions) {
         return addPermissions(Arrays.asList(permissions));
     }
 
-    public SecurityManagerFactory setPermissions(String...permissions) {
+    public SecurityManagerFactory setPermissions(String... permissions) {
         return setPermissions(Arrays.asList(permissions));
     }
 
-    public SecurityManagerFactory addPermissions(Collection<String> permissions) {
+    public SecurityManagerFactory addPermissions(
+        Collection<String> permissions
+    ) {
         this.permissions.addAll(permissions);
         return this;
     }
 
-    public SecurityManagerFactory setPermissions(Collection<String> permissions) {
+    public SecurityManagerFactory setPermissions(
+        Collection<String> permissions
+    ) {
         this.permissions.clear();
         return addPermissions(permissions);
     }
@@ -309,33 +332,49 @@ public final class SecurityManagerFactory {
         return this;
     }
 
-    public SecurityManagerFactory setAccessToFiles(int accessMask, File... files) {
+    public SecurityManagerFactory setAccessToFiles(
+        int accessMask,
+        File... files
+    ) {
         setAccessToFiles(accessMask, Arrays.asList(files));
         return this;
     }
 
-    public SecurityManagerFactory setAccessToDirectories(int accessMask, File... directories) {
+    public SecurityManagerFactory setAccessToDirectories(
+        int accessMask,
+        File... directories
+    ) {
         setAccessToDirectories(accessMask, Arrays.asList(directories));
         return this;
     }
 
-    public SecurityManagerFactory setAccessToFiles(int accessMask, Collection<File> files) {
-        for(File file : files) setAccessToFile(accessMask, file);
+    public SecurityManagerFactory setAccessToFiles(
+        int accessMask,
+        Collection<File> files
+    ) {
+        for (File file : files) setAccessToFile(accessMask, file);
         return this;
     }
 
-    public SecurityManagerFactory setAccessToDirectories(int accessMask, Collection<File> directories) {
-        for(File directory : directories) setAccessToDirectory(accessMask, directory);
+    public SecurityManagerFactory setAccessToDirectories(
+        int accessMask,
+        Collection<File> directories
+    ) {
+        for (File directory : directories)
+            setAccessToDirectory(accessMask, directory);
         return this;
     }
 
-    public SecurityManagerFactory setAccessToDirectory(int accessMask, File directory) {
+    public SecurityManagerFactory setAccessToDirectory(
+        int accessMask,
+        File directory
+    ) {
         directoriesAccesses.put(directory, accessMask);
         return this;
     }
 
     public SecurityManagerFactory setAccessToFile(int accessMask, File file) {
-        if(file.isDirectory()) setAccessToDirectory(accessMask, file);
+        if (file.isDirectory()) setAccessToDirectory(accessMask, file);
         else fileAccesses.put(file, accessMask);
         return this;
     }
@@ -351,7 +390,9 @@ public final class SecurityManagerFactory {
         return this;
     }
 
-    public SecurityManagerFactory setNativeLinkChecker(NativeLinkChecker checker) {
+    public SecurityManagerFactory setNativeLinkChecker(
+        NativeLinkChecker checker
+    ) {
         this.nativeLinkChecker = checker;
         return this;
     }
@@ -361,8 +402,13 @@ public final class SecurityManagerFactory {
         return this;
     }
 
-    public SecurityManagerFactory setPermissionsChecker(PermissionsChecker checker) {
-        this.permissionsChecker = checker == null ? null : new PermissionsChecker(checker, filesChecker);
+    public SecurityManagerFactory setPermissionsChecker(
+        PermissionsChecker checker
+    ) {
+        this.permissionsChecker =
+            checker == null
+                ? null
+                : new PermissionsChecker(checker, filesChecker);
         return this;
     }
 

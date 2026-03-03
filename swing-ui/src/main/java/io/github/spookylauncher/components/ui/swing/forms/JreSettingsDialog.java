@@ -1,23 +1,23 @@
 package io.github.spookylauncher.components.ui.swing.forms;
 
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
 import io.github.spookylauncher.components.JREController;
-import io.github.spookylauncher.components.Translator;
 import io.github.spookylauncher.components.OptionsController;
+import io.github.spookylauncher.components.Translator;
 import io.github.spookylauncher.components.ui.Messages;
 import io.github.spookylauncher.tree.jre.ExternalJreInfo;
 import io.github.spookylauncher.tree.jre.JreInfo;
-import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.tree.jre.SelectedJavaType;
+import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.util.Locale;
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import javax.swing.*;
 
 public class JreSettingsDialog extends JDialog {
+
     private JPanel contentPane;
     public JButton buttonOK;
     public JButton buttonCancel;
@@ -26,7 +26,12 @@ public class JreSettingsDialog extends JDialog {
     public JComboBox<String> jresComboBox;
     public JTextField javaPathField;
 
-    public JreSettingsDialog(Messages messages, JREController jreController, OptionsController optionsController, Translator localeController) {
+    public JreSettingsDialog(
+        Messages messages,
+        JREController jreController,
+        OptionsController optionsController,
+        Translator localeController
+    ) {
         final Options options = optionsController.getOptions();
 
         setContentPane(contentPane);
@@ -45,28 +50,28 @@ public class JreSettingsDialog extends JDialog {
                 File f = new File(javaPathField.getText());
 
                 boolean firstFlag = !f.exists();
-                boolean secondFlag = !firstFlag && (f.isDirectory() || !f.getName().contains("java"));
+                boolean secondFlag =
+                    !firstFlag &&
+                    (f.isDirectory() || !f.getName().contains("java"));
 
                 if (firstFlag || secondFlag) {
                     Locale locale = localeController.getLocale();
 
-                    messages.error
-                    (
-                            locale.get("error"),
-                            locale.get
-                            (
-                                    firstFlag
-                                    ? "externalJreNotExists"
-                                    : "specifiedExternalJreIsntExecutable"
-                            )
+                    messages.error(
+                        locale.get("error"),
+                        locale.get(
+                            firstFlag
+                                ? "externalJreNotExists"
+                                : "specifiedExternalJreIsntExecutable"
+                        )
                     );
 
                     return;
                 }
 
                 jreController.selectCustomJre(javaPathField.getText());
-            } else if(jres != null) {
-                    jreController.selectJre(jres[jresComboBox.getSelectedIndex()]);
+            } else if (jres != null) {
+                jreController.selectJre(jres[jresComboBox.getSelectedIndex()]);
             }
 
             dispose();
@@ -76,14 +81,20 @@ public class JreSettingsDialog extends JDialog {
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                dispose();
+        addWindowListener(
+            new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    dispose();
+                }
             }
-        });
+        );
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(e -> dispose(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(
+            e -> dispose(),
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT
+        );
 
         useExternalJreButton.addChangeListener(e -> {
             boolean enabled = useExternalJreButton.isSelected();
@@ -101,23 +112,28 @@ public class JreSettingsDialog extends JDialog {
             jresComboBox.setEnabled(enabled);
         });
 
-        String extPostfix = " (" + localeController.getLocale().get("founded") + ")";
+        String extPostfix =
+            " (" + localeController.getLocale().get("founded") + ")";
 
         JreInfo selected = jreController.getSelectedJre();
 
         JreInfo jre;
 
-        if(jres != null) {
+        if (jres != null) {
             for (int i = 0; i < jres.length; i++) {
                 jre = jres[i];
 
-                this.jresComboBox.addItem(jre.fullVersion + (jre instanceof ExternalJreInfo ? extPostfix : ""));
+                this.jresComboBox.addItem(
+                    jre.fullVersion +
+                        (jre instanceof ExternalJreInfo ? extPostfix : "")
+                );
 
                 if (jre.equals(selected)) this.jresComboBox.setSelectedIndex(i);
             }
         }
 
-        boolean customJava = options.selectedJavaType == SelectedJavaType.CUSTOM;
+        boolean customJava =
+            options.selectedJavaType == SelectedJavaType.CUSTOM;
 
         useInstalledJres.setSelected(!customJava);
         useExternalJreButton.setSelected(customJava);
@@ -126,9 +142,9 @@ public class JreSettingsDialog extends JDialog {
     }
 
     {
-// GUI initializer generated by IntelliJ IDEA GUI Designer
-// >>> IMPORTANT!! <<<
-// DO NOT EDIT OR ADD ANY CODE HERE!
+        // GUI initializer generated by IntelliJ IDEA GUI Designer
+        // >>> IMPORTANT!! <<<
+        // DO NOT EDIT OR ADD ANY CODE HERE!
         $$$setupUI$$$();
     }
 
@@ -141,34 +157,204 @@ public class JreSettingsDialog extends JDialog {
      */
     private void $$$setupUI$$$() {
         contentPane = new JPanel();
-        contentPane.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1));
+        contentPane.setLayout(
+            new GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1)
+        );
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        contentPane.add(panel1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
+        panel1.setLayout(
+            new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1)
+        );
+        contentPane.add(
+            panel1,
+            new GridConstraints(
+                1,
+                0,
+                1,
+                1,
+                GridConstraints.ANCHOR_CENTER,
+                GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                    GridConstraints.SIZEPOLICY_CAN_GROW,
+                1,
+                null,
+                null,
+                null,
+                0,
+                false
+            )
+        );
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel1.add(panel2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel2.setLayout(
+            new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1)
+        );
+        panel1.add(
+            panel2,
+            new GridConstraints(
+                0,
+                1,
+                1,
+                1,
+                GridConstraints.ANCHOR_CENTER,
+                GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                    GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                    GridConstraints.SIZEPOLICY_CAN_GROW,
+                null,
+                null,
+                null,
+                0,
+                false
+            )
+        );
         buttonCancel = new JButton();
         buttonCancel.setText("Cancel");
-        panel2.add(buttonCancel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(
+            buttonCancel,
+            new GridConstraints(
+                0,
+                0,
+                1,
+                1,
+                GridConstraints.ANCHOR_CENTER,
+                GridConstraints.FILL_HORIZONTAL,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                    GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_FIXED,
+                null,
+                null,
+                null,
+                0,
+                false
+            )
+        );
         buttonOK = new JButton();
         buttonOK.setText("OK");
-        panel1.add(buttonOK, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(
+            buttonOK,
+            new GridConstraints(
+                0,
+                0,
+                1,
+                1,
+                GridConstraints.ANCHOR_CENTER,
+                GridConstraints.FILL_HORIZONTAL,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                    GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_FIXED,
+                null,
+                null,
+                null,
+                0,
+                false
+            )
+        );
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
-        contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel3.setLayout(
+            new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1)
+        );
+        contentPane.add(
+            panel3,
+            new GridConstraints(
+                0,
+                0,
+                1,
+                1,
+                GridConstraints.ANCHOR_CENTER,
+                GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                    GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                    GridConstraints.SIZEPOLICY_CAN_GROW,
+                null,
+                null,
+                null,
+                0,
+                false
+            )
+        );
         useInstalledJres = new JRadioButton();
         useInstalledJres.setSelected(true);
         useInstalledJres.setText("Use installed JREs");
-        panel3.add(useInstalledJres, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(
+            useInstalledJres,
+            new GridConstraints(
+                0,
+                0,
+                1,
+                1,
+                GridConstraints.ANCHOR_WEST,
+                GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                    GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_FIXED,
+                null,
+                null,
+                null,
+                0,
+                false
+            )
+        );
         useExternalJreButton = new JRadioButton();
         useExternalJreButton.setText("Use external JRE");
-        panel3.add(useExternalJreButton, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(
+            useExternalJreButton,
+            new GridConstraints(
+                1,
+                0,
+                1,
+                2,
+                GridConstraints.ANCHOR_WEST,
+                GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK |
+                    GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_FIXED,
+                null,
+                null,
+                null,
+                0,
+                false
+            )
+        );
         jresComboBox = new JComboBox();
-        panel3.add(jresComboBox, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(
+            jresComboBox,
+            new GridConstraints(
+                0,
+                2,
+                1,
+                1,
+                GridConstraints.ANCHOR_WEST,
+                GridConstraints.FILL_HORIZONTAL,
+                GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_FIXED,
+                null,
+                null,
+                null,
+                0,
+                false
+            )
+        );
         javaPathField = new JTextField();
         javaPathField.setEnabled(false);
-        panel3.add(javaPathField, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        panel3.add(
+            javaPathField,
+            new GridConstraints(
+                1,
+                2,
+                1,
+                1,
+                GridConstraints.ANCHOR_WEST,
+                GridConstraints.FILL_HORIZONTAL,
+                GridConstraints.SIZEPOLICY_WANT_GROW,
+                GridConstraints.SIZEPOLICY_FIXED,
+                null,
+                new Dimension(150, -1),
+                null,
+                0,
+                false
+            )
+        );
     }
 
     /**
@@ -177,5 +363,4 @@ public class JreSettingsDialog extends JDialog {
     public JComponent $$$getRootComponent$$$() {
         return contentPane;
     }
-
 }

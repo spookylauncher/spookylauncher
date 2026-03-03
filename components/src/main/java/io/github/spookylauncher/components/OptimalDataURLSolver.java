@@ -3,10 +3,14 @@ package io.github.spookylauncher.components;
 import java.net.*;
 
 public final class OptimalDataURLSolver {
+
     private final String[] allBaseURLs;
     private final String launcherManifestName;
 
-    public OptimalDataURLSolver(final String[] allBaseURLs, final String launcherManifestName) {
+    public OptimalDataURLSolver(
+        final String[] allBaseURLs,
+        final String launcherManifestName
+    ) {
         this.allBaseURLs = allBaseURLs;
         this.launcherManifestName = launcherManifestName;
     }
@@ -15,10 +19,10 @@ public final class OptimalDataURLSolver {
         String optimalUrl = allBaseURLs[0];
         int leastResponseTime = Integer.MAX_VALUE;
 
-        for(String baseUrl : allBaseURLs) {
+        for (String baseUrl : allBaseURLs) {
             int responseTime;
 
-            if((responseTime = getResponseTime(baseUrl)) < leastResponseTime) {
+            if ((responseTime = getResponseTime(baseUrl)) < leastResponseTime) {
                 optimalUrl = baseUrl;
                 leastResponseTime = responseTime;
             }
@@ -37,15 +41,15 @@ public final class OptimalDataURLSolver {
 
             long endTime = System.currentTimeMillis();
 
-            if(con instanceof HttpURLConnection) {
+            if (con instanceof HttpURLConnection) {
                 HttpURLConnection hcon = (HttpURLConnection) con;
 
-                if(hcon.getResponseCode() >= 400) return Integer.MAX_VALUE;
+                if (hcon.getResponseCode() >= 400) return Integer.MAX_VALUE;
                 else hcon.disconnect();
             }
 
             return (int) (endTime - startTime);
-        } catch(Exception e) {
+        } catch (Exception e) {
             return Integer.MAX_VALUE;
         }
     }

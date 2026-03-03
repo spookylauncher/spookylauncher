@@ -3,11 +3,11 @@ package io.github.spookylauncher.components.ui.swing;
 import io.github.spookylauncher.components.ui.Dialog;
 import io.github.spookylauncher.components.ui.Label;
 import io.github.spookylauncher.components.ui.ProgressBar;
-
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
 class SPIFactory {
+
     public static ProgressBar getProgressBar(JProgressBar progress) {
         return new ProgressBar() {
             @Override

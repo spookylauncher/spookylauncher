@@ -1,6 +1,7 @@
 package io.github.spookylauncher.util.structures.tuple;
 
 public class Tuple3<X, Y, Z> extends Tuple2<X, Y> {
+
     public final Z z;
 
     public Tuple3(X x) {

@@ -4,6 +4,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
 
 public final class InstructionsVisitor {
+
     private final InsnList instructions;
     private int pos = -1;
 
@@ -12,8 +13,9 @@ public final class InstructionsVisitor {
     }
 
     public AbstractInsnNode peek(int relate) {
-        if(instructions == null)
-            throw new IllegalStateException("instructions list is not set");
+        if (instructions == null) throw new IllegalStateException(
+            "instructions list is not set"
+        );
 
         return instructions.get(pos + relate);
     }

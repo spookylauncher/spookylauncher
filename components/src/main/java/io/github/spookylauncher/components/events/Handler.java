@@ -6,5 +6,5 @@ public interface Handler extends Runnable {
         invoke();
     }
 
-    void invoke(Object...args);
+    void invoke(Object... args);
 }

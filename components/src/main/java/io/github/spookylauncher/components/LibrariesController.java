@@ -1,13 +1,12 @@
 package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.components.ui.UIProvider;
+import io.github.spookylauncher.io.OSType;
+import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.tree.LibrariesCollection;
 import io.github.spookylauncher.tree.LibraryInfo;
 import io.github.spookylauncher.tree.versions.LibrariesManifest;
 import io.github.spookylauncher.util.Locale;
-import io.github.spookylauncher.io.OSType;
-import io.github.spookylauncher.io.collectors.URLCollector;
-
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -25,7 +24,11 @@ public final class LibrariesController extends LauncherComponent {
     private final String manifestDownloaderName;
     private HashMap<String, File> libsDirs = new HashMap<>();
 
-    public LibrariesController(ComponentsController components, File libsDir, String manifestDownloaderName) {
+    public LibrariesController(
+        ComponentsController components,
+        File libsDir,
+        String manifestDownloaderName
+    ) {
         super("Libraries Controller", components);
         this.libsDir = libsDir;
         this.manifestDownloaderName = manifestDownloaderName;
@@ -36,18 +39,29 @@ public final class LibrariesController extends LauncherComponent {
     }
 
     private LibrariesManifest getManifest() {
-        return ( (ManifestDownloader<LibrariesManifest>) components.get(manifestDownloaderName)).getManifest();
+        return (
+            (ManifestDownloader<LibrariesManifest>) components.get(
+                manifestDownloaderName
+            )
+        ).getManifest();
     }
 
     public File getLibraryFile(LibraryInfo lib) {
-        if(!libsDirs.containsKey(lib.name)) {
-            libsDirs.put
-            (
+        if (!libsDirs.containsKey(lib.name)) {
+            libsDirs.put(
                 lib.name,
-                new File
-                (
-                        libsDir,
-                        lib.packet.replace(".", "/") + "/" + lib.name + "/" + lib.version + "/" + lib.name + "-" + lib.version + (lib.isNative ? "" : ".jar")
+                new File(
+                    libsDir,
+                    lib.packet.replace(".", "/") +
+                        "/" +
+                        lib.name +
+                        "/" +
+                        lib.version +
+                        "/" +
+                        lib.name +
+                        "-" +
+                        lib.version +
+                        (lib.isNative ? "" : ".jar")
                 )
             );
         }
@@ -60,12 +74,17 @@ public final class LibrariesController extends LauncherComponent {
     }
 
     public boolean isInstalled(LibrariesCollection collection) {
-        if(collection.libraries.length == 0 && collection.collections.length == 0) return false;
+        if (
+            collection.libraries.length == 0 &&
+            collection.collections.length == 0
+        ) return false;
 
         LibrariesManifest manifest = getManifest();
 
         for (LibraryInfo lib : collection.libraries)
-            if (!isInstalled(manifest.getLibrary(lib.name, lib.version))) return false;
+            if (
+                !isInstalled(manifest.getLibrary(lib.name, lib.version))
+            ) return false;
 
         for (String col : collection.collections)
             if (!isInstalled(manifest.getLibsCollection(col))) return false;
@@ -73,78 +92,91 @@ public final class LibrariesController extends LauncherComponent {
         return true;
     }
 
-    public void install(LibrariesCollection collection, Consumer<Boolean> onInstalled) {
-        LOG.info("start installing libraries collection \"" + collection.name + "\"");
+    public void install(
+        LibrariesCollection collection,
+        Consumer<Boolean> onInstalled
+    ) {
+        LOG.info(
+            "start installing libraries collection \"" + collection.name + "\""
+        );
 
         LibrariesManifest manifest = getManifest();
 
         AtomicBoolean success = new AtomicBoolean(true);
         AtomicInteger uninstalledCount = new AtomicInteger();
 
-        for(String subCollectionName : collection.collections) {
-            LibrariesCollection subCollection = manifest.getLibsCollection(subCollectionName);
+        for (String subCollectionName : collection.collections) {
+            LibrariesCollection subCollection = manifest.getLibsCollection(
+                subCollectionName
+            );
 
             uninstalledCount.getAndIncrement();
 
-            install
-            (
-               subCollection,
-               s -> {
-                   success.set(s);
-                   uninstalledCount.getAndDecrement();
-               }
-            );
+            install(subCollection, s -> {
+                success.set(s);
+                uninstalledCount.getAndDecrement();
+            });
         }
 
-        for(LibraryInfo lib : collection.libraries) {
+        for (LibraryInfo lib : collection.libraries) {
             LibraryInfo libInfo = manifest.getLibrary(lib.name, lib.version);
 
             assert libInfo != null;
 
             uninstalledCount.getAndIncrement();
 
-            install
-            (
-                libInfo,
-                s -> {
-                    success.set(s);
-                    uninstalledCount.getAndDecrement();
-                }
-            );
+            install(libInfo, s -> {
+                success.set(s);
+                uninstalledCount.getAndDecrement();
+            });
         }
 
-        new Thread(
-                () -> {
-                    while(true) {
-                        if(uninstalledCount.get() <= 0 || !success.get()) {
-                            onInstalled.accept(success.get());
-                            break;
-                        }
-
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            LOG.logp(Level.WARNING, "io.github.spookylauncher.components.LibrariesController", "install", "THROW", e);
-                        }
-                    }
+        new Thread(() -> {
+            while (true) {
+                if (uninstalledCount.get() <= 0 || !success.get()) {
+                    onInstalled.accept(success.get());
+                    break;
                 }
-        ).start();
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    LOG.logp(
+                        Level.WARNING,
+                        "io.github.spookylauncher.components.LibrariesController",
+                        "install",
+                        "THROW",
+                        e
+                    );
+                }
+            }
+        })
+            .start();
     }
 
     public void install(LibraryInfo lib, Consumer<Boolean> onInstalled) {
-        LOG.info("started library installing, name: \"" + lib.name + "\", version: " + lib.version);
+        LOG.info(
+            "started library installing, name: \"" +
+                lib.name +
+                "\", version: " +
+                lib.version
+        );
 
         final Locale locale = components.get(Translator.class).getLocale();
         final UIProvider uiProvider = components.get(UIProvider.class);
 
         String url;
 
-        if((url = lib.jar.getDownloadUrl()) == null) {
-            LOG.severe("failed to install library because download is not available");
-            uiProvider.messages().error(
+        if ((url = lib.jar.getDownloadUrl()) == null) {
+            LOG.severe(
+                "failed to install library because download is not available"
+            );
+            uiProvider
+                .messages()
+                .error(
                     locale.get("installationError"),
                     String.format(locale.get("libDownloadNotFounded"), lib.name)
-            );
+                );
             return;
         }
 
@@ -152,21 +184,23 @@ public final class LibrariesController extends LauncherComponent {
 
         File destination = getLibraryFile(lib);
 
-        if(!isInstalled(lib)) {
-
-            if(lib.isNative) {
+        if (!isInstalled(lib)) {
+            if (lib.isNative) {
                 destination.mkdirs();
             } else {
                 File parent = destination.getParentFile();
 
-                if(parent != null) parent.mkdirs();
+                if (parent != null) parent.mkdirs();
             }
 
             uiProvider.panel().setEnabledButtons(false);
 
             Downloader.Options options = new Downloader.Options();
 
-            options.title = String.format(locale.get("libInstallation"), lib.name);
+            options.title = String.format(
+                locale.get("libInstallation"),
+                lib.name
+            );
             options.subtitleFormat = locale.get("downloadingFormat");
             options.subtitle = lib.name + "-" + lib.version;
             options.consumeFullPaths = false;
@@ -177,30 +211,42 @@ public final class LibrariesController extends LauncherComponent {
 
             try {
                 urlCollector = new URLCollector(url);
-            } catch(URISyntaxException e) {
+            } catch (URISyntaxException e) {
                 LOG.severe("failed to install library: ");
-                LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.LibrariesController", "install", "Throw!", e);
+                LOG.logp(
+                    Level.SEVERE,
+                    "io.github.spookylauncher.components.LibrariesController",
+                    "install",
+                    "Throw!",
+                    e
+                );
                 return;
             }
 
+            Downloader.IDownloadMethod method = lib.isNative
+                ? downloader::downloadAndUnpackZip
+                : downloader::download;
 
-            Downloader.IDownloadMethod method = lib.isNative ? downloader::downloadAndUnpackZip : downloader::download;
+            method.download(destination, urlCollector, options, success -> {
+                uiProvider.panel().setEnabledButtons(true);
 
-            method.download(destination, urlCollector, options,
-                success -> {
-                    uiProvider.panel().setEnabledButtons(true);
-
-                    if(!success) {
-                        LOG.info("library installation canceled by user");
-                        uiProvider.messages().info(
-                                locale.get("libInstallationFailed"),
-                                locale.get("operationCanceledByUser")
+                if (!success) {
+                    LOG.info("library installation canceled by user");
+                    uiProvider
+                        .messages()
+                        .info(
+                            locale.get("libInstallationFailed"),
+                            locale.get("operationCanceledByUser")
                         );
-                    } else LOG.info("library successfully installed, name: \"" + lib.name + "\", version: " + lib.version);
+                } else LOG.info(
+                    "library successfully installed, name: \"" +
+                        lib.name +
+                        "\", version: " +
+                        lib.version
+                );
 
-                    onInstalled.accept(success);
-                }
-            );
+                onInstalled.accept(success);
+            });
         }
     }
 }

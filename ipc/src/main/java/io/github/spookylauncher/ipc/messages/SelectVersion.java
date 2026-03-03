@@ -3,6 +3,7 @@ package io.github.spookylauncher.ipc.messages;
 import java.io.*;
 
 public class SelectVersion extends AdvancedMappedBusMessage {
+
     public String versionName;
 
     @Override

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public final class ClassUtils {
+
     public static boolean classExists(Class<?> clazz, String name) {
         return classExists(clazz.getClassLoader(), name);
     }
@@ -15,13 +16,14 @@ public final class ClassUtils {
     public static boolean resourceExists(Class<?> clazz, String path) {
         return resourceExists(clazz.getClassLoader(), path);
     }
+
     public static boolean resourceExists(ClassLoader loader, String path) {
         InputStream in = loader.getResourceAsStream(path);
 
-        if(in != null) {
+        if (in != null) {
             try {
                 in.close();
-            } catch(IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 

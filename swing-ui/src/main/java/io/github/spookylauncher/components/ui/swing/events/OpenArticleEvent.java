@@ -9,21 +9,27 @@ import io.github.spookylauncher.util.Browser;
 
 class OpenArticleEvent extends Event {
 
-    OpenArticleEvent(final ComponentsController components, final SwingUIProvider provider) {
+    OpenArticleEvent(
+        final ComponentsController components,
+        final SwingUIProvider provider
+    ) {
         super(components, provider);
     }
 
     @Override
     public void run() {
+        VersionInfo version = components
+            .get(VersionsList.class)
+            .getSelectedVersionInfo();
 
-        VersionInfo version = components.get(VersionsList.class).getSelectedVersionInfo();
+        if (version == null) return;
 
-        if(version == null) return;
+        String wiki = version.articles.get(
+            components.get(Translator.class).getLocale().getLanguage()
+        );
 
-        String wiki = version.articles.get(components.get(Translator.class).getLocale().getLanguage());
+        if (wiki == null) wiki = version.articles.get("fallback");
 
-        if(wiki == null) wiki = version.articles.get("fallback");
-
-        if(wiki != null) Browser.openURL(wiki);
+        if (wiki != null) Browser.openURL(wiki);
     }
 }

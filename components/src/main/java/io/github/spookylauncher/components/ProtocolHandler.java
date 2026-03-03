@@ -1,22 +1,22 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.components.ui.UIProvider;
-import io.github.spookylauncher.ipc.messages.MessageType;
-import io.github.spookylauncher.protocol.ProtocolReader;
+import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.ipc.Constants;
 import io.github.spookylauncher.ipc.messages.FrameTopFront;
 import io.github.spookylauncher.ipc.messages.IpcError;
+import io.github.spookylauncher.ipc.messages.MessageType;
 import io.github.spookylauncher.ipc.messages.SelectVersion;
+import io.github.spookylauncher.protocol.ProtocolReader;
 import io.github.spookylauncher.tree.versions.VersionInfo;
 import io.github.spookylauncher.util.Locale;
 import io.mappedbus.MappedBusMessage;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 public final class ProtocolHandler extends LauncherComponent {
+
     private static final Logger LOG = Logger.getLogger("protocol handler");
 
     public ProtocolHandler(ComponentsController components) {
@@ -35,26 +35,25 @@ public final class ProtocolHandler extends LauncherComponent {
 
         IOUtils.deleteTree(new File(Constants.getFile()));
 
-        new Thread(
-                () -> {
-                    ProtocolReader reader = new ProtocolReader();
+        new Thread(() -> {
+            ProtocolReader reader = new ProtocolReader();
 
-                    running = true;
+            running = true;
 
-                    try {
-                        reader.open();
+            try {
+                reader.open();
 
-                        while(running) {
-                            reader.read(ProtocolHandler.this);
-                            Thread.sleep(100L);
-                        }
-
-                        reader.close();
-                    } catch(Exception e) {
-                        e.printStackTrace();
-                    }
+                while (running) {
+                    reader.read(ProtocolHandler.this);
+                    Thread.sleep(100L);
                 }
-        ).start();
+
+                reader.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        })
+            .start();
     }
 
     public void handle(MappedBusMessage msg) {
@@ -63,36 +62,63 @@ public final class ProtocolHandler extends LauncherComponent {
 
         LOG.info("handling IPC message: " + MessageType.get(msg.type()));
 
-        if(msg instanceof SelectVersion) {
-            String versionName = ( (SelectVersion) msg).versionName;
+        if (msg instanceof SelectVersion) {
+            String versionName = ((SelectVersion) msg).versionName;
 
-            final String repo = this.components.get(ManifestsURLs.class).getBaseDataURL();
+            final String repo = this.components.get(
+                ManifestsURLs.class
+            ).getBaseDataURL();
 
-            VersionInfo info = components.get(VersionsList.class).getManifest().getVersionInfo(repo, versionName);
+            VersionInfo info = components
+                .get(VersionsList.class)
+                .getManifest()
+                .getVersionInfo(repo, versionName);
 
             uiProvider.window().toTopFront();
 
-            if(info != null) uiProvider.panel().setVersion(info);
+            if (info != null) uiProvider.panel().setVersion(info);
             else {
-                LOG.severe("version \"" + versionName + "\" specified in IPC message not found");
-                uiProvider.messages().error(locale.get("error"), String.format(locale.get("versionNotFounded"), versionName));
+                LOG.severe(
+                    "version \"" +
+                        versionName +
+                        "\" specified in IPC message not found"
+                );
+                uiProvider
+                    .messages()
+                    .error(
+                        locale.get("error"),
+                        String.format(
+                            locale.get("versionNotFounded"),
+                            versionName
+                        )
+                    );
             }
-        } else if(msg instanceof IpcError) {
+        } else if (msg instanceof IpcError) {
             IpcError err = (IpcError) msg;
 
-            String errorMessage = String.format(locale.get(err.format), err.args);
+            String errorMessage = String.format(
+                locale.get(err.format),
+                err.args
+            );
 
             LOG.severe("ipc error: " + errorMessage);
 
-            uiProvider.messages().error(locale.get("error"), "IPC: " + errorMessage);
-        } else if(msg instanceof FrameTopFront) {
+            uiProvider
+                .messages()
+                .error(locale.get("error"), "IPC: " + errorMessage);
+        } else if (msg instanceof FrameTopFront) {
             uiProvider.window().toTopFront();
         } else {
             String msgType = msg.getClass().getSimpleName();
 
             LOG.severe("unsupported ipc message: " + msgType);
 
-            uiProvider.messages().error(locale.get("error"), String.format(locale.get("ipcUnsupportedMsg"), msgType));
+            uiProvider
+                .messages()
+                .error(
+                    locale.get("error"),
+                    String.format(locale.get("ipcUnsupportedMsg"), msgType)
+                );
         }
     }
 }
