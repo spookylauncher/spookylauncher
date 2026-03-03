@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public final class SecurityRules {
+
     public HashMap<String, String> files;
     public HashMap<String, String> dirs;
     public HashSet<String> executables;

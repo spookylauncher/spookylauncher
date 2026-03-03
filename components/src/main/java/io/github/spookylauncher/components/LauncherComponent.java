@@ -3,11 +3,15 @@ package io.github.spookylauncher.components;
 import java.io.IOException;
 
 public abstract class LauncherComponent {
+
     protected final ComponentsController components;
 
     private String name;
 
-    public LauncherComponent(final String name, final ComponentsController components) {
+    public LauncherComponent(
+        final String name,
+        final ComponentsController components
+    ) {
         this.components = components;
         this.setName(name);
     }
@@ -20,5 +24,5 @@ public abstract class LauncherComponent {
         return this.name;
     }
 
-    public void initialize() throws IOException { }
+    public void initialize() throws IOException {}
 }

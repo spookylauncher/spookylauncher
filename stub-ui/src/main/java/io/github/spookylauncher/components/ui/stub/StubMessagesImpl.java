@@ -12,5 +12,5 @@ class StubMessagesImpl extends LauncherComponent implements Messages {
     }
 
     @Override
-    public void message(String title, String message, MessageType type) { }
+    public void message(String title, String message, MessageType type) {}
 }

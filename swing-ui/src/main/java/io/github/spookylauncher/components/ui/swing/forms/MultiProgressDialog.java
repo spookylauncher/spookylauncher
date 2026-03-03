@@ -1,9 +1,10 @@
 package io.github.spookylauncher.components.ui.swing.forms;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class MultiProgressDialog extends JDialog {
+
     private final JPanel mainContentPanel;
     public JScrollPane scrollPane;
 
@@ -30,12 +31,18 @@ public class MultiProgressDialog extends JDialog {
 
         mainContentPanel = new JPanel();
 
-        mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
+        mainContentPanel.setLayout(
+            new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS)
+        );
 
         scrollPane = new JScrollPane(mainContentPanel);
 
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(
+            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+        );
+        scrollPane.setHorizontalScrollBarPolicy(
+            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
 
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 

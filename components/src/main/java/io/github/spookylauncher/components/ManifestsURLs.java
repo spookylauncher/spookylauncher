@@ -2,9 +2,8 @@ package io.github.spookylauncher.components;
 
 public final class ManifestsURLs extends LauncherComponent {
 
-    public static final String[] BASE_DATA_URLS =
-    {
-            "https://raw.githubusercontent.com/spookylauncher/Data/refs/heads/main"
+    public static final String[] BASE_DATA_URLS = {
+        "https://raw.githubusercontent.com/spookylauncher/Data/refs/heads/main",
     };
 
     private final String baseDataURL;
@@ -15,10 +14,9 @@ public final class ManifestsURLs extends LauncherComponent {
 
     public ManifestsURLs(final ComponentsController components) {
         super("Manifests URLs", components);
-
         OptimalDataURLSolver solver = new OptimalDataURLSolver(
-                BASE_DATA_URLS,
-                "launcher-manifest.json"
+            BASE_DATA_URLS,
+            "launcher-manifest.json"
         );
 
         this.baseDataURL = solver.getOptimalBaseURL();

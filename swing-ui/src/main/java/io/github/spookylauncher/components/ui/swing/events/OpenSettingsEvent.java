@@ -1,19 +1,25 @@
 package io.github.spookylauncher.components.ui.swing.events;
 
-import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.JREController;
 import io.github.spookylauncher.components.OptionsController;
 import io.github.spookylauncher.components.Translator;
 import io.github.spookylauncher.components.ui.swing.SwingUIProvider;
 import io.github.spookylauncher.components.ui.swing.forms.SettingsDialog;
+import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.util.Locale;
 
 class OpenSettingsEvent extends Event {
 
-    private static final int MAX_MEMORY = (int) (IOUtils.MAX_PHYSICAL_MEMORY / 1024 / 1024 / 2); // half of all memory in megabytes
+    private static final int MAX_MEMORY = (int) (IOUtils.MAX_PHYSICAL_MEMORY /
+        1024 /
+        1024 /
+        2); // half of all memory in megabytes
 
-    OpenSettingsEvent(final ComponentsController components, final SwingUIProvider provider) {
+    OpenSettingsEvent(
+        final ComponentsController components,
+        final SwingUIProvider provider
+    ) {
         super(components, provider);
     }
 
@@ -22,12 +28,12 @@ class OpenSettingsEvent extends Event {
         Translator translator = components.get(Translator.class);
 
         SettingsDialog dialog = new SettingsDialog(
-                256,
-                MAX_MEMORY,
-                components.get(JREController.class),
-                provider.messages(),
-                components.get(OptionsController.class),
-                translator
+            256,
+            MAX_MEMORY,
+            components.get(JREController.class),
+            provider.messages(),
+            components.get(OptionsController.class),
+            translator
         );
 
         Locale locale = translator.getLocale();

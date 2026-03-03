@@ -1,10 +1,11 @@
 package io.github.spookylauncher.wrapper.util.log;
 
-import java.io.PrintStream;
-
 import static java.lang.System.*;
 
+import java.io.PrintStream;
+
 public final class Logger {
+
     private static final boolean DEBUG = true;
 
     public static void throwing(final Throwable t) {
@@ -19,16 +20,20 @@ public final class Logger {
         log(Level.ERROR, location, t.toString());
     }
 
-    public static void log(final Level level, final String location, final Object obj) {
-        if(level == Level.DEBUG && !DEBUG) return;
+    public static void log(
+        final Level level,
+        final String location,
+        final Object obj
+    ) {
+        if (level == Level.DEBUG && !DEBUG) return;
 
         final PrintStream pipedOut = (level == Level.ERROR ? err : out);
 
         pipedOut.print("[" + level.name + "] [" + location + "] : ");
 
-        if(obj instanceof Throwable)
-            ((Throwable) obj).printStackTrace(pipedOut);
-        else
-            pipedOut.println(obj);
+        if (obj instanceof Throwable) ((Throwable) obj).printStackTrace(
+            pipedOut
+        );
+        else pipedOut.println(obj);
     }
 }

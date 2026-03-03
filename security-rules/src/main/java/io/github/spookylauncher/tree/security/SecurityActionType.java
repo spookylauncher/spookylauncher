@@ -6,5 +6,5 @@ public enum SecurityActionType {
     @SerializedName("deny")
     DENY,
     @SerializedName("permit")
-    PERMIT
+    PERMIT,
 }

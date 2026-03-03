@@ -1,6 +1,7 @@
 package io.github.spookylauncher.util.structures.tuple;
 
 public class Tuple5<X, Y, Z, W, V> extends Tuple4<X, Y, Z, W> {
+
     public final V v;
 
     public Tuple5(X x) {
@@ -24,7 +25,13 @@ public class Tuple5<X, Y, Z, W, V> extends Tuple4<X, Y, Z, W> {
         this.v = v;
     }
 
-    public static <X, Y, Z, W, V> Tuple5<X, Y, Z, W, V> of(X x, Y y, Z z, W w, V v) {
+    public static <X, Y, Z, W, V> Tuple5<X, Y, Z, W, V> of(
+        X x,
+        Y y,
+        Z z,
+        W w,
+        V v
+    ) {
         return new Tuple5<>(x, y, z, w, v);
     }
 }

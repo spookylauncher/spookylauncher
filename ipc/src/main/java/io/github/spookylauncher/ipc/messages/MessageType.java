@@ -12,10 +12,9 @@ public enum MessageType {
         this.id = id;
     }
 
-
     public static MessageType get(final int id) {
-        for(final MessageType type : values()) {
-            if(type.id == id) return type;
+        for (final MessageType type : values()) {
+            if (type.id == id) return type;
         }
 
         return null;

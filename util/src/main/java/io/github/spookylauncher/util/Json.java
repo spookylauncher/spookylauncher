@@ -1,10 +1,9 @@
 package io.github.spookylauncher.util;
 
+import com.google.gson.*;
 import io.github.spookylauncher.io.OSType;
 import io.github.spookylauncher.io.collectors.Collector;
 import io.github.spookylauncher.io.peddlers.Peddler;
-import com.google.gson.*;
-
 import java.io.IOException;
 import java.io.Reader;
 
@@ -13,15 +12,21 @@ public final class Json {
     private static final Gson GSON;
     private static final Gson PRETTY_PRINTING_GSON;
 
-    public static void peddleJson(Peddler peddler, Object obj) throws IOException {
+    public static void peddleJson(Peddler peddler, Object obj)
+        throws IOException {
         peddleJson(peddler, obj, true);
     }
 
-    public static void peddleJson(Peddler peddler, Object object, boolean prettyPrinting) throws IOException {
+    public static void peddleJson(
+        Peddler peddler,
+        Object object,
+        boolean prettyPrinting
+    ) throws IOException {
         peddler.peddleString(toJson(object, prettyPrinting));
     }
 
-    public static <T> T collectJson(Collector collector, Class<T> clazz) throws IOException {
+    public static <T> T collectJson(Collector collector, Class<T> clazz)
+        throws IOException {
         return fromJson(collector.collectString(), clazz);
     }
 
@@ -33,17 +38,21 @@ public final class Json {
         return (prettyPrinting ? PRETTY_PRINTING_GSON : GSON).toJson(o);
     }
 
-    public static <T> T fromJson(Reader reader, Class<T> clazz) { return GSON.fromJson(reader, clazz); }
+    public static <T> T fromJson(Reader reader, Class<T> clazz) {
+        return GSON.fromJson(reader, clazz);
+    }
 
     public static <T> T fromJson(String str, Class<T> clazz) {
         return GSON.fromJson(str, clazz);
     }
 
     static {
-        GsonBuilder builder =
-                new GsonBuilder()
-                .registerTypeAdapter(GeneralDate.class, new GsonGeneralDateAdapter())
-                .registerTypeAdapter(OSType.class, new GsonOsAdapter());
+        GsonBuilder builder = new GsonBuilder()
+            .registerTypeAdapter(
+                GeneralDate.class,
+                new GsonGeneralDateAdapter()
+            )
+            .registerTypeAdapter(OSType.class, new GsonOsAdapter());
 
         GSON = builder.create();
 

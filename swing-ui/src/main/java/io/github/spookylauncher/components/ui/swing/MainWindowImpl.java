@@ -1,19 +1,18 @@
 package io.github.spookylauncher.components.ui.swing;
 
-import io.github.spookylauncher.io.collectors.ResourceCollector;
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
-import io.github.spookylauncher.components.events.EventsManager;
 import io.github.spookylauncher.components.events.Events;
+import io.github.spookylauncher.components.events.EventsManager;
 import io.github.spookylauncher.components.ui.MainWindow;
-
-import javax.swing.*;
+import io.github.spookylauncher.io.collectors.ResourceCollector;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.*;
 
 class MainWindowImpl extends LauncherComponent implements MainWindow {
 
@@ -23,9 +22,11 @@ class MainWindowImpl extends LauncherComponent implements MainWindow {
 
     private final Image icon;
 
-    MainWindowImpl(final ComponentsController components, final SwingUIProvider provider) {
+    MainWindowImpl(
+        final ComponentsController components,
+        final SwingUIProvider provider
+    ) {
         super("Swing API Main Window", components);
-
         Image icon;
 
         try {
@@ -33,7 +34,13 @@ class MainWindowImpl extends LauncherComponent implements MainWindow {
         } catch (IOException e) {
             icon = null;
             LOG.severe("failed to set frame icon");
-            LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ui.swing.MainWindowImpl", "<init>", "Throw!", e);
+            LOG.logp(
+                Level.SEVERE,
+                "io.github.spookylauncher.components.ui.swing.MainWindowImpl",
+                "<init>",
+                "Throw!",
+                e
+            );
         }
 
         this.icon = icon;
@@ -43,16 +50,20 @@ class MainWindowImpl extends LauncherComponent implements MainWindow {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setResizable(false);
 
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
+        frame.addWindowListener(
+            new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    super.windowClosing(e);
 
-                components.get(EventsManager.class).emitAndUnsubscribeAll(Events.SHUTDOWN);
+                    components
+                        .get(EventsManager.class)
+                        .emitAndUnsubscribeAll(Events.SHUTDOWN);
 
-                System.exit(0);
+                    System.exit(0);
+                }
             }
-        });
+        );
 
         frame.setIconImage(icon);
 

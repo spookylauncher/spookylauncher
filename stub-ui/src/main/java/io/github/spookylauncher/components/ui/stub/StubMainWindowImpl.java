@@ -12,7 +12,7 @@ class StubMainWindowImpl extends LauncherComponent implements MainWindow {
     }
 
     @Override
-    public void toTopFront() { }
+    public void toTopFront() {}
 
     @Override
     public Image getIcon() {
@@ -25,5 +25,5 @@ class StubMainWindowImpl extends LauncherComponent implements MainWindow {
     }
 
     @Override
-    public void setVisible(boolean visible) { }
+    public void setVisible(boolean visible) {}
 }

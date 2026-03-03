@@ -1,6 +1,7 @@
 package io.github.spookylauncher.wrapper.security;
 
 public abstract class Checker {
+
     protected final CheckMode mode;
 
     public CheckMode getMode() {

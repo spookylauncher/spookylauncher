@@ -10,8 +10,8 @@ public enum CommandType {
     }
 
     public static CommandType parse(String command) {
-        for(CommandType type : values()) {
-            if(type.name.equals(command)) return type;
+        for (CommandType type : values()) {
+            if (type.name.equals(command)) return type;
         }
 
         return null;

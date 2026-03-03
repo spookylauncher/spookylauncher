@@ -1,8 +1,8 @@
 package io.github.spookylauncher.io.collectors;
 
 import java.io.IOException;
-import java.net.*;
 import java.io.InputStream;
+import java.net.*;
 
 public final class URLCollector extends Collector {
 
@@ -19,10 +19,12 @@ public final class URLCollector extends Collector {
         con.setDoInput(true);
         con.connect();
 
-        if(con instanceof HttpURLConnection) {
-            int response = ((HttpURLConnection)con).getResponseCode();
+        if (con instanceof HttpURLConnection) {
+            int response = ((HttpURLConnection) con).getResponseCode();
 
-            if(response >= 400) throw new IOException("HTTP Error " + response);
+            if (response >= 400) throw new IOException(
+                "HTTP Error " + response
+            );
         }
 
         size = con.getContentLengthLong();
@@ -32,7 +34,7 @@ public final class URLCollector extends Collector {
 
     @Override
     public long size() {
-        if(size == -1) {
+        if (size == -1) {
             try {
                 collectInput().close();
             } catch (IOException e) {

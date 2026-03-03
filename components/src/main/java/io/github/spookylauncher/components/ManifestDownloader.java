@@ -1,8 +1,7 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.util.Json;
 import io.github.spookylauncher.io.collectors.URLCollector;
-
+import io.github.spookylauncher.util.Json;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +24,11 @@ public class ManifestDownloader<T> extends LauncherComponent {
         return this;
     }
 
-    public ManifestDownloader(ComponentsController components, Class<T> manifestClass, String manifestUrl) {
+    public ManifestDownloader(
+        ComponentsController components,
+        Class<T> manifestClass,
+        String manifestUrl
+    ) {
         super("Manifest Downloader", components);
         this.manifestClass = manifestClass;
         this.manifestUrl = manifestUrl;
@@ -41,12 +44,15 @@ public class ManifestDownloader<T> extends LauncherComponent {
     public boolean downloadManifest() {
         LOG.info("manifest downloading started (" + manifestUrl + ")");
         try {
-            this.manifest = Json.collectJson(new URLCollector(manifestUrl), manifestClass);
+            this.manifest = Json.collectJson(
+                new URLCollector(manifestUrl),
+                manifestClass
+            );
 
             Set<Supplier<Boolean>> toRemove = new HashSet<>();
 
-            for(Supplier<Boolean> event : onDownloaded) {
-                if(event.get()) toRemove.add(event);
+            for (Supplier<Boolean> event : onDownloaded) {
+                if (event.get()) toRemove.add(event);
             }
 
             onDownloaded.removeAll(toRemove);
@@ -54,13 +60,23 @@ public class ManifestDownloader<T> extends LauncherComponent {
             LOG.info("manifest successfully downloaded");
 
             return true;
-        } catch(Exception e) {
+        } catch (Exception e) {
             LOG.severe("failed to download manifest \"" + manifestUrl + "\"");
-            LOG.logp(Level.SEVERE, "io.github.spookylauncher.components.ManifestDownloader", "downloadManifest", "Throw!", e);
-            components.get(ErrorHandler.class).handleException("manifestLoadError", e);
+            LOG.logp(
+                Level.SEVERE,
+                "io.github.spookylauncher.components.ManifestDownloader",
+                "downloadManifest",
+                "Throw!",
+                e
+            );
+            components
+                .get(ErrorHandler.class)
+                .handleException("manifestLoadError", e);
             return false;
         }
     }
 
-    public T getManifest() { return this.manifest; }
+    public T getManifest() {
+        return this.manifest;
+    }
 }

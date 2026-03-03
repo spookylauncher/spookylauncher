@@ -3,11 +3,11 @@ package io.github.spookylauncher.io.peddlers;
 import java.io.*;
 
 public class StreamPeddler extends Peddler {
+
     private final OutputStream out;
 
     public StreamPeddler(OutputStream out) {
         super(null);
-
         this.out = out;
     }
 
@@ -17,8 +17,7 @@ public class StreamPeddler extends Peddler {
 
         int len;
 
-        while((len = in.read(buffer)) != -1)
-            out.write(buffer, 0, len);
+        while ((len = in.read(buffer)) != -1) out.write(buffer, 0, len);
 
         out.flush();
         in.close();

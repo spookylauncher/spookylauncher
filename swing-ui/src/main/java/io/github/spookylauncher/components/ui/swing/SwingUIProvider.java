@@ -1,19 +1,20 @@
 package io.github.spookylauncher.components.ui.swing;
 
-import javax.swing.plaf.synth.*;
-
 import com.formdev.flatlaf.FlatDarkLaf;
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.ui.*;
 import io.github.spookylauncher.components.ui.swing.events.EventsRegister;
 import io.github.spookylauncher.io.Resource;
-
-import javax.swing.*;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.*;
+import javax.swing.plaf.synth.*;
 
-public final class SwingUIProvider extends LauncherComponent implements UIProvider {
+public final class SwingUIProvider
+    extends LauncherComponent
+    implements UIProvider
+{
 
     private static final Logger LOG = Logger.getLogger("swing ui");
     private JFrame frame;
@@ -34,11 +35,10 @@ public final class SwingUIProvider extends LauncherComponent implements UIProvid
     }
 
     public SwingUIProvider(
-            final ComponentsController components,
-            final String jresManifestDownloaderName
+        final ComponentsController components,
+        final String jresManifestDownloaderName
     ) {
         super("Swing UI Provider", components);
-
         this.jresManifestDownloaderName = jresManifestDownloaderName;
     }
 

@@ -3,13 +3,23 @@ package io.github.spookylauncher.tree.launcher;
 import com.google.gson.annotations.SerializedName;
 
 public class LauncherVersionInfo {
+
     public static final LauncherVersionInfo CURRENT;
 
-    @SerializedName("maxSupportedVersionsManifestVersion") public int maxSupportedVersionsManifestVersion;
-    @SerializedName("name") public String name;
-    @SerializedName("stage") public DevStage stage;
-    @SerializedName("versionCode") public int versionCode;
-    @SerializedName("jar") public String jar;
+    @SerializedName("maxSupportedVersionsManifestVersion")
+    public int maxSupportedVersionsManifestVersion;
+
+    @SerializedName("name")
+    public String name;
+
+    @SerializedName("stage")
+    public DevStage stage;
+
+    @SerializedName("versionCode")
+    public int versionCode;
+
+    @SerializedName("jar")
+    public String jar;
 
     static {
         LauncherVersionInfo version = new LauncherVersionInfo();

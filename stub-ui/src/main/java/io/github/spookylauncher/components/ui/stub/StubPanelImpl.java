@@ -10,7 +10,6 @@ import java.awt.*;
 
 class StubPanelImpl extends LauncherComponent implements TitlePanel {
 
-
     StubPanelImpl(final ComponentsController components) {
         super("Stub Title Panel", components);
     }
@@ -26,7 +25,7 @@ class StubPanelImpl extends LauncherComponent implements TitlePanel {
     }
 
     @Override
-    public void addActionEvent(String button, Runnable event) { }
+    public void addActionEvent(String button, Runnable event) {}
 
     @Override
     public boolean isButtonEnabled(String button) {
@@ -34,19 +33,19 @@ class StubPanelImpl extends LauncherComponent implements TitlePanel {
     }
 
     @Override
-    public void setEnabledButtons(boolean enabled, String... buttons) { }
+    public void setEnabledButtons(boolean enabled, String... buttons) {}
 
     @Override
-    public void setLocale(Locale locale) { }
+    public void setLocale(Locale locale) {}
 
     @Override
-    public void setEnabledButton(String button, boolean enabled) { }
+    public void setEnabledButton(String button, boolean enabled) {}
 
     @Override
-    public void setPreview(Image image) { }
+    public void setPreview(Image image) {}
 
     @Override
-    public void setVersion(VersionInfo info) { }
+    public void setVersion(VersionInfo info) {}
 
     @Override
     public VersionInfo getCurrentVersion() {

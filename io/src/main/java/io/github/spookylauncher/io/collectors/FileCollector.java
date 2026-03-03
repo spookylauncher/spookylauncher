@@ -6,12 +6,15 @@ import java.nio.file.Paths;
 
 public final class FileCollector extends Collector {
 
-    public FileCollector(File file) { this(file.getAbsolutePath()); }
+    public FileCollector(File file) {
+        this(file.getAbsolutePath());
+    }
 
     public FileCollector(String path) {
         super(path);
-
-        if(new File(path).isDirectory()) throw new IllegalArgumentException("input path is directory");
+        if (new File(path).isDirectory()) throw new IllegalArgumentException(
+            "input path is directory"
+        );
     }
 
     @Override

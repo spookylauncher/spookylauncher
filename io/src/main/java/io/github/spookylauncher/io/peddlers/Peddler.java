@@ -1,6 +1,5 @@
 package io.github.spookylauncher.io.peddlers;
 
-import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -9,9 +8,12 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Properties;
+import javax.imageio.ImageIO;
 
 public abstract class Peddler {
-    private static final CharsetEncoder UTF_ENCODER = StandardCharsets.UTF_8.newEncoder();
+
+    private static final CharsetEncoder UTF_ENCODER =
+        StandardCharsets.UTF_8.newEncoder();
     protected final String path;
 
     public Peddler(String path) {
@@ -28,7 +30,8 @@ public abstract class Peddler {
         peddleProperties(props, null);
     }
 
-    public final void peddleProperties(Properties props, String comments) throws IOException {
+    public final void peddleProperties(Properties props, String comments)
+        throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
 
@@ -66,7 +69,7 @@ public abstract class Peddler {
             public void write(int b) throws IOException {
                 baos.write(b);
 
-                if(count++ == bufferSize) {
+                if (count++ == bufferSize) {
                     flush();
                 }
             }
@@ -84,9 +87,13 @@ public abstract class Peddler {
         };
     }
 
-    public static Peddler of(Path path) { return of(path.toFile()); }
+    public static Peddler of(Path path) {
+        return of(path.toFile());
+    }
 
-    public static Peddler of(File file) { return new FilePeddler(file); }
+    public static Peddler of(File file) {
+        return new FilePeddler(file);
+    }
 
     public static Peddler of(OutputStream out) {
         return new StreamPeddler(out);

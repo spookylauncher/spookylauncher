@@ -3,9 +3,8 @@ package io.github.spookylauncher.components.ui;
 import io.github.spookylauncher.util.Locale;
 
 public interface Panel {
-
     Panel getChild(String name);
-    void setEnabledButtons(boolean enabled, String...buttons);
+    void setEnabledButtons(boolean enabled, String... buttons);
 
     void setLocale(Locale locale);
 

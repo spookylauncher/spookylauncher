@@ -2,21 +2,21 @@ package io.github.spookylauncher.components.debug;
 
 import io.github.spookylauncher.tree.DownloadableFile;
 import io.github.spookylauncher.tree.LibraryInfo;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class LocalLibraries {
+
     public static final List<LibraryInfo> LOCAL_LIBS = new ArrayList<>();
 
     private static void addLocalLibrary(
-            String name,
-            String packet,
-            String version,
-            boolean isNative,
-            File jar
+        String name,
+        String packet,
+        String version,
+        boolean isNative,
+        File jar
     ) {
         final LibraryInfo libInfo = new LibraryInfo();
 
@@ -40,11 +40,11 @@ public final class LocalLibraries {
 
     static {
         addLocalLibrary(
-                "sl-wrapper",
-                "io.github.spookylauncher.wrapper",
-                "1.0-A",
-                false,
-                new File("wrapper/target/wrapper-1.0-A.jar")
+            "sl-wrapper",
+            "io.github.spookylauncher.wrapper",
+            "1.0-A",
+            false,
+            new File("wrapper/target/wrapper-1.0-A.jar")
         );
     }
 }

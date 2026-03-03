@@ -8,10 +8,10 @@ import io.github.spookylauncher.ipc.messages.MessagesFactory;
 import io.github.spookylauncher.ipc.messages.SelectVersion;
 import io.mappedbus.MappedBusMessage;
 import io.mappedbus.MappedBusWriter;
-
 import java.io.IOException;
 
 public final class ProtocolSender {
+
     private final MappedBusWriter writer;
 
     private final boolean directlySending;
@@ -24,36 +24,52 @@ public final class ProtocolSender {
 
     public ProtocolSender(ProtocolHandler handler) {
         this.directlySending = handler != null;
-        this.writer = !directlySending ? ReaderWriterFactory.createWriter() : null;
+        this.writer = !directlySending
+            ? ReaderWriterFactory.createWriter()
+            : null;
         this.handler = handler;
     }
 
-    public void open() throws IOException { if(!directlySending) writer.open(); }
+    public void open() throws IOException {
+        if (!directlySending) writer.open();
+    }
 
-    public void close() throws IOException { if(!directlySending) writer.close(); }
+    public void close() throws IOException {
+        if (!directlySending) writer.close();
+    }
 
     public void sendFrameTopFront() {
-        sendMessage(MessagesFactory.getOrCreateNewInstance(MessageType.FRAME_TOP_FRONT.id));
+        sendMessage(
+            MessagesFactory.getOrCreateNewInstance(
+                MessageType.FRAME_TOP_FRONT.id
+            )
+        );
     }
-    public void sendIpcError(String format, String...args) {
-        IpcError msg = MessagesFactory.getOrCreateNewInstance(MessageType.IPC_ERROR.id);
+
+    public void sendIpcError(String format, String... args) {
+        IpcError msg = MessagesFactory.getOrCreateNewInstance(
+            MessageType.IPC_ERROR.id
+        );
 
         msg.format = format;
         msg.args = args;
 
         sendMessage(msg);
     }
+
     public void sendSelectVersion(String versionName) {
-        SelectVersion msg = MessagesFactory.getOrCreateNewInstance(MessageType.SELECT_VERSION.id);
+        SelectVersion msg = MessagesFactory.getOrCreateNewInstance(
+            MessageType.SELECT_VERSION.id
+        );
         msg.versionName = versionName;
         sendMessage(msg);
     }
 
     private void sendMessage(MappedBusMessage msg) {
-        if(!directlySending) {
+        if (!directlySending) {
             try {
                 writer.write(msg);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else handler.handle(msg);

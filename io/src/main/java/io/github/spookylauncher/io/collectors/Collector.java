@@ -1,8 +1,6 @@
 package io.github.spookylauncher.io.collectors;
 
 import io.github.spookylauncher.io.IOUtils;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -10,9 +8,12 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Properties;
+import javax.imageio.ImageIO;
 
 public abstract class Collector {
-    private static final CharsetDecoder UTF_DECODER = StandardCharsets.UTF_8.newDecoder();
+
+    private static final CharsetDecoder UTF_DECODER =
+        StandardCharsets.UTF_8.newDecoder();
 
     protected final String path;
     private boolean buffering;
@@ -32,9 +33,11 @@ public abstract class Collector {
     public BufferedImage collectImage() throws IOException {
         return ImageIO.read(collectInput());
     }
+
     public final Reader collectReader() throws IOException {
         return new InputStreamReader(collectInput(), StandardCharsets.UTF_8);
     }
+
     public final Properties collectProperties() throws IOException {
         Properties props = new Properties();
 
@@ -50,7 +53,9 @@ public abstract class Collector {
     public InputStream collectInput() throws IOException {
         InputStream in = collectBaseInput();
 
-        return buffering && !(in instanceof BufferedInputStream) ? new BufferedInputStream(in) : in;
+        return buffering && !(in instanceof BufferedInputStream)
+            ? new BufferedInputStream(in)
+            : in;
     }
 
     protected abstract InputStream collectBaseInput() throws IOException;
@@ -67,13 +72,19 @@ public abstract class Collector {
         return bytes;
     }
 
-    public static Collector of(Path path) { return of(path.toFile()); }
+    public static Collector of(Path path) {
+        return of(path.toFile());
+    }
 
-    public static Collector of(File file) { return new FileCollector(file); }
+    public static Collector of(File file) {
+        return new FileCollector(file);
+    }
 
     public static Collector of(byte[] bytes) throws IOException {
         return of(new ByteArrayInputStream(bytes));
     }
 
-    public static Collector of(InputStream in) throws IOException { return new StreamCollector(in); }
+    public static Collector of(InputStream in) throws IOException {
+        return new StreamCollector(in);
+    }
 }
