@@ -1,7 +1,7 @@
-package io.github.spookylauncher.components.ui.javafx;
+package io.github.spookylauncher.ui.javafx;
 
 import io.github.spookylauncher.components.*;
-import io.github.spookylauncher.components.ui.*;
+import io.github.spookylauncher.ui.*;
 
 public class JavaFxUiProvider extends LauncherComponent implements UIProvider {
     public JavaFxUiProvider(ComponentsController components) {
