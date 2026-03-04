@@ -77,4 +77,7 @@ public final class SwingUIProvider
     public Messages messages() {
         return messages;
     }
+
+    @Override
+    public void shutdown() { }
 }

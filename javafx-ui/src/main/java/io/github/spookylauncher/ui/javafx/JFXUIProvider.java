@@ -5,6 +5,7 @@ import io.github.spookylauncher.ui.*;
 import io.github.spookylauncher.ui.javafx.impl.JFXMainWindowImpl;
 import io.github.spookylauncher.ui.javafx.impl.JFXMessagesImpl;
 import javafx.application.Application;
+import javafx.application.Platform;
 
 import java.io.IOException;
 
@@ -43,5 +44,10 @@ public class JFXUIProvider extends LauncherComponent implements UIProvider {
     @Override
     public Messages messages() {
         return messages;
+    }
+
+    @Override
+    public void shutdown() {
+        Util.call(Platform::exit);
     }
 }

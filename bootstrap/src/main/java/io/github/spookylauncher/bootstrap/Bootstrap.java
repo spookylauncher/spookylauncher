@@ -200,6 +200,9 @@ public final class Bootstrap implements Runnable {
         ) {
             LOG.severe("no ui, exiting");
             System.exit(1);
+        } else if(controller.isInitialized(UIProvider.class)) {
+            LOG.info("shutdown ui");
+            controller.get(UIProvider.class).shutdown();
         }
     }
 }

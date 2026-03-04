@@ -8,4 +8,6 @@ public interface UIProvider {
     MainWindow window();
 
     Messages messages();
+
+    void shutdown();
 }
