@@ -48,6 +48,9 @@ public class JFXUIProvider extends LauncherComponent implements UIProvider {
 
     @Override
     public void shutdown() {
-        Util.call(Platform::exit);
+        Util.call(() -> {
+            JFXProxy.getApp().getStage().close();
+            Platform.exit();
+        });
     }
 }
