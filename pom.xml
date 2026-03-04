@@ -15,7 +15,7 @@
         <module>security-rules</module>
         <module>wrapper</module>
         <module>bootstrap</module>
-        <module>components</module>
+        <module>core</module>
         <module>swing-ui</module>
     </modules>
 
@@ -37,7 +37,7 @@
         <dependencies>
             <dependency>
                 <groupId>io.github.spookylauncher</groupId>
-                <artifactId>components</artifactId>
+                <artifactId>core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

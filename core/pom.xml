@@ -11,7 +11,7 @@
         <version>beta-1.0.0</version>
     </parent>
 
-    <artifactId>components</artifactId>
+    <artifactId>core</artifactId>
 
     <dependencies>
 
