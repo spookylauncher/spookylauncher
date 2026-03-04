@@ -51,4 +51,7 @@ public final class StubUIProvider
     public Messages messages() {
         return messages;
     }
+
+    @Override
+    public void shutdown() { }
 }
