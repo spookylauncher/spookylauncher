@@ -1,7 +1,7 @@
 package io.github.spookylauncher.components.ui.swing.events;
 
 import io.github.spookylauncher.components.ComponentsController;
-import io.github.spookylauncher.components.ui.TitlePanel;
+import io.github.spookylauncher.ui.TitlePanel;
 import io.github.spookylauncher.components.ui.swing.SwingUIProvider;
 
 public final class EventsRegister {

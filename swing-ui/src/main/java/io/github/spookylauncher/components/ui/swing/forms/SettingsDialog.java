@@ -5,7 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import io.github.spookylauncher.components.JREController;
 import io.github.spookylauncher.components.OptionsController;
 import io.github.spookylauncher.components.Translator;
-import io.github.spookylauncher.components.ui.Messages;
+import io.github.spookylauncher.ui.Messages;
 import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.util.PlaceholderTextField;

@@ -4,7 +4,7 @@ import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
 import io.github.spookylauncher.components.events.Events;
 import io.github.spookylauncher.components.events.EventsManager;
-import io.github.spookylauncher.components.ui.MainWindow;
+import io.github.spookylauncher.ui.MainWindow;
 import io.github.spookylauncher.io.collectors.ResourceCollector;
 import java.awt.*;
 import java.awt.event.WindowAdapter;

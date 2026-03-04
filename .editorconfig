@@ -1,0 +1,25 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.java]
+max_line_length = 100
+
+# --- IntelliJ Java formatting ---
+ij_java_right_margin = 100
+
+ij_java_method_call_arguments_wrap = wrap_if_long
+ij_java_method_call_arguments_align_multiline = false
+ij_java_method_call_arguments_chop_down_if_long = true
+
+ij_java_new_object_arguments_wrap = wrap_if_long
+ij_java_new_object_arguments_align_multiline = false
+ij_java_new_object_arguments_chop_down_if_long = true
+
+ij_java_keep_existing_line_breaks = false

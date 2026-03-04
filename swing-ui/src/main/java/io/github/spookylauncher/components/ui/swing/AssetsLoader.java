@@ -1,7 +1,7 @@
 package io.github.spookylauncher.components.ui.swing;
 
 import io.github.spookylauncher.io.Resource;
-import io.github.spookylauncher.util.structures.tuple.Tuple2;
+
 import java.awt.*;
 import java.util.logging.*;
 
