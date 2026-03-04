@@ -21,7 +21,7 @@ import javax.swing.*;
 public final class Bootstrap implements Runnable {
 
     private static final String UI_IMPLEMENTATION =
-        "io.github.spookylauncher.components.ui.swing.SwingUIProvider";
+        "io.github.spookylauncher.ui.javafx.JFXUIProvider";
     private static final Logger LOG = Logger.getLogger("bootstrap");
 
     public final File workDirectory;

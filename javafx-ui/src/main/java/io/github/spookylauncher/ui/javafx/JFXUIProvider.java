@@ -2,10 +2,18 @@ package io.github.spookylauncher.ui.javafx;
 
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.ui.*;
+import javafx.application.Application;
 
-public class JavaFxUiProvider extends LauncherComponent implements UIProvider {
-    public JavaFxUiProvider(ComponentsController components) {
+import java.io.IOException;
+
+public class JFXUIProvider extends LauncherComponent implements UIProvider {
+    public JFXUIProvider(ComponentsController components, String jresManifestDownloaderName) {
         super("JavaFX UI Provider", components);
+    }
+
+    @Override
+    public void initialize() throws IOException {
+        Application.launch(JFXApplication.class);
     }
 
     @Override

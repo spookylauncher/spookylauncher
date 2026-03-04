@@ -106,7 +106,7 @@ public final class ComponentsRegister {
             );
         } catch (Exception e) {
             System.err.printf(
-                "ui implementation \"%s\"\n is missing or not properly structured:",
+                "ui implementation \"%s\" is missing or not properly structured:",
                 uiImpl
             );
             throw new RuntimeException(e);
