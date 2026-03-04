@@ -7,6 +7,11 @@ import javafx.stage.Stage;
 
 public class JFXApplication extends Application {
     private Scene scene;
+    private Stage stage;
+
+    public Stage getStage() {
+        return stage;
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -18,5 +23,7 @@ public class JFXApplication extends Application {
         primaryStage.setTitle("Spooky Launcher");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        stage = primaryStage;
     }
 }
