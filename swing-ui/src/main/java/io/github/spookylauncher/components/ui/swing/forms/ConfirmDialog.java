@@ -2,7 +2,7 @@ package io.github.spookylauncher.components.ui.swing.forms;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import io.github.spookylauncher.components.ui.Dialog;
+import io.github.spookylauncher.ui.Dialog;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Locale;

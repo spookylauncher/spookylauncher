@@ -15,13 +15,7 @@
         <module>security-rules</module>
         <module>wrapper</module>
         <module>bootstrap</module>
-        <module>io</module>
-        <module>components</module>
-        <module>ipc</module>
-        <module>util</module>
-        <module>tree</module>
-        <module>ui</module>
-        <module>stub-ui</module>
+        <module>core</module>
         <module>swing-ui</module>
     </modules>
 
@@ -43,49 +37,13 @@
         <dependencies>
             <dependency>
                 <groupId>io.github.spookylauncher</groupId>
-                <artifactId>io</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.github.spookylauncher</groupId>
-                <artifactId>util</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.github.spookylauncher</groupId>
-                <artifactId>ipc</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.github.spookylauncher</groupId>
-                <artifactId>components</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.github.spookylauncher</groupId>
-                <artifactId>ui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.github.spookylauncher</groupId>
-                <artifactId>stub-ui</artifactId>
+                <artifactId>core</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>io.github.spookylauncher</groupId>
                 <artifactId>swing-ui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.github.spookylauncher</groupId>
-                <artifactId>tree</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

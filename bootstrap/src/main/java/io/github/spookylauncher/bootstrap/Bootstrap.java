@@ -5,7 +5,7 @@ import io.github.spookylauncher.components.ComponentsRegister;
 import io.github.spookylauncher.components.Translator;
 import io.github.spookylauncher.components.events.Events;
 import io.github.spookylauncher.components.events.EventsManager;
-import io.github.spookylauncher.components.ui.UIProvider;
+import io.github.spookylauncher.ui.UIProvider;
 import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.ipc.Constants;
 import io.github.spookylauncher.protocol.ProtocolRequestHandler;

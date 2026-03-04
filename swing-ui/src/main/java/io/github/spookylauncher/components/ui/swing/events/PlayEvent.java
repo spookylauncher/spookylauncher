@@ -2,8 +2,8 @@ package io.github.spookylauncher.components.ui.swing.events;
 
 import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.components.launch.GameLauncher;
-import io.github.spookylauncher.components.ui.Dialogs;
-import io.github.spookylauncher.components.ui.Messages;
+import io.github.spookylauncher.ui.Dialogs;
+import io.github.spookylauncher.ui.Messages;
 import io.github.spookylauncher.components.ui.swing.SwingUIProvider;
 import io.github.spookylauncher.tree.jre.JREsManifest;
 import io.github.spookylauncher.tree.jre.JreInfo;

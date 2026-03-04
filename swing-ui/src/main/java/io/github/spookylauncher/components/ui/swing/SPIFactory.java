@@ -1,8 +1,8 @@
 package io.github.spookylauncher.components.ui.swing;
 
-import io.github.spookylauncher.components.ui.Dialog;
-import io.github.spookylauncher.components.ui.Label;
-import io.github.spookylauncher.components.ui.ProgressBar;
+import io.github.spookylauncher.ui.Dialog;
+import io.github.spookylauncher.ui.Label;
+import io.github.spookylauncher.ui.ProgressBar;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
