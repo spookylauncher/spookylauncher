@@ -5,7 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import io.github.spookylauncher.components.JREController;
 import io.github.spookylauncher.components.OptionsController;
 import io.github.spookylauncher.components.Translator;
-import io.github.spookylauncher.components.ui.Messages;
+import io.github.spookylauncher.ui.Messages;
 import io.github.spookylauncher.tree.jre.ExternalJreInfo;
 import io.github.spookylauncher.tree.jre.JreInfo;
 import io.github.spookylauncher.tree.jre.SelectedJavaType;

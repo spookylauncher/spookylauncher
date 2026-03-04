@@ -2,8 +2,8 @@ package io.github.spookylauncher.components.ui.swing;
 
 import io.github.spookylauncher.components.ComponentsController;
 import io.github.spookylauncher.components.LauncherComponent;
-import io.github.spookylauncher.components.ui.MessageType;
-import io.github.spookylauncher.components.ui.Messages;
+import io.github.spookylauncher.ui.MessageType;
+import io.github.spookylauncher.ui.Messages;
 import java.util.*;
 import javax.swing.*;
 

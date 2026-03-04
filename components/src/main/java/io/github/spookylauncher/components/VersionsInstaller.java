@@ -1,7 +1,7 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.components.ui.TitlePanel;
-import io.github.spookylauncher.components.ui.UIProvider;
+import io.github.spookylauncher.ui.TitlePanel;
+import io.github.spookylauncher.ui.UIProvider;
 import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.tree.LibrariesCollection;
 import io.github.spookylauncher.tree.LibraryInfo;

@@ -2,14 +2,12 @@ package io.github.spookylauncher.components.ui.swing;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import io.github.spookylauncher.components.*;
-import io.github.spookylauncher.components.ui.*;
 import io.github.spookylauncher.components.ui.swing.events.EventsRegister;
-import io.github.spookylauncher.io.Resource;
+import io.github.spookylauncher.ui.*;
+
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
-import javax.swing.plaf.synth.*;
 
 public final class SwingUIProvider
     extends LauncherComponent

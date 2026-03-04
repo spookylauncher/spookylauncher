@@ -1,6 +1,6 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.components.ui.UIProvider;
+import io.github.spookylauncher.ui.UIProvider;
 import io.github.spookylauncher.io.OSType;
 import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.tree.LibrariesCollection;

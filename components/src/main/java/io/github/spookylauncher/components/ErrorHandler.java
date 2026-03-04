@@ -1,7 +1,7 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.components.ui.Messages;
-import io.github.spookylauncher.components.ui.UIProvider;
+import io.github.spookylauncher.ui.Messages;
+import io.github.spookylauncher.ui.UIProvider;
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.util.StringUtils;
 import java.net.UnknownHostException;

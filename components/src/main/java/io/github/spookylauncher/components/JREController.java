@@ -1,7 +1,7 @@
 package io.github.spookylauncher.components;
 
-import io.github.spookylauncher.components.ui.Messages;
-import io.github.spookylauncher.components.ui.UIProvider;
+import io.github.spookylauncher.ui.Messages;
+import io.github.spookylauncher.ui.UIProvider;
 import io.github.spookylauncher.io.IOUtils;
 import io.github.spookylauncher.io.OSType;
 import io.github.spookylauncher.io.collectors.FileCollector;
