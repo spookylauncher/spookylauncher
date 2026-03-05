@@ -4,10 +4,12 @@ import io.github.spookylauncher.components.*;
 import io.github.spookylauncher.ui.*;
 import io.github.spookylauncher.ui.javafx.impl.JFXMainWindowImpl;
 import io.github.spookylauncher.ui.javafx.impl.JFXMessagesImpl;
+import io.github.spookylauncher.util.ThreadUtil;
 import javafx.application.Application;
 import javafx.application.Platform;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 public class JFXUIProvider extends LauncherComponent implements UIProvider {
     private JFXMainWindowImpl window;
@@ -20,7 +22,18 @@ public class JFXUIProvider extends LauncherComponent implements UIProvider {
     @Override
     public void initialize() throws IOException {
         JFXProxy.setProvider(this);
-        Application.launch(JFXApplication.class);
+
+        CountDownLatch latch = new CountDownLatch(1);
+
+        JFXProxy.setInitLatch(latch);
+
+        ThreadUtil.run(() -> Application.launch(JFXApplication.class));
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new IOException(e);
+        }
 
         window = new JFXMainWindowImpl(JFXProxy.getApp().getStage());
         messages = new JFXMessagesImpl();
@@ -48,9 +61,6 @@ public class JFXUIProvider extends LauncherComponent implements UIProvider {
 
     @Override
     public void shutdown() {
-        Util.call(() -> {
-            JFXProxy.getApp().getStage().close();
-            Platform.exit();
-        });
+        Platform.exit();
     }
 }
