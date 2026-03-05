@@ -15,4 +15,8 @@ public class JFXProxy {
     public static JFXApplication getApp() {
         return JFXProxy.app;
     }
+
+    public static JFXUIProvider getProvider() {
+        return JFXProxy.provider;
+    }
 }

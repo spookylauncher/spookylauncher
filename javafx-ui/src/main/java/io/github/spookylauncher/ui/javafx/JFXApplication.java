@@ -1,8 +1,8 @@
 package io.github.spookylauncher.ui.javafx;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class JFXApplication extends Application {
@@ -17,8 +17,9 @@ public class JFXApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         JFXProxy.setApp(this);
 
-        Label label = new Label("Hello, JavaFX!");
-        Scene scene = new Scene(label, 800, 434);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
+
+        Scene scene = new Scene(fxmlLoader.load(), 800, 434);
 
         primaryStage.setTitle("Spooky Launcher");
         primaryStage.setScene(scene);
