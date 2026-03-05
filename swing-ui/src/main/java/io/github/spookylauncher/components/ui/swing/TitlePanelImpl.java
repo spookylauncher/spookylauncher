@@ -7,6 +7,7 @@ import io.github.spookylauncher.ui.TitlePanel;
 import io.github.spookylauncher.components.ui.swing.forms.TitlePanelForm;
 import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.tree.versions.VersionInfo;
+import io.github.spookylauncher.util.ThreadUtil;
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.util.StringUtils;
 import java.awt.*;
@@ -181,35 +182,34 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                 : locale.get("install")
         );
 
-        new Thread(() -> {
-            if (info.getPreviewsCount() > 0) {
-                try {
-                    setPreview(
-                        new URLCollector(
-                            components
+        ThreadUtil.runDaemon(() -> {
+                if (info.getPreviewsCount() > 0) {
+                    try {
+                        setPreview(
+                            new URLCollector(
+                                components
                                     .get(ManifestsURLs.class)
                                     .getBaseDataURL() +
-                                "/versions/" +
-                                StringUtils.urlEncode(info.name) +
-                                "/previews/preview_" +
-                                (new Random().nextInt(info.getPreviewsCount()) +
-                                    1) +
-                                ".png"
-                        ).collectImage()
-                    );
-                } catch (IOException | URISyntaxException e) {
-                    LOG.severe("failed to set preview");
-                    LOG.logp(
-                        Level.SEVERE,
-                        "io.github.spookylauncher.components.ui.swing.TitlePanelImpl",
-                        "setVersion",
-                        "Throw!",
-                        e
-                    );
-                }
-            } else setPreview(noPreview);
-        })
-            .start();
+                                    "/versions/" +
+                                    StringUtils.urlEncode(info.name) +
+                                    "/previews/preview_" +
+                                    (new Random().nextInt(info.getPreviewsCount()) +
+                                        1) +
+                                    ".png"
+                            ).collectImage()
+                        );
+                    } catch (IOException | URISyntaxException e) {
+                        LOG.severe("failed to set preview");
+                        LOG.logp(
+                            Level.SEVERE,
+                            "io.github.spookylauncher.components.ui.swing.TitlePanelImpl",
+                            "setVersion",
+                            "Throw!",
+                            e
+                        );
+                    }
+                } else setPreview(noPreview);
+            });
 
         String lang = locale.getLanguage();
 
@@ -234,7 +234,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
             (fallback ? "" : "_" + lang) +
             ".txt";
 
-        new Thread(() -> {
+        ThreadUtil.runDaemon(() -> {
             try {
                 titlePanelForm.description.setText(
                     new URLCollector(labelUrl).collectString()
@@ -249,8 +249,7 @@ class TitlePanelImpl extends LauncherComponent implements TitlePanel {
                     e
                 );
             }
-        })
-            .start();
+        });
     }
 
     @Override

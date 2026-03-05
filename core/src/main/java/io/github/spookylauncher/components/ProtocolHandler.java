@@ -9,6 +9,7 @@ import io.github.spookylauncher.ipc.messages.MessageType;
 import io.github.spookylauncher.ipc.messages.SelectVersion;
 import io.github.spookylauncher.protocol.ProtocolReader;
 import io.github.spookylauncher.tree.versions.VersionInfo;
+import io.github.spookylauncher.util.ThreadUtil;
 import io.github.spookylauncher.util.Locale;
 import io.mappedbus.MappedBusMessage;
 import java.io.File;
@@ -35,7 +36,7 @@ public final class ProtocolHandler extends LauncherComponent {
 
         IOUtils.deleteTree(new File(Constants.getFile()));
 
-        new Thread(() -> {
+        ThreadUtil.runDaemon(() -> {
             ProtocolReader reader = new ProtocolReader();
 
             running = true;
@@ -52,8 +53,7 @@ public final class ProtocolHandler extends LauncherComponent {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        })
-            .start();
+        });
     }
 
     public void handle(MappedBusMessage msg) {

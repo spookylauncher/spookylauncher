@@ -2,6 +2,7 @@ package io.github.spookylauncher.components;
 
 import io.github.spookylauncher.GameStartData;
 import io.github.spookylauncher.io.IOUtils;
+import io.github.spookylauncher.util.ThreadUtil;
 import io.github.spookylauncher.util.structures.tuple.Tuple2;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -85,61 +86,60 @@ public final class LogsController extends LauncherComponent {
         File latestLog,
         Runnable onLoggingEnded
     ) {
-        new Thread(() -> {
-            try {
-                InputStream in = process.getInputStream();
-                OutputStream out = Files.newOutputStream(log.toPath());
+        ThreadUtil.runDaemon(() -> {
+                try {
+                    InputStream in = process.getInputStream();
+                    OutputStream out = Files.newOutputStream(log.toPath());
 
-                StringBuilder header = new StringBuilder();
+                    StringBuilder header = new StringBuilder();
 
-                header.append(
-                    "----------------------------------------------------------------\n"
-                );
-                header.append("\nUptime: ");
-                header.append(dateFormat.format(new Date(uptime)));
-                header.append('\n');
-
-                for (Tuple2<String, String> tuple : data) {
-                    header.append(tuple.x);
-                    header.append(": ");
-                    header.append(tuple.y);
+                    header.append(
+                        "----------------------------------------------------------------\n"
+                    );
+                    header.append("\nUptime: ");
+                    header.append(dateFormat.format(new Date(uptime)));
                     header.append('\n');
-                }
 
-                header.append(
-                    "\n----------------------------------------------------------------\n\n\n"
-                );
+                    for (Tuple2<String, String> tuple : data) {
+                        header.append(tuple.x);
+                        header.append(": ");
+                        header.append(tuple.y);
+                        header.append('\n');
+                    }
 
-                out.write(header.toString().getBytes(StandardCharsets.UTF_8));
+                    header.append(
+                        "\n----------------------------------------------------------------\n\n\n"
+                    );
 
-                int len;
+                    out.write(header.toString().getBytes(StandardCharsets.UTF_8));
 
-                while (process.isAlive()) {
-                    while ((len = in.read()) != -1) out.write(len);
-                }
+                    int len;
 
-                out.flush();
-                out.close();
+                    while (process.isAlive()) {
+                        while ((len = in.read()) != -1) out.write(len);
+                    }
 
-                IOUtils.copy(log, latestLog);
+                    out.flush();
+                    out.close();
 
-                onLoggingEnded.run();
+                    IOUtils.copy(log, latestLog);
 
-                if (
+                    onLoggingEnded.run();
+
+                    if (
+                        components
+                            .get(OptionsController.class)
+                            .getOptions()
+                            .discordPresence
+                    ) components
+                        .get(DiscordPresenceViewer.class)
+                        .showMenuPresence();
+                } catch (Exception e) {
                     components
-                        .get(OptionsController.class)
-                        .getOptions()
-                        .discordPresence
-                ) components
-                    .get(DiscordPresenceViewer.class)
-                    .showMenuPresence();
-            } catch (Exception e) {
-                components
-                    .get(ErrorHandler.class)
-                    .handleException("logCreationFailed", e);
-            }
-        })
-            .start();
+                        .get(ErrorHandler.class)
+                        .handleException("logCreationFailed", e);
+                }
+            });
     }
 
     private FileHandler getHandler(Logger root, File file) throws IOException {

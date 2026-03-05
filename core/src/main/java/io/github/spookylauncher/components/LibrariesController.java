@@ -6,6 +6,7 @@ import io.github.spookylauncher.io.collectors.URLCollector;
 import io.github.spookylauncher.tree.LibrariesCollection;
 import io.github.spookylauncher.tree.LibraryInfo;
 import io.github.spookylauncher.tree.versions.LibrariesManifest;
+import io.github.spookylauncher.util.ThreadUtil;
 import io.github.spookylauncher.util.Locale;
 import java.io.File;
 import java.net.URISyntaxException;
@@ -131,27 +132,26 @@ public final class LibrariesController extends LauncherComponent {
             });
         }
 
-        new Thread(() -> {
-            while (true) {
-                if (uninstalledCount.get() <= 0 || !success.get()) {
-                    onInstalled.accept(success.get());
-                    break;
-                }
+        ThreadUtil.runDaemon(() -> {
+                while (true) {
+                    if (uninstalledCount.get() <= 0 || !success.get()) {
+                        onInstalled.accept(success.get());
+                        break;
+                    }
 
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    LOG.logp(
-                        Level.WARNING,
-                        "io.github.spookylauncher.components.LibrariesController",
-                        "install",
-                        "THROW",
-                        e
-                    );
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        LOG.logp(
+                            Level.WARNING,
+                            "io.github.spookylauncher.components.LibrariesController",
+                            "install",
+                            "THROW",
+                            e
+                        );
+                    }
                 }
-            }
-        })
-            .start();
+            });
     }
 
     public void install(LibraryInfo lib, Consumer<Boolean> onInstalled) {

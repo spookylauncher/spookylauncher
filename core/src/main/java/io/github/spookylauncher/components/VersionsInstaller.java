@@ -7,6 +7,7 @@ import io.github.spookylauncher.tree.LibrariesCollection;
 import io.github.spookylauncher.tree.LibraryInfo;
 import io.github.spookylauncher.tree.versions.LibrariesManifest;
 import io.github.spookylauncher.tree.versions.VersionInfo;
+import io.github.spookylauncher.util.ThreadUtil;
 import io.github.spookylauncher.util.Locale;
 import io.github.spookylauncher.util.StringUtils;
 import java.io.File;
@@ -70,27 +71,26 @@ public final class VersionsInstaller extends LauncherComponent {
         }
 
         if (onInstalledCallback != null) {
-            new Thread(() -> {
-                while (true) {
-                    if (uninstalledCount.get() <= 0) {
-                        onInstalledCallback.accept(success.get());
-                        break;
-                    }
+            ThreadUtil.runDaemon(() -> {
+                    while (true) {
+                        if (uninstalledCount.get() <= 0) {
+                            onInstalledCallback.accept(success.get());
+                            break;
+                        }
 
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        LOG.logp(
-                            Level.WARNING,
-                            "io.github.spookylauncher.components.VersionsInstaller",
-                            "installLibraries",
-                            "THROW",
-                            e
-                        );
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            LOG.logp(
+                                Level.WARNING,
+                                "io.github.spookylauncher.components.VersionsInstaller",
+                                "installLibraries",
+                                "THROW",
+                                e
+                            );
+                        }
                     }
-                }
-            })
-                .start();
+                });
         }
     }
 

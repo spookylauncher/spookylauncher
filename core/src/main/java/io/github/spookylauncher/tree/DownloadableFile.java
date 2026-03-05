@@ -2,6 +2,8 @@ package io.github.spookylauncher.tree;
 
 import com.google.gson.annotations.SerializedName;
 import io.github.spookylauncher.io.OSType;
+import io.github.spookylauncher.util.ThreadUtil;
+
 import java.util.HashMap;
 
 public class DownloadableFile {
@@ -28,11 +30,10 @@ public class DownloadableFile {
         this.downloadUrl = url;
 
         if (autoCalculateSha1) {
-            new Thread(() -> {
+            ThreadUtil.runDaemon(() -> {
                 // TODO: new hash calculation
                 sha1 = "";
-            })
-                .run();
+            });
         }
     }
 

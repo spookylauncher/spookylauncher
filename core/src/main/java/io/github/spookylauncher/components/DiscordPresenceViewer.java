@@ -3,6 +3,7 @@ package io.github.spookylauncher.components;
 import io.github.spookylauncher.components.events.Events;
 import io.github.spookylauncher.components.events.EventsManager;
 import io.github.spookylauncher.tree.versions.VersionInfo;
+import io.github.spookylauncher.util.ThreadUtil;
 import io.github.spookylauncher.util.Locale;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -24,7 +25,7 @@ public final class DiscordPresenceViewer extends LauncherComponent {
     public void initialize() throws IOException {
         super.initialize();
 
-        new Thread(() -> {
+        ThreadUtil.runDaemon(() -> {
             try {
                 components
                     .get(EventsManager.class)
@@ -74,8 +75,7 @@ public final class DiscordPresenceViewer extends LauncherComponent {
                     e
                 );
             }
-        })
-            .start();
+        });
 
         if (
             components.get(OptionsController.class).getOptions().discordPresence

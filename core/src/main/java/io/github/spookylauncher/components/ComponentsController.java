@@ -1,5 +1,7 @@
 package io.github.spookylauncher.components;
 
+import io.github.spookylauncher.util.ThreadUtil;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -151,7 +153,7 @@ public final class ComponentsController {
             }
         };
 
-        if (async) new Thread(task).start();
+        if (async) ThreadUtil.runDaemon(task);
         else task.run();
     }
 }

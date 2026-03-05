@@ -11,6 +11,7 @@ import io.github.spookylauncher.tree.jre.JREsManifest;
 import io.github.spookylauncher.tree.jre.JreInfo;
 import io.github.spookylauncher.tree.jre.SelectedJavaType;
 import io.github.spookylauncher.tree.launcher.Options;
+import io.github.spookylauncher.util.ThreadUtil;
 import io.github.spookylauncher.util.Locale;
 import java.io.File;
 import java.io.IOException;
@@ -327,66 +328,65 @@ public final class JREController extends LauncherComponent {
             return;
         }
 
-        new Thread(() -> {
-            assert OSType.CURRENT != null;
+        ThreadUtil.runDaemon(() -> {
+                assert OSType.CURRENT != null;
 
-            File destination = getJreDirectory(info);
+                File destination = getJreDirectory(info);
 
-            if (!isInstalled(info)) {
-                destination.mkdirs();
+                if (!isInstalled(info)) {
+                    destination.mkdirs();
 
-                uiProvider.panel().setEnabledButtons(false);
+                    uiProvider.panel().setEnabledButtons(false);
 
-                Downloader.Options options = new Downloader.Options();
+                    Downloader.Options options = new Downloader.Options();
 
-                options.title = String.format(
-                    locale.get("jreInstallation"),
-                    info.fullVersion,
-                    info.vendor
-                );
-                options.subtitleFormat = locale.get("unpackingFormat");
-                options.consumeFullPaths = false;
-
-                URLCollector urlCollector;
-
-                try {
-                    urlCollector = new URLCollector(url);
-                } catch (URISyntaxException e) {
-                    LOG.severe("failed to install jre: ");
-                    LOG.logp(
-                        Level.SEVERE,
-                        "io.github.spookylauncher.components.JREController",
-                        "installJre",
-                        "Throw!",
-                        e
+                    options.title = String.format(
+                        locale.get("jreInstallation"),
+                        info.fullVersion,
+                        info.vendor
                     );
-                    return;
+                    options.subtitleFormat = locale.get("unpackingFormat");
+                    options.consumeFullPaths = false;
+
+                    URLCollector urlCollector;
+
+                    try {
+                        urlCollector = new URLCollector(url);
+                    } catch (URISyntaxException e) {
+                        LOG.severe("failed to install jre: ");
+                        LOG.logp(
+                            Level.SEVERE,
+                            "io.github.spookylauncher.components.JREController",
+                            "installJre",
+                            "Throw!",
+                            e
+                        );
+                        return;
+                    }
+
+                    components
+                        .get(Downloader.class)
+                        .downloadAndUnpackZip(
+                            destination,
+                            urlCollector,
+                            options,
+                            success -> {
+                                uiProvider.panel().setEnabledButtons(true);
+
+                                if (!success) {
+                                    LOG.info("JRE installation canceled by user");
+                                    uiProvider
+                                        .messages()
+                                        .info(
+                                            locale.get("jreInstallationFailed"),
+                                            locale.get("operationCanceledByUser")
+                                        );
+                                } else LOG.info("JRE successfully installed");
+
+                                onInstalled.accept(success);
+                            }
+                        );
                 }
-
-                components
-                    .get(Downloader.class)
-                    .downloadAndUnpackZip(
-                        destination,
-                        urlCollector,
-                        options,
-                        success -> {
-                            uiProvider.panel().setEnabledButtons(true);
-
-                            if (!success) {
-                                LOG.info("JRE installation canceled by user");
-                                uiProvider
-                                    .messages()
-                                    .info(
-                                        locale.get("jreInstallationFailed"),
-                                        locale.get("operationCanceledByUser")
-                                    );
-                            } else LOG.info("JRE successfully installed");
-
-                            onInstalled.accept(success);
-                        }
-                    );
-            }
-        })
-            .start();
+            });
     }
 }

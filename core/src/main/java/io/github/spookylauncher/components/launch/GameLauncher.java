@@ -14,6 +14,7 @@ import io.github.spookylauncher.tree.jre.JreInfo;
 import io.github.spookylauncher.tree.launcher.Options;
 import io.github.spookylauncher.tree.versions.LibrariesManifest;
 import io.github.spookylauncher.tree.versions.VersionInfo;
+import io.github.spookylauncher.util.ThreadUtil;
 import io.github.spookylauncher.util.CommandTokenizer;
 import io.github.spookylauncher.util.Locale;
 import java.io.*;
@@ -101,7 +102,7 @@ public class GameLauncher extends LauncherComponent {
         versionsInstaller.installLibraries(version, success -> {
             if (success) {
                 LOG.info("libraries successfully installed");
-                new Thread(launchTask).start();
+                ThreadUtil.runDaemon(launchTask);
             } else LOG.info("failed to install libraries");
         });
     }
