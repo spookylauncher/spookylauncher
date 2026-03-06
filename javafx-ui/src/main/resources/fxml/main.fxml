@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25">
+<GridPane alignment="CENTER" hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/main.css" vgap="5.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="178.2000244140625" />
     <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="367.7999755859375" />
@@ -25,19 +25,49 @@
     <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="51.20001220703125" vgrow="ALWAYS" />
   </rowConstraints>
    <children>
-      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="51.0" prefWidth="438.0" text="Play" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="47.0" prefWidth="213.0" text="Versions" GridPane.rowIndex="3">
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="98.0" prefWidth="408.0" stylesheets="@../styles/main.css" text="Play" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+         <graphic>
+            <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
+               <image>
+                  <Image url="@../assets/play_icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </Button>
-      <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" text="Settings" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
+      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="66.0" prefWidth="178.0" stylesheets="@../styles/main.css" text="Versions" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <graphic>
+            <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
+               <image>
+                  <Image url="@../assets/versions_icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button ellipsisString="" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" stylesheets="@../styles/main.css" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
+               <image>
+                  <Image url="@../assets/settings_icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
       <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="78.0" prefWidth="178.0" text="Version Name" textAlignment="RIGHT" GridPane.rowSpan="2">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <TextArea editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="282.0" prefWidth="178.0" text="Version description" wrapText="true" GridPane.rowIndex="2" />
+      <TextArea editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="282.0" prefWidth="178.0" text="Version description" wrapText="true" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </TextArea>
       <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
          <GridPane.margin>
             <Insets right="5.0" />
@@ -45,7 +75,7 @@
          <children>
             <ImageView pickOnBounds="true">
                <image>
-                  <Image url="@img.png" />
+                  <Image url="@../assets/img.png" />
                </image>
             </ImageView>
          </children>
