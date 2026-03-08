@@ -3,24 +3,45 @@ package io.github.spookylauncher.ui.javafx;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 
 public class JFXController {
 
     public Button articleButton, playButton, versionsButton, settingsButton;
-    public ImageView versionPreview;
     public Pane versionPreviewPane;
     public Parent root;
 
     public void initialize() {
         applySettings(root);
 
-        versionPreview.fitWidthProperty().bind(versionPreviewPane.widthProperty());
-        versionPreview.fitHeightProperty().bind(versionPreviewPane.heightProperty());
+        Image image = new Image(getClass().getResourceAsStream("/assets/img.png"));
 
-        versionPreview.setSmooth(true);
-        versionPreview.setManaged(false);
+        BackgroundImage bgImage = new BackgroundImage(
+            image,
+            BackgroundRepeat.NO_REPEAT,
+            BackgroundRepeat.NO_REPEAT,
+            BackgroundPosition.CENTER,
+            new BackgroundSize(
+                1.0, 1.0,
+                true, true,
+                false, false
+            )
+        );
+
+        versionPreviewPane.setBackground(new Background(bgImage));
+
+        int backgroundRadius = 25;
+
+        Rectangle clip = new Rectangle();
+
+        clip.setArcWidth(backgroundRadius * 2);
+        clip.setArcHeight(backgroundRadius * 2);
+        clip.widthProperty().bind(versionPreviewPane.widthProperty());
+        clip.heightProperty().bind(versionPreviewPane.heightProperty());
+
+        versionPreviewPane.setClip(clip);
     }
 
     private void applySettings(Parent root) {

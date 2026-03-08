@@ -25,6 +25,14 @@
     -fx-effect: dropshadow(gaussian, #626264, 25, 0, 0, -5);
 }
 
+#version_preview_pane {
+    -fx-effect: dropshadow(gaussian, #626264, 25, 0, 0, 0);
+    -fx-border-color: #626264;
+    -fx-border-width: 3;
+    -fx-border-radius: 25;
+    -fx-padding: 10;
+}
+
 .text-area .content {
     -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #27272e, #3d3d47);
     -fx-background-radius: 25;
