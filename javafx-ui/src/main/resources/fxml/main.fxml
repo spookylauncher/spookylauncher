@@ -12,20 +12,31 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="CENTER" hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/main.css" vgap="5.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="root" alignment="CENTER" hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="800.0" stylesheets="@../styles/main.css" vgap="8.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="io.github.spookylauncher.ui.javafx.JFXController">
   <columnConstraints>
     <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="178.2000244140625" />
-    <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="367.7999755859375" />
-      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="34.800048828125" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="75.19998779296876" />
+    <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="448.39997558593745" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="55.600024414062545" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="5.7999755859375455" prefWidth="55.60000000000002" />
   </columnConstraints>
   <rowConstraints>
       <RowConstraints maxHeight="1.7976931348623157E308" minHeight="2.2000082015991156" prefHeight="36.60001831054687" vgrow="ALWAYS" />
-    <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="14.199981689453125" vgrow="ALWAYS" />
-    <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="291.3999938964844" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="6.000024414062494" vgrow="ALWAYS" />
+    <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="309.1999755859375" vgrow="ALWAYS" />
     <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="51.20001220703125" vgrow="ALWAYS" />
   </rowConstraints>
    <children>
-      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="98.0" prefWidth="408.0" stylesheets="@../styles/main.css" text="Play" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+      <Button fx:id="articleButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Open Article" GridPane.columnSpan="2" GridPane.rowIndex="3">
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
+               <image>
+                  <Image url="@../assets/article_icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="playButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="98.0" prefWidth="408.0" stylesheets="@../styles/main.css" text="Play" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="3">
          <graphic>
             <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
                <image>
@@ -37,7 +48,7 @@
             <Insets />
          </GridPane.margin>
       </Button>
-      <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="66.0" prefWidth="178.0" stylesheets="@../styles/main.css" text="Versions" GridPane.rowIndex="3">
+      <Button fx:id="versionsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="42.0" prefWidth="58.0" stylesheets="@../styles/main.css" GridPane.columnIndex="3" GridPane.valignment="TOP">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
@@ -49,26 +60,32 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button ellipsisString="" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" stylesheets="@../styles/main.css" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+      <Button fx:id="settingsButton" ellipsisString="" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="42.0" prefWidth="54.0" stylesheets="@../styles/main.css" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
          <graphic>
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
+            <ImageView fitHeight="20.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
                <image>
                   <Image url="@../assets/settings_icon.png" />
                </image>
             </ImageView>
          </graphic>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
       </Button>
-      <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="78.0" prefWidth="178.0" text="Version Name" textAlignment="RIGHT" GridPane.rowSpan="2">
+      <Label id="version_name" fx:id="versionName" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="46.0" prefWidth="215.0" stylesheets="@../styles/main.css" text="Version Name" textAlignment="RIGHT" GridPane.columnSpan="2">
          <font>
             <Font size="25.0" />
          </font>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
       </Label>
-      <TextArea editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="282.0" prefWidth="178.0" text="Version description" wrapText="true" GridPane.rowIndex="2">
+      <TextArea editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="302.0" prefWidth="195.0" text="Version description" wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </TextArea>
-      <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
+      <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
@@ -80,6 +97,7 @@
             </ImageView>
          </children>
       </StackPane>
+      <Label id="version_release_date" alignment="CENTER" contentDisplay="CENTER" stylesheets="@../styles/main.css" text="2019/10/19" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
    </children>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

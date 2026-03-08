@@ -8,10 +8,14 @@
 }
 
 .label {
-    -fx-font-size: 35px;
+    -fx-font-size: 25px;
     -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-effect: dropshadow(gaussian, white, 15, 0, 0, 0);
+}
+
+#version_release_date {
+    -fx-font-size: 15px;
 }
 
 .text-area {
