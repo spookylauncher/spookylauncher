@@ -25,7 +25,7 @@
     -fx-effect: dropshadow(gaussian, #626264, 25, 0, 0, -5);
 }
 
-#version_preview_pane {
+#version_preview_parent_pane {
     -fx-effect: dropshadow(gaussian, #626264, 25, 0, 0, 0);
     -fx-border-color: #626264;
     -fx-border-width: 3;
