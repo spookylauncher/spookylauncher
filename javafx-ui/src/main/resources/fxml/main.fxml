@@ -85,12 +85,12 @@
             <Insets />
          </GridPane.margin>
       </TextArea>
-      <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2">
+      <StackPane fx:id="versionPreviewPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2">
          <GridPane.margin>
-            <Insets right="5.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
          <children>
-            <ImageView pickOnBounds="true">
+            <ImageView fx:id="versionPreview" pickOnBounds="true">
                <image>
                   <Image url="@../assets/img.png" />
                </image>
