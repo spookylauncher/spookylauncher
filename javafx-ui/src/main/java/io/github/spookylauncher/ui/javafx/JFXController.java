@@ -1,22 +1,25 @@
 package io.github.spookylauncher.ui.javafx;
 
-import javafx.event.ActionEvent;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
 
 public class JFXController {
-    public VBox contentPanel;
-    public Label statusLabel;
 
-    public void onHomeClicked(ActionEvent actionEvent) {
-        System.out.println("home");
+    public Button articleButton, playButton, versionsButton, settingsButton;
+    public Parent root;
+
+    public void initialize() {
+        applySettings(root);
     }
 
-    public void onSettingsClicked(ActionEvent actionEvent) {
-        System.out.println("settings");
-    }
+    private void applySettings(Parent root) {
+        for (Node node : root.getChildrenUnmodifiable()) {
+            node.setPickOnBounds(false);
 
-    public void onAboutClicked(ActionEvent actionEvent) {
-        System.out.println("about");
+            if (node instanceof Parent) {
+                applySettings((Parent) node);
+            }
+        }
     }
 }
