@@ -85,17 +85,10 @@
             <Insets />
          </GridPane.margin>
       </TextArea>
-      <StackPane fx:id="versionPreviewPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2">
+      <StackPane id="version_preview_pane" fx:id="versionPreviewPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="200.0" stylesheets="@../styles/main.css" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin>
-         <children>
-            <ImageView fx:id="versionPreview" pickOnBounds="true">
-               <image>
-                  <Image url="@../assets/img.png" />
-               </image>
-            </ImageView>
-         </children>
       </StackPane>
       <Label id="version_release_date" alignment="CENTER" contentDisplay="CENTER" stylesheets="@../styles/main.css" text="2019/10/19" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
    </children>
