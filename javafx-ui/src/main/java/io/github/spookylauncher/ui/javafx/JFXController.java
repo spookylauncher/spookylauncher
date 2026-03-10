@@ -3,6 +3,7 @@ package io.github.spookylauncher.ui.javafx;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
@@ -10,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 public class JFXController {
 
     public Button articleButton, playButton, versionsButton, settingsButton;
+    public Label versionNameLabel, developerLabel, releaseDateLabel;
     public Pane versionPreviewPane;
     public Parent root;
 
