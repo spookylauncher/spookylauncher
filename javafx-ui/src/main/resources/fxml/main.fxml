@@ -29,7 +29,7 @@
     <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="51.20001220703125" vgrow="ALWAYS" />
   </rowConstraints>
    <children>
-      <Button fx:id="articleButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" GridPane.columnIndex="3" GridPane.valignment="TOP">
+      <Button fx:id="articleButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" pickOnBounds="false" GridPane.columnIndex="3" GridPane.valignment="TOP">
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
                <image>
@@ -38,7 +38,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="playButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="98.0" prefWidth="408.0" text="Play" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="3">
+      <Button fx:id="playButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" pickOnBounds="false" prefHeight="98.0" prefWidth="408.0" text="Play" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="3">
          <graphic>
             <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
                <image>
@@ -50,7 +50,7 @@
             <Insets />
          </GridPane.margin>
       </Button>
-      <Button fx:id="versionsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="42.0" prefWidth="58.0" text="Versions" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.valignment="TOP">
+      <Button fx:id="versionsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" pickOnBounds="false" prefHeight="42.0" prefWidth="58.0" text="Versions" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.valignment="TOP">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
@@ -62,7 +62,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="settingsButton" ellipsisString="" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="42.0" prefWidth="54.0" GridPane.columnIndex="4" GridPane.valignment="TOP">
+      <Button fx:id="settingsButton" ellipsisString="" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onSettingsClicked" pickOnBounds="false" prefHeight="42.0" prefWidth="54.0" GridPane.columnIndex="4" GridPane.valignment="TOP">
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
                <image>
@@ -74,7 +74,7 @@
             <Insets />
          </GridPane.margin>
       </Button>
-      <Label id="version_name" fx:id="versionNameLabel" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="46.0" prefWidth="215.0" text="Version Name" textAlignment="RIGHT" GridPane.columnSpan="2">
+      <Label id="version_name" fx:id="versionNameLabel" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" prefHeight="46.0" prefWidth="215.0" text="Version Name" textAlignment="RIGHT" GridPane.columnSpan="2">
          <font>
             <Font size="25.0" />
          </font>
@@ -82,21 +82,21 @@
             <Insets />
          </GridPane.margin>
       </Label>
-      <TextArea editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="302.0" prefWidth="195.0" text="Version description" wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="2">
+      <TextArea editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" prefHeight="302.0" prefWidth="195.0" text="Version description" wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </TextArea>
-      <Label id="version_release_date" fx:id="releaseDateLabel" alignment="CENTER" contentDisplay="CENTER" text="2019/10/19" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+      <Label id="version_release_date" fx:id="releaseDateLabel" alignment="CENTER" contentDisplay="CENTER" pickOnBounds="false" text="2019/10/19" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
       <AnchorPane id="version_preview_parent_pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2">
          <children>
-            <Pane id="version_preview_pane" fx:id="versionPreviewPane" layoutX="27.200000000000003" layoutY="40.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="292.0" prefWidth="527.0" AnchorPane.bottomAnchor="-10.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="-10.0" AnchorPane.topAnchor="-10.0" />
+            <Pane id="version_preview_pane" fx:id="versionPreviewPane" layoutX="27.200000000000003" layoutY="40.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" prefHeight="292.0" prefWidth="527.0" AnchorPane.bottomAnchor="-10.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="-10.0" AnchorPane.topAnchor="-10.0" />
          </children>
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
       </AnchorPane>
-      <Label id="version_release_date" fx:id="developerLabel" alignment="CENTER" contentDisplay="CENTER" text="by Pseudocactus" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM" />
+      <Label id="version_release_date" fx:id="developerLabel" alignment="CENTER" contentDisplay="CENTER" pickOnBounds="false" text="by Pseudocactus" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM" />
    </children>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

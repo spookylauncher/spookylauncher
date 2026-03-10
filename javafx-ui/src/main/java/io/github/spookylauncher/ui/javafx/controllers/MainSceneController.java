@@ -1,23 +1,29 @@
 package io.github.spookylauncher.ui.javafx.controllers;
 
+import io.github.spookylauncher.ui.javafx.JFXProxy;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MainSceneController {
 
-    public Button articleButton, playButton, versionsButton, settingsButton;
-    public Label versionNameLabel, developerLabel, releaseDateLabel;
-    public Pane versionPreviewPane;
-    public Parent root;
+    @FXML public Button articleButton, playButton, versionsButton, settingsButton;
+    @FXML public Label versionNameLabel, developerLabel, releaseDateLabel;
+    @FXML public Pane versionPreviewPane;
+    @FXML public Parent root;
 
     public void initialize() {
-        applySettings(root);
-
         Image image = new Image(getClass().getResourceAsStream("/assets/img.png"));
 
         BackgroundImage bgImage = new BackgroundImage(
@@ -46,13 +52,22 @@ public class MainSceneController {
         versionPreviewPane.setClip(clip);
     }
 
-    private void applySettings(Parent root) {
-        for (Node node : root.getChildrenUnmodifiable()) {
-            node.setPickOnBounds(false);
+    @FXML
+    public void onSettingsClicked() throws IOException {
+        Stage dialog = new Stage();
 
-            if (node instanceof Parent) {
-                applySettings((Parent) node);
-            }
-        }
+        dialog.initOwner(JFXProxy.getApp().getStage());
+        dialog.initModality(Modality.WINDOW_MODAL);
+
+        dialog.getIcons().addAll(JFXProxy.getApp().getStage().getIcons());
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/settings.fxml"));
+
+        Scene scene = new Scene(fxmlLoader.load(), 600, 250);
+
+        dialog.setTitle("Spooky Launcher: Settings");
+        dialog.setScene(scene);
+
+        dialog.show();
     }
 }
