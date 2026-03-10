@@ -30,6 +30,53 @@
     -fx-background-color: transparent;
 }
 
+.text-field {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #27272e, #3d3d47);
+    -fx-effect: dropshadow(gaussian, #626264, 25, 0, 0, -5);
+
+    -fx-background-radius: 10;
+    -fx-border-color: #626264;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+}
+
+.check-box .box {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #27272e, #3d3d47);
+    -fx-effect: dropshadow(gaussian, #626264, 25, 0, 0, -5);
+
+    -fx-background-radius: 5;
+    -fx-border-color: #626264;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+}
+
+.check-box:hover .box {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #18181c, #27272e);
+    -fx-border-color: #a4a4a4;
+}
+
+.slider .track, .slider .thumb {
+    -fx-effect: dropshadow(gaussian, #626264, 10, 0, 0, 0);
+
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, #27272e, #3d3d47);
+    -fx-background-radius: 5;
+
+    -fx-border-color: #626264;
+    -fx-border-width: 3;
+    -fx-border-radius: 5;
+}
+
+.slider .thumb {
+    -fx-background-color: #27272e;
+}
+
+.slider:hover .thumb {
+    -fx-background-color: #212126;
+}
+
 .button {
     -fx-alignment: center;
 
