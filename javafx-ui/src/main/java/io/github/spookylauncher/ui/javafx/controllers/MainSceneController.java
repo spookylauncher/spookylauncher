@@ -1,4 +1,4 @@
-package io.github.spookylauncher.ui.javafx;
+package io.github.spookylauncher.ui.javafx.controllers;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 
-public class JFXController {
+public class MainSceneController {
 
     public Button articleButton, playButton, versionsButton, settingsButton;
     public Label versionNameLabel, developerLabel, releaseDateLabel;
