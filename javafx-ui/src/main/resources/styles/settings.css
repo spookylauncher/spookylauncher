@@ -1,0 +1,7 @@
+.root {
+    -fx-background-color: radial-gradient(center 50% 50%, radius 50%, #2e2e2e, #101014);
+}
+
+.label {
+    -fx-font-size: 15px
+}
