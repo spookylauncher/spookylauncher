@@ -28,7 +28,7 @@
     <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="51.20001220703125" vgrow="ALWAYS" />
   </rowConstraints>
    <children>
-      <Button fx:id="articleButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Open Article" GridPane.columnSpan="2" GridPane.rowIndex="3">
+      <Button fx:id="articleButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" GridPane.columnIndex="3">
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" styleClass="button-icon">
                <image>
@@ -49,7 +49,7 @@
             <Insets />
          </GridPane.margin>
       </Button>
-      <Button fx:id="versionsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="42.0" prefWidth="58.0" stylesheets="@../styles/main.css" GridPane.columnIndex="3" GridPane.valignment="TOP">
+      <Button fx:id="versionsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="42.0" prefWidth="58.0" stylesheets="@../styles/main.css" text="Versions" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.valignment="TOP">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
